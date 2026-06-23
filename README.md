@@ -7,7 +7,7 @@
   <b>A next-gen portfolio platform built with Django, MySQL, APIs, and creativity — to showcase projects, skills, experiences, and more in an interactive and intelligent way.</b>
 </p>
 <p align="center">
-  🌍 <b>Live Demo:</b> <a href="https://roshandamor.me" target="_blank">https://roshandamor.me</a> | 
+  🌍 <b>Live Demo:</b> <a href="https://devmitra.rkdapp.site" target="_blank">https://devmitra.rkdapp.site</a> | 
   📖 <b>Setup Guide:</b> <a href="./SETUP.md">SETUP.md</a>
 </p>
 
