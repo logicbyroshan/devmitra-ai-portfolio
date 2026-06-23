@@ -8,6 +8,7 @@ import nh3
 import math
 import re
 import os
+from portfolio.utils import compress_image_to_webp
 
 ALLOWED_TAGS = {
     "b", "i", "strong", "em", "u", "a", "br", "p", "ul", "ol", "li", "span",
@@ -120,6 +121,10 @@ class Blog(models.Model):
         self.content = sanitize_html(self.content)
         # Calculate reading time automatically
         self.reading_time = self.calculate_reading_time()
+        
+        if self.cover_image:
+            compress_image_to_webp(self.cover_image)
+            
         super().save(*args, **kwargs)
 
     def __str__(self):

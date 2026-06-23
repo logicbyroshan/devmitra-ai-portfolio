@@ -207,3 +207,6 @@ deploye_key.pub
 
 .deploye_key
 .deploye_key.pub
+# Media Files
+media/
+media/*

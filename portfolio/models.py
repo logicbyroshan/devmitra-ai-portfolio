@@ -5,6 +5,7 @@ import nh3
 from django.core.exceptions import ValidationError
 import re
 import os
+from .utils import compress_image_to_webp
 
 ALLOWED_TAGS = {
     "b", "i", "strong", "em", "u", "a", "br", "p", "ul", "ol", "li", "span",
@@ -150,6 +151,11 @@ class Technology(models.Model):
         verbose_name_plural = "Technologies"
         ordering = ["name"]
 
+    def save(self, *args, **kwargs):
+        if self.icon:
+            compress_image_to_webp(self.icon)
+        super().save(*args, **kwargs)
+
     def __str__(self):
         return self.name
 
@@ -241,6 +247,9 @@ class Project(models.Model):
         self.summary = sanitize_html(self.summary)
         self.content = sanitize_html(self.content)
 
+        if self.cover_image:
+            compress_image_to_webp(self.cover_image)
+
         super().save(*args, **kwargs)
 
     def __str__(self):
@@ -303,6 +312,11 @@ class ProjectImage(models.Model):
     )
     caption = models.CharField(max_length=255, blank=True, null=True)
 
+    def save(self, *args, **kwargs):
+        if self.image:
+            compress_image_to_webp(self.image)
+        super().save(*args, **kwargs)
+
     def __str__(self):
         return f"Image for {self.project.title}"
 
@@ -362,6 +376,11 @@ class Resume(models.Model):
     # Additional resume information
     title = models.CharField(max_length=200, default="My Resume")
     last_updated = models.DateTimeField(auto_now=True)
+
+    def save(self, *args, **kwargs):
+        if self.preview_image:
+            compress_image_to_webp(self.preview_image)
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.title
@@ -477,6 +496,8 @@ class Achievement(models.Model):
 
     def save(self, *args, **kwargs):
         self.summary = sanitize_html(self.summary)
+        if self.image:
+            compress_image_to_webp(self.image)
         super().save(*args, **kwargs)
 
     def __str__(self):

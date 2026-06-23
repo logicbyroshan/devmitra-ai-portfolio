@@ -83,15 +83,12 @@ I built DevMitra to document my work, share my learnings, and provide visitors w
 - 🎨 **Centralized CSS** — Consolidated animations, components, and responsive design  
 
 ### 🔮 Upcoming Features
-- ✅ **ToDo App** (integrated mini-app).  
-- ✅ **Project Manager & Blog Manager** (admin tools).  
-- 🌍 **Dedicated Blog Website** with preferences, social login, AI suggestions.  
-- 🛠 **Custom Admin Dashboard** to manage projects, blogs, resources, and notifications.  
-- 🔗 **REST API Integration** across apps (portfolio + blog + community).  
-- 💬 **Real-time Collaboration** (WebSockets for Code Together).  
-- 🎮 **Gamified Blogs** — Reader badges & engagement tracking.  
-- 👥 **User Profiles** — Social login, preferences, and personalization.  
-- ⚡ **DevOps Ready** — Dockerization, CI/CD, and scalable deployment.  
+- 🌍 **Dedicated Blog Website** with preferences, social login, AI suggestions.
+- 🔗 **REST API Integration** across apps (portfolio + blog + community).
+- 💬 **Real-time Collaboration** (WebSockets for Code Together).
+- 🎮 **Gamified Blogs** — Reader badges & engagement tracking.
+- 👥 **User Profiles** — Social login, preferences, and personalization.
+- ⚡ **DevOps Ready** — Dockerization, CI/CD, and scalable deployment.
 
 ---
 
@@ -500,12 +497,15 @@ _(Full list available in `requirements.txt`.)_
 
 ## 🎯 Recent Improvements
 
-- ✅ **CSS Architecture Overhaul** — Consolidated 300+ lines of duplicate CSS into centralized components
-- ✅ **Responsive Optimization** — Enhanced mobile experience with better spacing and typography
-- ✅ **Blog System** — Completely separated blog functionality into dedicated Django app
-- ✅ **Animation System** — Unified data-animation system across all pages
-- ✅ **Component Consolidation** — Breadcrumbs, page headers, and grid layouts centralized in base.css
-- ✅ **Performance Boost** — Reduced CSS bloat and improved maintainability
+- ✅ **Custom Admin Dashboard** — Built a completely custom, secure, and intuitive dashboard replacing the default Django admin.
+- ✅ **Automated Image Optimization** — All uploaded images are automatically compressed and converted to WebP format to ensure ultra-fast load times.
+- ✅ **Security Hardening** — Implemented strict Content-Security-Policy (CSP), Permissions-Policy, and Rate-Limiting across the dashboard and API endpoints.
+- ✅ **CSS Architecture Overhaul** — Consolidated 300+ lines of duplicate CSS into centralized components.
+- ✅ **Responsive Optimization** — Enhanced mobile experience with better spacing and typography.
+- ✅ **Blog System** — Completely separated blog functionality into dedicated Django app.
+- ✅ **Animation System** — Unified data-animation system across all pages.
+- ✅ **Component Consolidation** — Breadcrumbs, page headers, and grid layouts centralized in base.css.
+- ✅ **Performance Boost** — Reduced CSS bloat and improved maintainability.
 
 ## 🤝 Contributing
 

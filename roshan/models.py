@@ -4,6 +4,7 @@ from tinymce.models import HTMLField
 from django.core.exceptions import ValidationError
 import nh3
 import os
+from portfolio.utils import compress_image_to_webp
 
 ALLOWED_TAGS = {
     "b", "i", "strong", "em", "u", "a", "br", "p", "ul", "ol", "li", "span",
@@ -185,6 +186,10 @@ class AboutMeConfiguration(models.Model):
             # Update existing instance instead of creating new one
             existing = AboutMeConfiguration.objects.first()
             self.pk = existing.pk
+            
+        if self.profile_image:
+            compress_image_to_webp(self.profile_image)
+            
         super().save(*args, **kwargs)
 
 
@@ -373,6 +378,12 @@ class Resource(models.Model):
                 counter += 1
             self.slug = slug
         self.description = sanitize_html(self.description)
+        
+        if self.thumbnail:
+            compress_image_to_webp(self.thumbnail)
+        if self.preview_image:
+            compress_image_to_webp(self.preview_image)
+            
         super().save(*args, **kwargs)
 
     def __str__(self):
@@ -466,6 +477,10 @@ class ManualPlaylist(models.Model):
                 slug = f"{base_slug}-{counter}"
                 counter += 1
             self.slug = slug
+            
+        if self.cover_image:
+            compress_image_to_webp(self.cover_image)
+            
         super().save(*args, **kwargs)
 
     def __str__(self):
