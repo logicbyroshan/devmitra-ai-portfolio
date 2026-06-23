@@ -91,20 +91,6 @@
     </div>
 
     <!-- Pagination -->
-    {% if is_paginated %}
-    <nav class="pagination" aria-label="Resource pages">
-        {% if page_obj.has_previous %}
-            <a href="?page={{ page_obj.previous_page_number }}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}" class="pagination-btn"><i class="fa-solid fa-arrow-left"></i></a>
-        {% else %}<button class="pagination-btn" disabled><i class="fa-solid fa-arrow-left"></i></button>{% endif %}
-        <div class="page-numbers">
-            {% for num in page_obj.paginator.page_range %}
-                <a href="?page={{ num }}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}" class="page-number {% if page_obj.number == num %}active{% endif %}">{{ num }}</a>
-            {% endfor %}
-        </div>
-        {% if page_obj.has_next %}
-            <a href="?page={{ page_obj.next_page_number }}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}" class="pagination-btn"><i class="fa-solid fa-arrow-right"></i></a>
-        {% else %}<button class="pagination-btn" disabled><i class="fa-solid fa-arrow-right"></i></button>{% endif %}
-    </nav>
-    {% endif %}
+    {% include "components/pagination.html" %}
 </div>
 {% endblock %}

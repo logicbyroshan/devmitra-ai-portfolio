@@ -1,0 +1,79 @@
+<!-- ======================= HEADER / NAVBAR ======================= -->
+<header class="site-header">
+    <div class="header-container">
+        <!-- Mobile Navigation Toggle (Left side in mobile) -->
+        <button class="mobile-nav-toggle" id="mobile-nav-toggle" aria-controls="primary-navigation"
+            aria-expanded="false">
+            <span class="sr-only">Menu</span>
+            <span class="line top"></span>
+            <span class="line middle"></span>
+            <span class="line bottom"></span>
+        </button>
+
+        <!-- Left Navigation -->
+        <nav class="nav-left" id="primary-navigation"> 
+            <ul>
+                <!-- DYNAMIC: URL tags for navigation -->
+                <li><a href="{% url 'blog:blog_list' %}"><span class="nav-dot"></span>ARTICLES</a></li>
+                <li><a href="{% url 'portfolio:project_list' %}"><span class="nav-dot"></span>PROJECTS</a></li>
+                <li><a href="{% url 'portfolio:experience_list' %}"><span class="nav-dot"></span>EXPERIENCES</a>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- Center Logo -->
+        <div class="nav-center-logo">
+            <a href="{% url 'portfolio:home' %}" aria-label="Home - Roshan Damor Portfolio"> 
+                <img src="{% static 'images/logo.png' %}" alt="Roshan Damor Logo - Light Theme" class="logo-light">
+                
+                <img src="{% static 'images/logo-dark.png' %}" alt="Roshan Damor Logo - Dark Theme"
+                    class="logo-dark"> 
+            </a>
+        </div>
+
+        <!-- Right Navigation -->
+        <div class="nav-right">
+            <!-- Theme Toggle Button -->
+            <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
+                <i class="fas fa-sun" id="theme-icon"></i>
+            </button>
+
+            <!-- Resume Button -->
+            <button class="outline-btn" id="open-resume-modal">
+                <i class="fas fa-file-alt"></i> RESUME
+            </button>
+
+            <!-- Video Resume Button -->
+            <button class="filled-btn" id="open-video-modal">
+                <i class="fas fa-video"></i> VIDEO RESUME
+            </button>
+        </div>
+
+        <!-- Mobile Theme Toggle (Right side in mobile) -->
+        <button class="theme-toggle mobile-header-theme-toggle" id="mobile-header-theme-toggle"
+            aria-label="Toggle theme">
+            <i class="fas fa-sun" id="mobile-header-theme-icon"></i>
+        </button>
+    </div>
+
+    <!-- Mobile Navigation Menu -->
+    <div class="mobile-nav-menu" id="mobile-nav-menu">
+        <div class="mobile-menu-content">
+            <nav class="mobile-nav-links">
+                <a href="{% url 'blog:blog_list' %}"><span class="nav-dot"></span>ARTICLES</a>
+                <a href="{% url 'portfolio:project_list' %}"><span class="nav-dot"></span>PROJECTS</a>
+                <a href="{% url 'portfolio:experience_list' %}"><span class="nav-dot"></span>EXPERIENCES</a>
+            </nav>
+            <div class="mobile-nav-buttons">
+                <!-- Resume Button -->
+                <button class="outline-btn" id="mobile-open-resume-modal">
+                    <i class="fas fa-file-alt"></i> RESUME
+                </button>
+                <!-- Video Resume Button -->
+                <button class="filled-btn" id="mobile-open-video-modal">
+                    <i class="fas fa-video"></i> VIDEO RESUME
+                </button>
+            </div>
+        </div>
+    </div>
+</header>

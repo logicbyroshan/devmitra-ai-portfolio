@@ -1,0 +1,95 @@
+<!-- ======================= RESUME MODAL ======================= -->
+<div id="resume-modal" class="resume-modal" role="dialog" aria-modal="true" aria-labelledby="resume-modal-title"> 
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 id="resume-modal-title">{{ resume.title|default:"My Resume" }}</h3> 
+            <button id="close-resume-modal" class="close-btn" aria-label="Close resume modal">&times;</button> 
+        </div>
+        <div class="modal-body">
+            {% if resume and resume.preview_image %}
+            <img src="{{ resume.preview_image.url }}" alt="{{ resume.title|default:'Resume Preview' }}"> 
+            {% else %}
+            <!-- Fallback to static image -->
+            <img src="{% static 'images/resume_preview.jpg' %}" alt="Default Resume Preview"> 
+            {% endif %}
+        </div>
+        <div class="modal-footer">
+            {% if resume and resume.downloadable_file %}
+            <a href="{{ resume.downloadable_file.url }}" class="filled-btn"
+                download="{{ resume.downloadable_file.name|default:'Roshan_Damor_Resume.pdf' }}"> 
+                <i class="fas fa-download"></i> Download PDF
+            </a>
+            {% else %}
+            <!-- Fallback to static file -->
+            <a href="{% static 'documents/Roshan_Damor_Resume.pdf' %}" class="filled-btn"
+                download="Roshan_Damor_Resume.pdf"> 
+                <i class="fas fa-download"></i> Download PDF
+            </a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- ======================= VIDEO RESUME MODAL ======================= -->
+<div id="video-modal" class="video-modal" role="dialog" aria-modal="true" aria-labelledby="video-modal-title"
+    hidden>
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 id="video-modal-title">Video Resume</h3>
+            <button id="close-video-modal" class="close-btn" aria-label="Close video resume modal">×</button>
+        </div>
+        <div class="video-container">
+            {% if video_resume and video_resume.embed_url %}
+            <iframe id="resume-video-iframe" width="100%" height="400" src=""
+                data-embed="{{ video_resume.embed_url }}" title="Video Resume - YouTube video player"
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowfullscreen></iframe>
+            {% else %}
+            <div class="no-video-message">
+                <i class="fa-solid fa-video-slash"></i>
+                <h4>No Video Resume Available</h4>
+                <p>Please add a video resume URL in the admin panel.</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<script>
+    (() => {
+        const modal = document.getElementById('video-modal');
+        const openButtons = document.querySelectorAll('[data-open-video]'); // add this attr to whatever opens modal
+        const closeBtn = document.getElementById('close-video-modal');
+        const iframe = document.getElementById('resume-video-iframe');
+
+        function openModal() {
+            if (!iframe) return;
+            const embed = iframe.dataset.embed || '';
+            if (embed) {
+                // Optionally add origin param to minimize config errors
+                const origin = location.origin;
+                const srcWithOrigin = embed + (embed.includes('?') ? '&' : '?') + 'origin=' + encodeURIComponent(origin);
+                iframe.src = srcWithOrigin;
+            }
+            modal.removeAttribute('hidden');
+        }
+
+        function closeModal() {
+            if (iframe) {
+                // Clear src to stop playback/network
+                iframe.src = '';
+            }
+            modal.setAttribute('hidden', '');
+        }
+
+        // Example: any button with attribute data-open-video will open the modal
+        openButtons.forEach(btn => btn.addEventListener('click', openModal));
+        if (closeBtn) closeBtn.addEventListener('click', closeModal);
+
+        // close on Escape
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && !modal.hasAttribute('hidden')) closeModal();
+        });
+    })();
+</script>

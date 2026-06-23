@@ -1,0 +1,106 @@
+<!-- ======================= FOOTER ======================= -->
+<footer class="site-footer">
+    <div class="footer-container">
+        <div class="footer-top">
+            <!-- Column 1: About & Socials -->
+            <div class="footer-col-about">
+                <div class="footer-logo">
+                    <a href="{% url 'portfolio:home' %}" aria-label="Home - Roshan Damor Portfolio"> 
+                        <!-- Light logo (visible in dark theme) -->
+                        <img src="{% static 'images/logo.png' %}" alt="Roshan Damor Logo - Light Theme"
+                            class="logo-light"> 
+                        <!-- Dark logo (visible in light theme) -->
+                        <img src="{% static 'images/logo-dark.png' %}" alt="Roshan Damor Logo - Dark Theme"
+                            class="logo-dark"> 
+                    </a>
+                </div>
+                <p>A passionate developer building AI-powered solutions and scalable web applications for a
+                    digital-first world.</p>
+                <ul class="social-icons">
+                    {% if config.twitter_url %}
+                    <li><a href="{{ config.twitter_url }}" aria-label="Twitter Profile" target="_blank"
+                            rel="noopener noreferrer"><i class="fab fa-twitter"></i></a></li> 
+                    {% endif %}
+                    {% if config.github_url %}
+                    <li><a href="{{ config.github_url }}" aria-label="GitHub Profile" target="_blank"
+                            rel="noopener noreferrer"><i class="fab fa-github"></i></a></li> 
+                    {% endif %}
+                    {% if config.linkedin_url %}
+                    <li><a href="{{ config.linkedin_url }}" aria-label="LinkedIn Profile" target="_blank"
+                            rel="noopener noreferrer"><i class="fab fa-linkedin-in"></i></a></li> 
+                    {% endif %}
+                    {% if config.youtube_url %}
+                    <li><a href="{{ config.youtube_url }}" aria-label="YouTube Channel" target="_blank"
+                            rel="noopener noreferrer"><i class="fab fa-youtube"></i></a></li> 
+                    {% endif %}
+                    {% if config.instagram_url %}
+                    <li><a href="{{ config.instagram_url }}" aria-label="Instagram Profile" target="_blank"
+                            rel="noopener noreferrer"><i class="fab fa-instagram"></i></a></li> 
+                    {% endif %}
+                    {% if config.facebook_url %}
+                    <li><a href="{{ config.facebook_url }}" aria-label="Facebook Profile" target="_blank"
+                            rel="noopener noreferrer"><i class="fab fa-facebook-f"></i></a></li> 
+                    {% endif %}
+                </ul>
+            </div>
+
+            <!-- Column 2: Quick Links -->
+            <div class="footer-col-links">
+                <h4>Links</h4>
+                <ul>
+                    <!-- DYNAMIC: URL tags with anchors -->
+                    <li><a href="{% url 'portfolio:home' %}">HOME</a></li>
+                    <li><a href="{% url 'roshan:about' %}">ABOUT</a></li>
+                    <li><a href="/#skills">SKILLS</a></li>
+                    <li><a href="{% url 'portfolio:home' %}#contact">CONTACT</a></li>
+                </ul>
+            </div>
+
+            <!-- Column 3: Explore -->
+            <div class="footer-col-links">
+                <h4>Explore</h4>
+                <ul>
+                    <li><a href="https://www.blogmitra.roshanproject.site" target="_blank"
+                            rel="noopener noreferrer">ARTICLES</a></li>
+                    <li><a href="https://www.knowroshan.roshanproject.site" target="_blank"
+                            rel="noopener noreferrer">PERSONAL</a></li>
+                    <li><a href="https://www.ideamitra.roshanproject.site" target="_blank"
+                            rel="noopener noreferrer">STARTUPS</a></li>
+                    <li><a href="https://www.gigmitra.roshanproject.site" target="_blank"
+                            rel="noopener noreferrer">FREELANCE</a></li>
+                </ul>
+            </div>
+
+            <!-- Column 4: Resources -->
+            <div class="footer-col-links">
+                <h4>Resources</h4>
+                <ul>
+                    <li><a href="{% url 'blog:blog_list' %}">BLOGS</a></li>
+                    <li><a href="{% url 'portfolio:project_list' %}">PROJECTS</a></li>
+                    <li><a href="{% url 'portfolio:experience_list' %}">EXPERIENCES</a></li>
+                    <li><a href="{% url 'portfolio:achievements_list' %}">ACHIEVEMENTS</a></li>
+                </ul>
+            </div>
+
+            <!-- Column 5: Connect -->
+            <div class="footer-col-links">
+                <h4>Connect</h4>
+                <ul>
+                    <li><a href="{% url 'roshan:my_playlist' %}">PLAYLIST</a></li>
+                    <li><a href="{% url 'roshan:resources' %}">RESOURCES</a></li>
+                    <li><a href="https://risetogethr.tech" target="_blank" rel="noopener noreferrer">COMMUNITY</a>
+                    </li>
+                    <li><a href="https://github.com/logicbyroshan" target="_blank" rel="noopener noreferrer">OPEN
+                            SOURCE</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p class="copyright">&copy; {% now "Y" %} Roshan Damor. All Rights Reserved.</p>
+            <div class="footer-bottom-links">
+                <a href="{% url 'roshan:privacy_policy' %}">Privacy Policy</a>
+                <a href="{% url 'roshan:terms_of_service' %}">Terms of Service</a>
+            </div>
+        </div>
+    </div>
+</footer>

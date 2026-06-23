@@ -1,0 +1,26 @@
+<!-- ========================= NEWSLETTER CTA SECTION ========================= -->
+<section id="newsletter" class="cta-section portfolio-container portfolio" data-animation="fade-in">
+    <header></header> 
+    <div class="cta-container card">
+        <div class="cta-left-content">
+            <h2><i class="fa-solid fa-paper-plane"></i> Subscribe for <span>Updates</span></h2>
+        </div>
+        <div class="cta-right-content">
+            <!-- Message Display Area -->
+            {% if messages %}
+            <div class="newsletter-messages">
+                {% for message in messages %}
+                <div class="message {{ message.tags }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+            {% endif %}
+            <!-- Newsletter Form -->
+            <form id="newsletter-form" class="cta-form" method="post" action="{% url 'portfolio:subscribe_home' %}">
+                {% csrf_token %}
+                <input type="email" name="email" id="newsletter-email" placeholder="Enter your email address"
+                    aria-label="Enter your email address to subscribe" required>
+                <button type="submit" class="filled-btn" id="newsletter-submit-btn">Subscribe</button>
+            </form>
+        </div>
+    </div>
+</section>

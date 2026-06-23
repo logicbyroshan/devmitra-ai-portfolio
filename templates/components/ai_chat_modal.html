@@ -1,0 +1,43 @@
+<!-- AI Chat Modal -->
+<div class="ai-modal" id="ai-chat-modal">
+    <div class="ai-modal-overlay" id="ai-modal-overlay"></div>
+    <div class="ai-modal-container">
+        <div class="ai-modal-header">
+            <div class="ai-modal-title">
+                <div class="ai-avatar">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <h3>Chat with Rexi AI</h3>
+            </div>
+            <button type="button" class="ai-modal-close" id="close-ai-modal" aria-label="Close AI chat modal"> 
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+
+        <div class="ai-chat-interface">
+            <div class="ai-chat-messages" id="ai-chat-messages">
+            </div>
+            <!-- Input form -->
+            <form id="ai-form" class="ai-query-form" action="{% url 'ai:submit_ai_query' %}" method="POST"
+                enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="input-container">
+                    <div class="textarea-container">
+                        <textarea name="question"
+                            placeholder="Ask anything about me, e.g., 'What are your key skills?' (Ctrl+Enter to send)"
+                            rows="1" maxlength="1000" aria-label="Type your question for the AI assistant"></textarea>
+                        
+                        <div class="char-count">
+                            <span id="char-counter">0</span>/1000
+                        </div>
+                    </div>
+                    <button type="submit" class="submit-btn" title="Send Message (Ctrl+Enter)"
+                        aria-label="Send message to AI assistant"> 
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+                <div id="file-display-container"></div>
+            </form>
+        </div>
+    </div>
+</div>

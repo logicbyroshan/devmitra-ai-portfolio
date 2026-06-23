@@ -1,0 +1,32 @@
+{% if is_paginated %}
+<nav class="pagination" aria-label="Pagination">
+    <!-- DYNAMIC: Previous page link -->
+    {% if page_obj.has_previous %}
+        <a href="?page={{ page_obj.previous_page_number }}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}{% if request.GET.sort %}&sort={{ request.GET.sort }}{% endif %}" class="pagination-btn" aria-label="Previous Page">
+            <i class="fa-solid fa-arrow-left"></i>
+        </a>
+    {% else %}
+        <button class="pagination-btn" disabled><i class="fa-solid fa-arrow-left"></i></button>
+    {% endif %}
+    
+    <!-- DYNAMIC: Page number links -->
+    <div class="page-numbers">
+        {% for num in page_obj.paginator.page_range %}
+            {% if page_obj.number == num %}
+                <a href="#" class="page-number active">{{ num }}</a>
+            {% else %}
+                <a href="?page={{ num }}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}{% if request.GET.sort %}&sort={{ request.GET.sort }}{% endif %}" class="page-number">{{ num }}</a>
+            {% endif %}
+        {% endfor %}
+    </div>
+
+    <!-- DYNAMIC: Next page link -->
+    {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}{% if request.GET.sort %}&sort={{ request.GET.sort }}{% endif %}" class="pagination-btn" aria-label="Next Page">
+            <i class="fa-solid fa-arrow-right"></i>
+        </a>
+    {% else %}
+        <button class="pagination-btn" disabled><i class="fa-solid fa-arrow-right"></i></button>
+    {% endif %}
+</nav>
+{% endif %}
