@@ -1,0 +1,179 @@
+﻿/* ============================================================
+   nav.css — Top navigation bar
+   ============================================================ */
+
+/* --- Navbar Container --------------------------------------- */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--bg2);
+    padding: 0.6rem 1.5rem;
+    border-bottom: 1px solid var(--border);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+    position: sticky;
+    top: 0;
+    z-index: 999;
+    min-height: 58px;
+}
+
+/* --- Left: hamburger + search ----------------------------- */
+.navbar-left {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-grow: 1;
+    max-width: 500px;
+}
+
+/* Hamburger toggle (navbar only) */
+#sidebar-toggle {
+    background: transparent;
+    border: none;
+    color: var(--text2);
+    font-size: 1.25rem;
+    cursor: pointer;
+    padding: 0.4rem 0.5rem;
+    border-radius: var(--r-sm);
+    transition: color 0.2s, background 0.2s;
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+#sidebar-toggle:hover {
+    color: var(--accent);
+    background: rgba(76, 201, 240, 0.08);
+}
+
+/* --- Search Bar -------------------------------------------- */
+.search-bar {
+    position: relative;
+    width: 100%;
+}
+
+.search-bar .search-icon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-muted);
+    pointer-events: none;
+}
+
+.search-bar input {
+    width: 100%;
+    padding: 0.5rem 0.85rem 0.5rem 2.25rem;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    background-color: var(--bg);
+    color: var(--text);
+    font-size: 0.9rem;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.search-bar input::placeholder {
+    color: var(--text-muted);
+}
+
+.search-bar input:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(76, 201, 240, 0.18);
+}
+
+.search-bar input:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+}
+
+/* --- Right: icons + user ---------------------------------- */
+.navbar-right {
+    display: flex;
+    align-items: center;
+    gap: 1.4rem;
+}
+
+.current-date {
+    color: var(--text2);
+    font-size: 0.85rem;
+    white-space: nowrap;
+}
+
+.notification-icon {
+    position: relative;
+    cursor: pointer;
+    line-height: 1;
+}
+
+.notification-icon .fa-bell {
+    font-size: 1.3rem;
+    color: var(--text2);
+    transition: color 0.2s;
+}
+
+.notification-icon:hover .fa-bell {
+    color: var(--text);
+}
+
+.notification-badge {
+    position: absolute;
+    top: -5px;
+    right: -7px;
+    background-color: var(--danger);
+    color: var(--white);
+    border-radius: 50%;
+    width: 18px;
+    height: 18px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 2px solid var(--bg2);
+}
+
+.user-profile {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.user-profile .user-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--border);
+}
+
+.user-profile .user-name {
+    font-weight: 500;
+    color: var(--text);
+    font-size: 0.9rem;
+}
+
+/* --- Responsive ------------------------------------------- */
+@media (max-width: 992px) {
+    .current-date {
+        display: none;
+    }
+}
+
+@media (max-width: 768px) {
+    .navbar-left {
+        display: none;
+    }
+
+    .user-profile .user-name {
+        display: none;
+    }
+
+    .navbar {
+        padding: 0.6rem 1rem;
+    }
+
+    .navbar-right {
+        gap: 1rem;
+    }
+}

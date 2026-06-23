@@ -1,5 +1,6 @@
 from django.conf import settings
 from .models import NotificationSettings, EmailTemplate
+import html
 import logging
 
 logger = logging.getLogger(__name__)
@@ -51,7 +52,7 @@ class EmailNotificationService:
             }
 
             # Render templates with context
-            rendered_html = self._render_template_string(html_content, context)
+            rendered_html = self._render_template_string(html_content, context, html_escape=True)
             rendered_text = self._render_template_string(text_content, context)
             rendered_subject = self._render_template_string(subject, context)
 
@@ -123,7 +124,7 @@ class EmailNotificationService:
             }
 
             # Render templates with context
-            rendered_html = self._render_template_string(html_content, context)
+            rendered_html = self._render_template_string(html_content, context, html_escape=True)
             rendered_text = self._render_template_string(text_content, context)
             rendered_subject = self._render_template_string(subject, context)
 
@@ -166,16 +167,18 @@ class EmailNotificationService:
         except EmailTemplate.DoesNotExist:
             return None
 
-    def _render_template_string(self, template_string, context):
+    def _render_template_string(self, template_string, context, html_escape=False):
         """Render template string with context variables using safe string replacement.
 
         Uses simple {{variable}} replacement instead of Django's Template engine
         to prevent server-side template injection (SSTI) from DB-stored templates.
+        Set html_escape=True when rendering HTML content to prevent XSS.
         """
         result = template_string
         for key, value in context.items():
-            result = result.replace("{{ " + key + " }}", str(value))
-            result = result.replace("{{" + key + "}}", str(value))
+            safe_value = html.escape(str(value)) if html_escape else str(value)
+            result = result.replace("{{ " + key + " }}", safe_value)
+            result = result.replace("{{" + key + "}}", safe_value)
         return result
 
     def _get_default_admin_html_template(self):

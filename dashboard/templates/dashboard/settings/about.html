@@ -1,0 +1,64 @@
+﻿{% extends 'dashboard/base.html' %}
+{% block title %}About Me — Admin{% endblock %}
+
+{% block extra_head %}{{ form.media }}{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1 class="page-title">About Me</h1>
+</div>
+
+{% include 'dashboard/tabs/settings.html' %}
+
+
+<form method="post" enctype="multipart/form-data" id="main-form">
+    {% csrf_token %}
+    <div class="form-layout">
+        <div class="form-main">
+            <div class="form-section">
+                <h3 class="form-section-title">Page Info</h3>
+                <div class="form-group"><label class="form-label">Page Title</label>{{ form.page_title }}</div>
+                <div class="form-group"><label class="form-label">Intro Paragraph</label>{{ form.intro_paragraph }}
+                </div>
+                <div class="form-group"><label class="form-label">Detailed Description</label>{{
+                    form.detailed_description }}</div>
+            </div>
+            <div class="form-section">
+                <h3 class="form-section-title">Personal Details</h3>
+                <div class="form-row col-2">
+                    <div class="form-group"><label class="form-label">Birthday</label>{{ form.birthday }}</div>
+                    <div class="form-group"><label class="form-label">Location</label>{{ form.location }}</div>
+                </div>
+                <div class="form-group"><label class="form-label">Email</label>{{ form.email }}</div>
+                <div class="form-check-row">
+                    {{ form.open_to_work }}
+                    <label for="{{ form.open_to_work.id_for_label }}">Open to Work</label>
+                </div>
+            </div>
+        </div>
+        <div class="form-sidebar">
+            <div class="form-section">
+                <h3 class="form-section-title">Profile Photo</h3>
+                {% if form.instance.profile_image %}
+                <img src="{{ form.instance.profile_image.url }}" alt="" class="img-preview" style="border-radius:50%;">
+                {% endif %}
+                <div class="form-group">{{ form.profile_image }}</div>
+            </div>
+            <div class="form-section">
+                <h3 class="form-section-title">Social Links</h3>
+                <div class="form-group"><label class="form-label">GitHub</label>{{ form.github_url }}</div>
+                <div class="form-group"><label class="form-label">LinkedIn</label>{{ form.linkedin_url }}</div>
+                <div class="form-group"><label class="form-label">Twitter</label>{{ form.twitter_url }}</div>
+                <div class="form-group"><label class="form-label">YouTube</label>{{ form.youtube_url }}</div>
+                <div class="form-group"><label class="form-label">Instagram</label>{{ form.instagram_url }}</div>
+                <div class="form-group"><label class="form-label">Website</label>{{ form.website_url }}</div>
+            </div>
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary w-full">
+                    <i class="fa-solid fa-floppy-disk"></i> Save
+                </button>
+            </div>
+        </div>
+    </div>
+</form>
+{% endblock %}

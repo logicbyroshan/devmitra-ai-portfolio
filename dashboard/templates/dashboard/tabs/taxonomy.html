@@ -1,0 +1,9 @@
+﻿<!-- Taxonomy section tabs -->
+<div class="page-tabs">
+    <a href="{% url 'dashboard:categories_list' %}" class="page-tab {% if active_nav == 'categories' %}active{% endif %}">
+        <i class="fa-solid fa-layer-group"></i> Categories
+    </a>
+    <a href="{% url 'dashboard:technologies_list' %}" class="page-tab {% if active_nav == 'technologies' %}active{% endif %}">
+        <i class="fa-solid fa-microchip"></i> Technologies
+    </a>
+</div>

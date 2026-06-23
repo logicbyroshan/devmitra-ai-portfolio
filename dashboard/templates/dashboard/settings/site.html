@@ -1,0 +1,67 @@
+﻿{% extends 'dashboard/base.html' %}
+{% block title %}Site Configuration — Admin{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1 class="page-title">Site Configuration</h1>
+</div>
+
+{% include 'dashboard/tabs/settings.html' %}
+
+
+<form method="post" enctype="multipart/form-data" id="main-form">
+    {% csrf_token %}
+    <div class="form-layout">
+        <div class="form-main">
+            <div class="form-section">
+                <h3 class="form-section-title">General</h3>
+                <div class="form-group">
+                    <label class="form-label">Site Name</label>
+                    {{ form.site_name }}
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Tagline</label>
+                    {{ form.tagline }}
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Site URL</label>
+                    {{ form.site_url }}
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Meta Description</label>
+                    {{ form.meta_description }}
+                </div>
+            </div>
+            <div class="form-section">
+                <h3 class="form-section-title">Social Links</h3>
+                <div class="form-row col-2">
+                    <div class="form-group"><label class="form-label">GitHub</label>{{ form.github_url }}</div>
+                    <div class="form-group"><label class="form-label">LinkedIn</label>{{ form.linkedin_url }}</div>
+                    <div class="form-group"><label class="form-label">Twitter / X</label>{{ form.twitter_url }}</div>
+                    <div class="form-group"><label class="form-label">Email</label>{{ form.email }}</div>
+                </div>
+            </div>
+        </div>
+        <div class="form-sidebar">
+            <div class="form-section">
+                <h3 class="form-section-title">Favicon / Logo</h3>
+                {% if form.instance.favicon %}
+                <img src="{{ form.instance.favicon.url }}" alt=""
+                    style="width:48px;height:48px;object-fit:contain;display:block;margin-bottom:0.75rem;">
+                {% endif %}
+                <div class="form-group"><label class="form-label">Favicon</label>{{ form.favicon }}</div>
+                {% if form.instance.logo %}
+                <img src="{{ form.instance.logo.url }}" alt=""
+                    style="height:48px;object-fit:contain;display:block;margin-bottom:0.75rem;">
+                {% endif %}
+                <div class="form-group"><label class="form-label">Logo</label>{{ form.logo }}</div>
+            </div>
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary w-full">
+                    <i class="fa-solid fa-floppy-disk"></i> Save Settings
+                </button>
+            </div>
+        </div>
+    </div>
+</form>
+{% endblock %}

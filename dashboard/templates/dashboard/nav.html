@@ -1,0 +1,36 @@
+{% load static %}
+<!-- ── Navbar ─────────────────────────────────────────────── -->
+<nav class="navbar">
+    <div class="navbar-left">
+        <button class="sidebar-toggle btn-icon" id="sidebar-toggle" title="Toggle sidebar">
+            <i class="fa-solid fa-bars"></i>
+        </button>
+        <div class="search-bar">
+            <i class="fa-solid fa-magnifying-glass search-icon"></i>
+            <input type="text" id="table-search" placeholder="Search on this page…">
+        </div>
+    </div>
+    <div class="navbar-right">
+        <div class="current-date" id="current-date"></div>
+        <a href="{% url 'dashboard:contacts_list' %}" class="notification-icon" title="Unread messages">
+            <i class="fa-solid fa-bell"></i>
+            {% if unread_messages_count %}
+            <span class="notification-badge">{{ unread_messages_count }}</span>
+            {% endif %}
+        </a>
+        <a href="/" target="_blank" rel="noopener noreferrer" class="btn-icon" title="View website">
+            <i class="fa-solid fa-arrow-up-right-from-square"></i>
+        </a>
+        <div class="user-profile">
+            {% if user_avatar %}
+            <img src="{{ user_avatar.url }}" class="user-avatar" alt="{{ request.user.get_full_name }}">
+            {% else %}
+            <div class="user-avatar"
+                style="background:var(--border);border-radius:50%;width:38px;height:38px;display:grid;place-items:center;font-size:1rem;color:var(--text2);">
+                <i class="fa-solid fa-user"></i>
+            </div>
+            {% endif %}
+            <span class="user-name">{{ request.user.get_full_name|default:request.user.username }}</span>
+        </div>
+    </div>
+</nav>

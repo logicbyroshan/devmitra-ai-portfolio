@@ -18,8 +18,8 @@
     content="Discover Roshan Damor's journey as a passionate Full Stack Developer & AI Engineer, his mission to build impactful software, and his interests in AI ethics and open-source contribution.">
 <meta property="og:type" content="profile">
 <meta property="og:url" content="{{ request.build_absolute_uri }}">
-{% if config.profile_image %}
-<meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{{ config.profile_image.url }}">
+{% if about_config.profile_image %}
+<meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{{ about_config.profile_image.url }}">
 {% else %}
 <meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{% static 'images/hero.png' %}">
 {% endif %}
@@ -35,8 +35,8 @@
 <meta name="twitter:title" content="About Roshan Damor - Full Stack Developer & AI Engineer">
 <meta name="twitter:description"
     content="Discover Roshan Damor's journey as a passionate Full Stack Developer & AI Engineer, building impactful software and contributing to open-source projects.">
-{% if config.profile_image %}
-<meta name="twitter:image" content="{{ request.scheme }}://{{ request.get_host }}{{ config.profile_image.url }}">
+{% if about_config.profile_image %}
+<meta name="twitter:image" content="{{ request.scheme }}://{{ request.get_host }}{{ about_config.profile_image.url }}">
 {% else %}
 <meta name="twitter:image" content="{{ request.scheme }}://{{ request.get_host }}{% static 'images/hero.png' %}">
 {% endif %}
@@ -53,10 +53,10 @@
             "@type": "Person",
             "name": "Roshan Damor",
             "jobTitle": "Full Stack Developer & AI Engineer",
-            "description": "{{ config.intro_paragraph|default:'Passionate Full Stack Developer & AI Engineer building innovative web applications and AI solutions' }}",
+            "description": "{{ about_config.intro_paragraph|default:'Passionate Full Stack Developer & AI Engineer building innovative web applications and AI solutions' }}",
             "url": "{{ request.scheme }}://{{ request.get_host }}",
-            {% if config.profile_image %}
-            "image": "{{ request.scheme }}://{{ request.get_host }}{{ config.profile_image.url }}",
+            {% if about_config.profile_image %}
+            "image": "{{ request.scheme }}://{{ request.get_host }}{{ about_config.profile_image.url }}",
             {% endif %}
             "sameAs": [
                 "https://github.com/logicbyroshan",
@@ -103,8 +103,8 @@
     <section class="profile-section">
         <div class="profile-left-column">
             <div class="profile-image-wrapper" data-animation="zoom-in">
-                {% if config.profile_image %}
-                    <img src="{{ config.profile_image.url }}" alt="Photo of Roshan Damor">
+                {% if about_config.profile_image %}
+                    <img src="{{ about_config.profile_image.url }}" alt="Photo of Roshan Damor">
                 {% else %}
                     <img src="https://placehold.co/400x400/010409/eaeaea?text=Roshan" alt="Placeholder photo">
                 {% endif %}
@@ -114,70 +114,70 @@
             <div class="profile-info-card" data-animation="fade-in-up">
                 <!-- Personal Info -->
                 <div class="profile-details">
-                    {% if config.open_to_work %}
+                    {% if about_config.open_to_work %}
                     <div class="profile-badge">
                         <i class="fas fa-briefcase"></i>
                         <span>Open to Work</span>
                     </div>
                     {% endif %}
 
-                    {% if config.location %}
+                    {% if about_config.location %}
                     <div class="profile-location">
                         <i class="fas fa-map-marker-alt"></i>
-                        <span>{{ config.location }}</span>
+                        <span>{{ about_config.location }}</span>
                     </div>
                     {% endif %}
 
-                    {% if config.website_url %}
+                    {% if about_config.website_url %}
                     <div class="profile-website">
                         <i class="fas fa-link"></i>
-                        <a href="{{ config.website_url }}" target="_blank" rel="noopener">{{ config.website_url|cut:"https://"|cut:"http://"|cut:"www." }}</a>
+                        <a href="{{ about_config.website_url }}" target="_blank" rel="noopener">{{ about_config.website_url|cut:"https://"|cut:"http://"|cut:"www." }}</a>
                     </div>
                     {% endif %}
 
-                    {% if config.birthday and config.age %}
+                    {% if about_config.birthday and about_config.age %}
                     <div class="profile-birthday">
                         <i class="fas fa-birthday-cake"></i>
-                        <span>{{ config.age }} years old</span>
+                        <span>{{ about_config.age }} years old</span>
                     </div>
                     {% endif %}
 
-                    {% if config.email %}
+                    {% if about_config.email %}
                     <div class="profile-email">
                         <i class="fas fa-envelope"></i>
-                        <a href="mailto:{{ config.email }}">{{ config.email }}</a>
+                        <a href="mailto:{{ about_config.email }}">{{ about_config.email }}</a>
                     </div>
                     {% endif %}
                 </div>
 
                 <!-- Social Links -->
                 <div class="profile-social">
-                    {% if config.github_url %}
-                    <a href="{{ config.github_url }}" target="_blank" rel="noopener" title="GitHub">
+                    {% if about_config.github_url %}
+                    <a href="{{ about_config.github_url }}" target="_blank" rel="noopener" title="GitHub">
                         <i class="fab fa-github"></i>
                         <span class="sr-only">GitHub</span>
                     </a>
                     {% endif %}
-                    {% if config.linkedin_url %}
-                    <a href="{{ config.linkedin_url }}" target="_blank" rel="noopener" title="LinkedIn">
+                    {% if about_config.linkedin_url %}
+                    <a href="{{ about_config.linkedin_url }}" target="_blank" rel="noopener" title="LinkedIn">
                         <i class="fab fa-linkedin"></i>
                         <span class="sr-only">LinkedIn</span>
                     </a>
                     {% endif %}
-                    {% if config.twitter_url %}
-                    <a href="{{ config.twitter_url }}" target="_blank" rel="noopener" title="Twitter">
+                    {% if about_config.twitter_url %}
+                    <a href="{{ about_config.twitter_url }}" target="_blank" rel="noopener" title="Twitter">
                         <i class="fab fa-x-twitter"></i>
                         <span class="sr-only">Twitter</span>
                     </a>
                     {% endif %}
-                    {% if config.youtube_url %}
-                    <a href="{{ config.youtube_url }}" target="_blank" rel="noopener" title="YouTube">
+                    {% if about_config.youtube_url %}
+                    <a href="{{ about_config.youtube_url }}" target="_blank" rel="noopener" title="YouTube">
                         <i class="fab fa-youtube"></i>
                         <span class="sr-only">YouTube</span>
                     </a>
                     {% endif %}
-                    {% if config.instagram_url %}
-                    <a href="{{ config.instagram_url }}" target="_blank" rel="noopener" title="Instagram">
+                    {% if about_config.instagram_url %}
+                    <a href="{{ about_config.instagram_url }}" target="_blank" rel="noopener" title="Instagram">
                         <i class="fab fa-instagram"></i>
                         <span class="sr-only">Instagram</span>
                     </a>
@@ -188,12 +188,12 @@
 
         <div class="profile-content" data-animation="fade-in-up">
             <header class="page-header">
-                <h1>{{ config.page_title|safe|default:"A Bit More <span>About Me</span>" }}</h1>
-                <p>{{ config.intro_paragraph|safe|default:"This is my story, my journey, and what drives me." }}</p>
+                <h1>{{ about_config.page_title|safe|default:"A Bit More <span>About Me</span>" }}</h1>
+                <p>{{ about_config.intro_paragraph|safe|default:"This is my story, my journey, and what drives me." }}</p>
             </header>
             <div class="details-from-cms">
                 <!-- IMPORTANT: The |safe filter renders the HTML from your TinyMCE editor -->
-                {{ config.detailed_description|safe|default:"<ul><li><strong>Mission:</strong> To build software that is not only functional but also intuitive and impactful.</li><li><strong>Interests:</strong> Beyond coding, I'm passionate about AI ethics, open-source contribution, and exploring the intersection of technology and art.</li></ul>" }}
+                {{ about_config.detailed_description|safe|default:"<ul><li><strong>Mission:</strong> To build software that is not only functional but also intuitive and impactful.</li><li><strong>Interests:</strong> Beyond coding, I'm passionate about AI ethics, open-source contribution, and exploring the intersection of technology and art.</li></ul>" }}
             </div>
         </div>
     </section>

@@ -1,0 +1,50 @@
+{% extends 'dashboard/base.html' %}
+{% block title %}{% if category %}Edit Category{% else %}Add Category{% endif %} — Admin{% endblock %}
+
+{% block extra_head %}{{ form.media }}{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1 class="page-title">{% if category %}Edit Category{% else %}Add Resource Category{% endif %}</h1>
+    </div>
+    <a href="{% url 'dashboard:resource_categories_list' %}" class="btn btn-outline">
+        <i class="fa-solid fa-arrow-left"></i> Back
+    </a>
+</div>
+
+<div class="card" style="max-width:600px;">
+    <div class="card-body">
+        <form method="post" id="main-form">
+            {% csrf_token %}
+            <div class="form-group">
+                <label class="form-label required">Name</label>
+                {{ form.name }}
+                {% if form.name.errors %}<div class="field-error">{{ form.name.errors|join:", " }}</div>{% endif %}
+            </div>
+            <div class="form-group">
+                <label class="form-label">Slug</label>
+                {{ form.slug }}
+            </div>
+            <div class="form-group">
+                <label class="form-label">Description</label>
+                {{ form.description }}
+            </div>
+            <div class="form-group">
+                <label class="form-label">Icon (CSS class or emoji)</label>
+                {{ form.icon }}
+            </div>
+            <div style="display:flex;gap:0.75rem;">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fa-solid fa-floppy-disk"></i> Save
+                </button>
+                {% if category %}
+                <a href="{% url 'dashboard:resource_category_delete' category.pk %}" class="btn btn-danger">
+                    <i class="fa-solid fa-trash"></i> Delete
+                </a>
+                {% endif %}
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

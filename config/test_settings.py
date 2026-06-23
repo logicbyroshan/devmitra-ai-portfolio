@@ -34,9 +34,6 @@ MEDIA_ROOT = tempfile.mkdtemp()
 
 # Disable external API calls during tests
 GEMINI_API_KEY = "test-gemini-key"
-SPOTIFY_CLIENT_ID = "test-spotify-client-id"
-SPOTIFY_CLIENT_SECRET = "test-spotify-client-secret"
-SPOTIFY_REDIRECT_URI = "http://testserver/music/admin/spotify-callback/"
 
 # Email backend for testing
 EMAIL_BACKEND = "django.core.mail.backends.locmem.EmailBackend"

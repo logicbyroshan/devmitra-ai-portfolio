@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
             e.preventDefault();
             const targetId = link.getAttribute('href').substring(1);
             const targetElement = document.getElementById(targetId);
-            
+
             if (targetElement) {
                 const headerOffset = 80; // Account for fixed header
                 const elementPosition = targetElement.getBoundingClientRect().top;
@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Add click handler to copy link
         heading.addEventListener('click', () => {
             const url = `${window.location.origin}${window.location.pathname}#${heading.id}`;
-            
+
             if (navigator.clipboard && window.isSecureContext) {
                 navigator.clipboard.writeText(url).then(() => {
                     showCopyNotification(heading);
@@ -140,7 +140,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // =========================================================================
     const tocButton = document.querySelector('.toc-toggle');
     const tocContainer = document.querySelector('.table-of-contents');
-    
+
     if (tocButton && tocContainer) {
         tocButton.addEventListener('click', () => {
             tocContainer.classList.toggle('toc-visible');
@@ -204,7 +204,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // =========================================================================
     // ENHANCED ACCESSIBILITY
     // =========================================================================
-    
+
     // Add skip links for better navigation
     const skipLinks = document.createElement('div');
     skipLinks.className = 'skip-links';
@@ -241,6 +241,4 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     `;
     document.head.appendChild(skipLinkStyles);
-
-    console.log('Legal page JavaScript initialized successfully');
 });

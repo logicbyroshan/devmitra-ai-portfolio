@@ -1,0 +1,143 @@
+﻿{% extends 'dashboard/base.html' %}
+{% block title %}{% if resource %}Edit Resource{% else %}Add Resource{% endif %} — Admin{% endblock %}
+
+{% block extra_head %}{{ form.media }}{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1 class="page-title">{% if resource %}Edit Resource{% else %}Add Resource{% endif %}</h1>
+        {% if resource %}<p class="page-tagline">{{ resource.title }}</p>{% endif %}
+    </div>
+    <a href="{% url 'dashboard:resources_list' %}" class="btn btn-outline">
+        <i class="fa-solid fa-arrow-left"></i> Back
+    </a>
+</div>
+
+<form method="post" enctype="multipart/form-data" id="main-form">
+    {% csrf_token %}
+    <div class="form-layout">
+        <div class="form-main">
+            <div class="form-section">
+                <h3 class="form-section-title">Resource Details</h3>
+                <div class="form-group">
+                    <label class="form-label required">Title</label>
+                    {{ form.title }}
+                    {% if form.title.errors %}<div class="field-error">{{ form.title.errors|join:", " }}</div>{% endif%}
+                </div>
+                <div class="form-row col-2">
+                    <div class="form-group">
+                        <label class="form-label">Categories</label>
+                        <div class="checkbox-group">{{ form.categories }}</div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Resource Type</label>
+                        {{ form.resource_type }}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Link</label>
+                    {{ form.link }}
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Description</label>
+                    {{ form.description }}
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3 class="form-section-title">Media</h3>
+                <div class="form-group">
+                    <label class="form-label">File Upload</label>
+                    {{ form.file_upload }}
+                </div>
+                <div class="form-group">
+                    <label class="form-label">YouTube Video ID</label>
+                    {{ form.youtube_embed_id }}
+                    <span class="form-hint">e.g. dQw4w9WgXcQ (from the YouTube URL)</span>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Vimeo Video ID</label>
+                    {{ form.vimeo_embed_id }}
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Custom Embed Code</label>
+                    {{ form.custom_embed_code }}
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Preview Image</label>
+                    {% if resource and resource.preview_image %}
+                    <img src="{{ resource.preview_image.url }}" alt="" class="img-preview">
+                    {% endif %}
+                    {{ form.preview_image }}
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3 class="form-section-title">Attribution &amp; Metadata</h3>
+                <div class="form-row col-2">
+                    <div class="form-group">
+                        <label class="form-label">Author</label>
+                        {{ form.author }}
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Publication Date</label>
+                        {{ form.publication_date }}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Technologies</label>
+                    <div class="checkbox-group">{{ form.technologies }}</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-sidebar">
+            <div class="form-section">
+                <h3 class="form-section-title">Thumbnail</h3>
+                {% if resource and resource.thumbnail %}
+                <img src="{{ resource.thumbnail.url }}" alt="" class="img-preview">
+                {% endif %}
+                <div class="form-group">
+                    {{ form.thumbnail }}
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3 class="form-section-title">Visibility</h3>
+                <div class="form-check-row">
+                    {{ form.is_active }}
+                    <label for="{{ form.is_active.id_for_label }}">Active (visible)</label>
+                </div>
+                <div class="form-check-row">
+                    {{ form.is_featured }}
+                    <label for="{{ form.is_featured.id_for_label }}">Featured</label>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3 class="form-section-title">Sort &amp; Rating</h3>
+                <div class="form-group">
+                    <label class="form-label">Display Order</label>
+                    {{ form.order }}
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Personal Rating</label>
+                    {{ form.personal_rating }}
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary w-full">
+                    <i class="fa-solid fa-floppy-disk"></i> Save Resource
+                </button>
+                {% if resource %}
+                <a href="{% url 'dashboard:resource_delete' resource.pk %}" class="btn btn-danger w-full">
+                    <i class="fa-solid fa-trash"></i> Delete
+                </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</form>
+{% endblock %}

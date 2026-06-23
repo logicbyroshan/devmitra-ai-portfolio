@@ -1,13 +1,11 @@
-from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.sitemaps.views import sitemap
-from django.views.generic import TemplateView, RedirectView
+from django.views.generic import TemplateView
 from portfolio.sitemaps import (
     StaticViewSitemap,
     ProjectSitemap,
-    SkillSitemap,
     ExperienceSitemap,
     AchievementSitemap,
 )
@@ -18,18 +16,16 @@ sitemaps = {
     "static": StaticViewSitemap,
     "blogs": BlogSitemap,
     "projects": ProjectSitemap,
-    "skills": SkillSitemap,
     "experiences": ExperienceSitemap,
     "achievements": AchievementSitemap,
 }
 
 urlpatterns = [
-    path("admin", RedirectView.as_view(url="/admin/", permanent=True)),
-    path("admin/", admin.site.urls),
+    path("panel/", include("dashboard.urls", namespace="dashboard")),
+    path("auth/", include("authentication.urls", namespace="authentication")),
     path("", include("portfolio.urls")),
     path("blogs/", include("blog.urls")),
     path("ai/", include("ai.urls")),
-    path("auth/", include("authentication.urls")),
     path("", include("roshan.urls")),
     # SEO URLs
     path(

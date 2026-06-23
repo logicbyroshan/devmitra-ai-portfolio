@@ -273,7 +273,7 @@
                 <i class="fas fa-home"></i>
                 Go Home
             </a>
-            <a href="{% url 'portfolio:projects' %}" class="error-btn secondary">
+            <a href="{% url 'portfolio:project_list' %}" class="error-btn secondary">
                 <i class="fas fa-project-diagram"></i>
                 View Projects
             </a>
@@ -292,11 +292,11 @@
                 </li>
                 <li>
                     <i class="fas fa-folder-open"></i>
-                    <span><a href="{% url 'portfolio:projects' %}">Explore my projects</a></span>
+                    <span><a href="{% url 'portfolio:project_list' %}">Explore my projects</a></span>
                 </li>
                 <li>
                     <i class="fas fa-blog"></i>
-                    <span><a href="{% url 'blog:home' %}">Read my latest blogs</a></span>
+                    <span><a href="{% url 'blog:blog_list' %}">Read my latest blogs</a></span>
                 </li>
                 <li>
                     <i class="fas fa-envelope"></i>

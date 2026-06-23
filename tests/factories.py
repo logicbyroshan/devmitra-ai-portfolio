@@ -11,13 +11,13 @@ from portfolio.models import (
     SiteConfiguration,
     Project,
     Category,
-    Skill,
+    Technology,
     Experience,
     Achievement,
     ContactSubmission,
     ProjectImage,
 )
-from blog.models import Blog, Comment
+from blog.models import Blog
 from roshan.models import AboutMeConfiguration, Resource, ResourceCategory
 
 fake = Faker()
@@ -59,29 +59,19 @@ class CategoryFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Category
 
-    name = factory.Faker("word")
-    slug = factory.LazyAttribute(lambda obj: slugify(obj.name))
+    name = factory.Sequence(lambda n: f"Category {n}")
     category_type = factory.Iterator(
         Category.CategoryType.choices, getter=lambda x: x[0]
     )
-    icon = factory.Faker("file_name", extension="svg")
 
 
-class SkillFactory(factory.django.DjangoModelFactory):
-    """Factory for creating Skill instances."""
+class TechnologyFactory(factory.django.DjangoModelFactory):
+    """Factory for creating Technology instances."""
 
     class Meta:
-        model = Skill
+        model = Technology
 
-    name = factory.Faker("word")
-    slug = factory.LazyAttribute(lambda obj: slugify(obj.name))
-    proficiency_level = factory.Iterator(
-        Skill.ProficiencyLevel.choices, getter=lambda x: x[0]
-    )
-    years_of_experience = factory.Faker("random_int", min=1, max=10)
-    description = factory.Faker("text", max_nb_chars=200)
-    icon = factory.Faker("file_name", extension="svg")
-    is_featured = factory.Faker("boolean", chance_of_getting_true=30)
+    name = factory.Sequence(lambda n: f"Technology {n}")
 
 
 class ProjectFactory(factory.django.DjangoModelFactory):
@@ -90,26 +80,12 @@ class ProjectFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Project
 
-    title = factory.Faker("sentence", nb_words=3)
-    slug = factory.LazyAttribute(lambda obj: slugify(obj.title))
+    title = factory.Sequence(lambda n: f"Test Project {n}")
     summary = factory.Faker("text", max_nb_chars=200)
-    description = factory.Faker("text", max_nb_chars=500)
+    content = factory.Faker("text", max_nb_chars=500)
     cover_image = factory.django.FileField(filename="project_cover.jpg")
-    github_url = factory.LazyAttribute(
-        lambda obj: f"https://github.com/testuser/{obj.slug}"
-    )
-    live_url = factory.LazyAttribute(lambda obj: f"https://{obj.slug}.example.com")
-    start_date = factory.Faker("date_between", start_date="-2y", end_date="today")
-    end_date = factory.LazyAttribute(
-        lambda obj: (
-            fake.date_between(start_date=obj.start_date, end_date="today")
-            if fake.boolean(chance_of_getting_true=70)
-            else None
-        )
-    )
-    is_featured = factory.Faker("boolean", chance_of_getting_true=40)
-    is_published = True
-    order = factory.Sequence(lambda n: n)
+    github_url = factory.Sequence(lambda n: f"https://github.com/testuser/project-{n}")
+    live_url = factory.Sequence(lambda n: f"https://project-{n}.example.com")
 
     @factory.post_generation
     def categories(self, create, extracted, **kwargs):
@@ -119,7 +95,6 @@ class ProjectFactory(factory.django.DjangoModelFactory):
             for category in extracted:
                 self.categories.add(category)
         else:
-            # Create default categories if none provided
             project_categories = CategoryFactory.create_batch(
                 2, category_type=Category.CategoryType.PROJECT
             )
@@ -133,11 +108,6 @@ class ProjectFactory(factory.django.DjangoModelFactory):
         if extracted:
             for tech in extracted:
                 self.technologies.add(tech)
-        else:
-            # Create default technologies if none provided
-            tech_skills = SkillFactory.create_batch(3)
-            for skill in tech_skills:
-                self.technologies.add(skill)
 
 
 class ProjectImageFactory(factory.django.DjangoModelFactory):
@@ -148,8 +118,7 @@ class ProjectImageFactory(factory.django.DjangoModelFactory):
 
     project = factory.SubFactory(ProjectFactory)
     image = factory.django.FileField(filename="project_image.jpg")
-    alt_text = factory.Faker("sentence", nb_words=5)
-    order = factory.Sequence(lambda n: n)
+    caption = factory.Faker("sentence", nb_words=5)
 
 
 class ExperienceFactory(factory.django.DjangoModelFactory):
@@ -159,11 +128,11 @@ class ExperienceFactory(factory.django.DjangoModelFactory):
         model = Experience
 
     company_name = factory.Faker("company")
-    position = factory.Faker("job")
-    slug = factory.LazyAttribute(
-        lambda obj: slugify(f"{obj.company_name}-{obj.position}")
-    )
-    description = factory.Faker("text", max_nb_chars=500)
+    role = factory.Faker("job")
+    company_url = factory.Faker("url")
+    summary = factory.Faker("text", max_nb_chars=300)
+    responsibilities = factory.Faker("text", max_nb_chars=500)
+    achievements = factory.Faker("text", max_nb_chars=300)
     start_date = factory.Faker("date_between", start_date="-3y", end_date="today")
     end_date = factory.LazyAttribute(
         lambda obj: (
@@ -172,10 +141,10 @@ class ExperienceFactory(factory.django.DjangoModelFactory):
             else None
         )
     )
-    location = factory.Faker("city")
-    company_url = factory.Faker("url")
-    is_current = factory.LazyAttribute(lambda obj: obj.end_date is None)
-    order = factory.Sequence(lambda n: n)
+    experience_type = factory.SubFactory(
+        "tests.factories.CategoryFactory",
+        category_type=Category.CategoryType.EXPERIENCE,
+    )
 
 
 class AchievementFactory(factory.django.DjangoModelFactory):
@@ -185,12 +154,15 @@ class AchievementFactory(factory.django.DjangoModelFactory):
         model = Achievement
 
     title = factory.Faker("sentence", nb_words=4)
-    description = factory.Faker("text", max_nb_chars=300)
-    date_achieved = factory.Faker("date_between", start_date="-2y", end_date="today")
-    certificate_image = factory.django.FileField(filename="certificate.jpg")
-    certificate_url = factory.Faker("url")
     issuing_organization = factory.Faker("company")
-    order = factory.Sequence(lambda n: n)
+    summary = factory.Faker("text", max_nb_chars=300)
+    date_issued = factory.Faker("date_between", start_date="-2y", end_date="today")
+    image = factory.django.FileField(filename="certificate.jpg")
+    credential_url = factory.Faker("url")
+    category = factory.SubFactory(
+        "tests.factories.CategoryFactory",
+        category_type=Category.CategoryType.ACHIEVEMENT,
+    )
 
 
 class ContactSubmissionFactory(factory.django.DjangoModelFactory):
@@ -203,7 +175,6 @@ class ContactSubmissionFactory(factory.django.DjangoModelFactory):
     email = factory.Faker("email")
     subject = factory.Faker("sentence", nb_words=5)
     message = factory.Faker("text", max_nb_chars=500)
-    submitted_at = factory.Faker("date_time_this_year")
     is_read = factory.Faker("boolean", chance_of_getting_true=30)
 
 
@@ -213,12 +184,10 @@ class BlogFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Blog
 
-    title = factory.Faker("sentence", nb_words=6)
-    slug = factory.LazyAttribute(lambda obj: slugify(obj.title))
+    title = factory.Sequence(lambda n: f"Test Blog Post {n}")
     summary = factory.Faker("text", max_nb_chars=200)
     content = factory.Faker("text", max_nb_chars=1000)
     cover_image = factory.django.FileField(filename="blog_cover.jpg")
-    created_date = factory.Faker("date_time_this_year")
 
     @factory.post_generation
     def categories(self, create, extracted, **kwargs):
@@ -228,26 +197,11 @@ class BlogFactory(factory.django.DjangoModelFactory):
             for category in extracted:
                 self.categories.add(category)
         else:
-            # Create default blog categories if none provided
             blog_categories = CategoryFactory.create_batch(
                 2, category_type=Category.CategoryType.BLOG
             )
             for category in blog_categories:
                 self.categories.add(category)
-
-
-class CommentFactory(factory.django.DjangoModelFactory):
-    """Factory for creating Comment instances."""
-
-    class Meta:
-        model = Comment
-
-    blog = factory.SubFactory(BlogFactory)
-    author_name = factory.Faker("name")
-    author_email = factory.Faker("email")
-    content = factory.Faker("text", max_nb_chars=300)
-    created_at = factory.Faker("date_time_this_year")
-    is_approved = factory.Faker("boolean", chance_of_getting_true=80)
 
 
 class AboutMeConfigurationFactory(factory.django.DjangoModelFactory):
@@ -258,10 +212,8 @@ class AboutMeConfigurationFactory(factory.django.DjangoModelFactory):
         django_get_or_create = ("intro_paragraph",)
 
     intro_paragraph = factory.Faker("text", max_nb_chars=300)
-    years_of_experience = factory.Faker("random_int", min=1, max=15)
-    projects_completed = factory.Faker("random_int", min=10, max=100)
-    technologies_learned = factory.Faker("random_int", min=5, max=50)
-    certifications_earned = factory.Faker("random_int", min=1, max=20)
+    location = factory.Faker("city")
+    open_to_work = True
     profile_image = factory.django.FileField(filename="profile.jpg")
 
 
@@ -271,10 +223,9 @@ class ResourceCategoryFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = ResourceCategory
 
-    name = factory.Faker("word")
-    slug = factory.LazyAttribute(lambda obj: slugify(obj.name))
+    name = factory.Sequence(lambda n: f"ResourceCategory {n}")
     description = factory.Faker("text", max_nb_chars=200)
-    icon = factory.Faker("file_name", extension="svg")
+    icon = "fa-solid fa-folder"
     order = factory.Sequence(lambda n: n)
 
 
@@ -284,19 +235,15 @@ class ResourceFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Resource
 
-    title = factory.Faker("sentence", nb_words=4)
-    slug = factory.LazyAttribute(lambda obj: slugify(obj.title))
+    title = factory.Sequence(lambda n: f"Test Resource {n}")
     description = factory.Faker("text", max_nb_chars=300)
-    category = factory.SubFactory(ResourceCategoryFactory)
     resource_type = factory.Iterator(
         Resource.ResourceType.choices, getter=lambda x: x[0]
     )
-    file = factory.django.FileField(filename="resource.pdf")
-    external_url = factory.Faker("url")
+    link = factory.Faker("url")
     is_featured = factory.Faker("boolean", chance_of_getting_true=30)
-    is_public = True
+    is_active = True
     order = factory.Sequence(lambda n: n)
-    created_at = factory.Faker("date_time_this_year")
 
 
 # Convenience functions for creating complete test scenarios
@@ -315,14 +262,14 @@ def create_complete_portfolio():
         2, category_type=Category.CategoryType.BLOG
     )
 
-    # Skills
-    skills = SkillFactory.create_batch(8)
+    # Technologies
+    technologies = TechnologyFactory.create_batch(8)
 
     # Projects with images
     projects = []
     for i in range(5):
         project = ProjectFactory(
-            categories=project_categories[:2], technologies=skills[:3]
+            categories=project_categories[:2], technologies=technologies[:3]
         )
         # Add project images
         ProjectImageFactory.create_batch(3, project=project)
@@ -335,21 +282,14 @@ def create_complete_portfolio():
     achievements = AchievementFactory.create_batch(4)
 
     # Blog posts
-    blogs = []
-    for i in range(3):
-        blog = BlogFactory(categories=blog_categories)
-        # Add comments to each blog
-        CommentFactory.create_batch(2, blog=blog)
-        blogs.append(blog)
+    blogs = BlogFactory.create_batch(3, categories=blog_categories)
 
     # About me configuration
     about_me = AboutMeConfigurationFactory()
 
     # Resource categories and resources
     resource_categories = ResourceCategoryFactory.create_batch(2)
-    resources = []
-    for category in resource_categories:
-        resources.extend(ResourceFactory.create_batch(3, category=category))
+    resources = ResourceFactory.create_batch(len(resource_categories) * 3)
 
     # Contact submissions
     contacts = ContactSubmissionFactory.create_batch(5)
@@ -360,7 +300,7 @@ def create_complete_portfolio():
             "project": project_categories,
             "blog": blog_categories,
         },
-        "skills": skills,
+        "technologies": technologies,
         "projects": projects,
         "experiences": experiences,
         "achievements": achievements,

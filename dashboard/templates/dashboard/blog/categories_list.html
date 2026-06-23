@@ -1,0 +1,56 @@
+{% extends 'dashboard/base.html' %}
+{% block title %}Blog Categories — Admin{% endblock %}
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1 class="page-title">Blog Categories</h1>
+        <p class="page-subtitle">{{ categories.count }} categor{{ categories.count|pluralize:"y,ies" }}</p>
+    </div>
+    <a href="{% url 'dashboard:blog_category_create' %}" class="btn btn-primary">
+        <i class="fa-solid fa-plus"></i> Add Category
+    </a>
+</div>
+
+{% include 'dashboard/tabs/blog.html' %}
+
+<div class="card">
+    <div class="table-wrap">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Slug</th>
+                    <th>Posts</th>
+                    <th style="width:110px;">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for cat in categories %}
+                <tr>
+                    <td class="fw-medium">{{ cat.name }}</td>
+                    <td class="text-muted text-sm">{{ cat.slug }}</td>
+                    <td>{{ cat.blog_set.count }}</td>
+                    <td>
+                        <div class="action-btns">
+                            <a href="{% url 'dashboard:blog_category_edit' cat.pk %}" class="btn-icon edit"
+                                title="Edit">
+                                <i class="fa-solid fa-pen"></i>
+                            </a>
+                            <a href="{% url 'dashboard:blog_category_delete' cat.pk %}" class="btn-icon delete"
+                                title="Delete">
+                                <i class="fa-solid fa-trash"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4" class="empty-row"><i class="fa-solid fa-inbox"></i> No categories yet. <a
+                            href="{% url 'dashboard:blog_category_create' %}">Add one</a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

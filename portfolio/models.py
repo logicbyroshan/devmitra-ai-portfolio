@@ -3,6 +3,7 @@ from django.utils.text import slugify
 from tinymce.models import HTMLField
 import nh3
 from django.core.exceptions import ValidationError
+import re
 import os
 
 ALLOWED_TAGS = {
@@ -16,7 +17,7 @@ ALLOWED_TAGS = {
     "iframe", "video", "audio",
 }
 ALLOWED_ATTRIBUTES = {
-    "a": {"href", "title", "target", "rel"},
+    "a": {"href", "title", "target"},
     "img": {"src", "alt", "title", "width", "height", "loading", "style"},
     "iframe": {"src", "width", "height", "frameborder", "allow", "allowfullscreen", "title", "loading", "style"},
     "video": {"src", "controls", "width", "height", "autoplay", "muted", "loop", "poster"},
@@ -142,14 +143,7 @@ class Technology(models.Model):
         blank=True,
         null=True,
         validators=[validate_image_file],
-        help_text="Technology icon (supports all image formats including SVG, WebP)",
-    )
-    category = models.ForeignKey(
-        "Category",
-        limit_choices_to={"category_type": "SKL"},
-        on_delete=models.SET_NULL,
-        blank=True,
-        null=True,
+        help_text="Skill icon (supports all image formats including SVG, WebP)",
     )
 
     class Meta:
@@ -182,7 +176,7 @@ class Category(models.Model):
         )  # Prevents "Web Dev" for both Blog and Project
 
     def save(self, *args, **kwargs):
-        if not self.slug or self.slug != slugify(self.name):
+        if not self.slug:
             base_slug = slugify(self.name)
             slug = base_slug
             counter = 1
@@ -225,6 +219,9 @@ class Project(models.Model):
     )
     github_url = models.URLField(blank=True, null=True)
     live_url = models.URLField(blank=True, null=True)
+    is_published = models.BooleanField(
+        default=True, db_index=True, help_text="Show this project on the website"
+    )
     created_date = models.DateTimeField(auto_now_add=True)
 
     class Meta:
@@ -254,7 +251,7 @@ class Project(models.Model):
         """Extract the embed src URL from iframe code or plain YouTube URL."""
         if not self.youtube_embed_code:
             return None
-        import re
+
         # Try extracting src from iframe tag first
         src_match = re.search(r'src=["\']([^"\']*)["\'\s]', self.youtube_embed_code)
         if src_match:
@@ -278,7 +275,6 @@ class Project(models.Model):
         """Extract YouTube video ID for thumbnail generation."""
         if not self.youtube_embed_code:
             return None
-        import re
         patterns = [
             r'(?:youtube\.com/embed/)([A-Za-z0-9_-]{11})',
             r'(?:youtube\.com/watch\?v=|youtu\.be/)([A-Za-z0-9_-]{11})',
@@ -311,36 +307,6 @@ class ProjectImage(models.Model):
         return f"Image for {self.project.title}"
 
 
-class ProjectComment(models.Model):
-    project = models.ForeignKey(
-        Project, related_name="comments", on_delete=models.CASCADE
-    )
-    author_name = models.CharField(max_length=100, default="Anonymous")
-    body = models.TextField()
-    # likes = models.PositiveIntegerField(default=0) # Removed, `total_likes` property handles this
-    created_date = models.DateTimeField(auto_now_add=True)
-    is_approved = models.BooleanField(default=True, db_index=True)
-
-    class Meta:
-        ordering = ["created_date"]
-        verbose_name = "Project Comment"
-        verbose_name_plural = "Project Comments"
-
-    def __str__(self):
-        return f"Comment by {self.author_name} on {self.project.title}"
-
-    @property
-    def total_likes(self):
-        """Get total number of likes for this comment."""
-        return self.user_likes.count()
-
-    def is_liked_by_user(self, user):
-        """Check if a specific user has liked this comment."""
-        if user.is_authenticated:
-            return self.user_likes.filter(user=user).exists()
-        return False
-
-
 class Experience(models.Model):
     company_name = models.CharField(max_length=200)
     company_url = models.URLField(blank=True, null=True)
@@ -357,6 +323,9 @@ class Experience(models.Model):
         Category,
         limit_choices_to={"category_type": Category.CategoryType.EXPERIENCE},
         on_delete=models.PROTECT,
+    )
+    is_visible = models.BooleanField(
+        default=True, db_index=True, help_text="Show this experience on the website"
     )
 
     class Meta:
@@ -413,7 +382,6 @@ class VideoResume(models.Model):
     @property
     def embed_url(self):
         """Extract the embed src URL from iframe code or plain URL."""
-        import re
         if not self.embed_code:
             return ""
         # Try extracting src from iframe tag
@@ -463,79 +431,6 @@ class ContactSubmission(models.Model):
 
 
 # --- SKILL MODELS (enhanced with categories) ---
-class Skill(models.Model):
-    SKILL_CATEGORIES = [
-        ("languages_frameworks", "Languages & Frameworks"),
-        ("backend_database", "Backend & Database"),
-        ("tools_platforms", "Tools & Platforms"),
-        ("soft_skills", "Soft Skills"),
-    ]
-
-    title = models.CharField(max_length=100)
-    slug = models.SlugField(max_length=100, unique=True, editable=False)
-    category = models.CharField(
-        max_length=50,
-        choices=SKILL_CATEGORIES,
-        default="languages_frameworks",
-        help_text="Category for organizing skills on home page",
-    )
-    icon = models.CharField(max_length=50)
-    learning_journey = HTMLField(
-        blank=True, help_text="Detailed learning journey and experience with this skill"
-    )
-    order = models.PositiveIntegerField(default=0)
-    technologies = models.ManyToManyField(Technology, blank=True)
-
-    # New fields for skill detail page
-    proficiency_level = models.CharField(
-        max_length=20,
-        choices=[
-            ("beginner", "Beginner"),
-            ("intermediate", "Intermediate"),
-            ("advanced", "Advanced"),
-            ("expert", "Expert"),
-        ],
-        default="intermediate",
-    )
-    years_of_experience = models.PositiveIntegerField(
-        default=1, help_text="Years of experience with this skill"
-    )
-    is_featured = models.BooleanField(
-        default=False, db_index=True, help_text="Display this skill prominently on the home page"
-    )
-
-    class Meta:
-        ordering = ["order", "title"]
-
-    def save(self, *args, **kwargs):
-        if not self.slug:
-            base_slug = slugify(self.title)
-            slug = base_slug
-            counter = 1
-            while type(self).objects.filter(slug=slug).exclude(pk=self.pk).exists():
-                slug = f"{base_slug}-{counter}"
-                counter += 1
-            self.slug = slug
-        super().save(*args, **kwargs)
-
-    def __str__(self):
-        return self.title
-
-    @property
-    def related_projects_count(self):
-        """Get count of projects using technologies from this skill"""
-        return (
-            Project.objects.filter(technologies__in=self.technologies.all())
-            .distinct()
-            .count()
-        )
-
-    @property
-    def technology_list(self):
-        """Get comma-separated list of technology names"""
-        return ", ".join([tech.name for tech in self.technologies.all()])
-
-
 class FAQ(models.Model):
     question = models.CharField(max_length=255)
     answer = models.TextField()
@@ -573,6 +468,9 @@ class Achievement(models.Model):
         limit_choices_to={"category_type": Category.CategoryType.ACHIEVEMENT},
         on_delete=models.PROTECT,
     )
+    is_visible = models.BooleanField(
+        default=True, db_index=True, help_text="Show this achievement on the website"
+    )
 
     class Meta:
         ordering = ["-date_issued"]  # Show newest first by default
@@ -584,25 +482,3 @@ class Achievement(models.Model):
     def __str__(self):
         return f"{self.title} from {self.issuing_organization}"
 
-
-# =========================================================================
-# COMMENT LIKE MODELS
-# =========================================================================
-
-
-class ProjectCommentLike(models.Model):
-    """Model to track individual user likes on project comments."""
-
-    comment = models.ForeignKey(
-        ProjectComment, related_name="user_likes", on_delete=models.CASCADE
-    )
-    user = models.ForeignKey("auth.User", on_delete=models.CASCADE)
-    created_date = models.DateTimeField(auto_now_add=True)
-
-    class Meta:
-        unique_together = ("comment", "user")  # Prevent duplicate likes
-        verbose_name = "Project Comment Like"
-        verbose_name_plural = "Project Comment Likes"
-
-    def __str__(self):
-        return f"{self.user.username} likes comment on {self.comment.project.title}"

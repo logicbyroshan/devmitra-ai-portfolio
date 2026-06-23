@@ -1,0 +1,9 @@
+﻿<!-- Resources section tabs -->
+<div class="page-tabs">
+    <a href="{% url 'dashboard:resources_list' %}" class="page-tab {% if active_nav == 'resources' %}active{% endif %}">
+        <i class="fa-solid fa-books"></i> All Resources
+    </a>
+    <a href="{% url 'dashboard:resource_categories_list' %}" class="page-tab {% if active_nav == 'resource_categories' %}active{% endif %}">
+        <i class="fa-solid fa-folder"></i> Categories
+    </a>
+</div>

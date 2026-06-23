@@ -1,0 +1,227 @@
+{% extends 'dashboard/base.html' %}
+
+{% block title %}Dashboard — Admin{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1 class="page-title">Dashboard</h1>
+        <p class="page-tagline">Welcome back, {{ request.user.get_full_name|default:request.user.username }}! Here's what's happening.</p>
+    </div>
+    <div style="font-size:0.82rem;color:var(--text-muted);">
+        <i class="fa-solid fa-clock"></i>&nbsp; <span id="current-time"></span>
+    </div>
+</div>
+
+<!-- Stats Grid -->
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-icon stat-icon--cyan">
+            <i class="fa-solid fa-diagram-project"></i>
+        </div>
+        <div class="stat-info">
+            <span class="stat-value">{{ stats.projects }}</span>
+            <span class="stat-label">Projects</span>
+        </div>
+        <a href="{% url 'dashboard:projects_list' %}" class="stat-link"><i class="fa-solid fa-arrow-right"></i></a>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon stat-icon--purple">
+            <i class="fa-solid fa-newspaper"></i>
+        </div>
+        <div class="stat-info">
+            <span class="stat-value">{{ stats.blogs }}</span>
+            <span class="stat-label">Blog Posts</span>
+        </div>
+        <a href="{% url 'dashboard:blog_list' %}" class="stat-link"><i class="fa-solid fa-arrow-right"></i></a>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon stat-icon--green">
+            <i class="fa-solid fa-code"></i>
+        </div>
+        <div class="stat-info">
+            <span class="stat-value">{{ stats.skills }}</span>
+            <span class="stat-label">Skills</span>
+        </div>
+        <a href="{% url 'dashboard:skills_list' %}" class="stat-link"><i class="fa-solid fa-arrow-right"></i></a>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon stat-icon--orange">
+            <i class="fa-solid fa-envelope"></i>
+        </div>
+        <div class="stat-info">
+            <span class="stat-value">{{ stats.messages }}</span>
+            <span class="stat-label">Messages</span>
+            {% if stats.unread_messages %}<span class="badge-dot">{{ stats.unread_messages }} new</span>{% endif %}
+        </div>
+        <a href="{% url 'dashboard:contacts_list' %}" class="stat-link"><i class="fa-solid fa-arrow-right"></i></a>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon stat-icon--red">
+            <i class="fa-solid fa-trophy"></i>
+        </div>
+        <div class="stat-info">
+            <span class="stat-value">{{ stats.achievements }}</span>
+            <span class="stat-label">Achievements</span>
+        </div>
+        <a href="{% url 'dashboard:achievements_list' %}" class="stat-link"><i class="fa-solid fa-arrow-right"></i></a>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon stat-icon--cyan">
+            <i class="fa-solid fa-paper-plane"></i>
+        </div>
+        <div class="stat-info">
+            <span class="stat-value">{{ stats.newsletter }}</span>
+            <span class="stat-label">Newsletter Subs</span>
+        </div>
+        <a href="{% url 'dashboard:newsletter_list' %}" class="stat-link"><i class="fa-solid fa-arrow-right"></i></a>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon stat-icon--purple">
+            <i class="fa-solid fa-book-open"></i>
+        </div>
+        <div class="stat-info">
+            <span class="stat-value">{{ stats.resources }}</span>
+            <span class="stat-label">Resources</span>
+        </div>
+        <a href="{% url 'dashboard:resources_list' %}" class="stat-link"><i class="fa-solid fa-arrow-right"></i></a>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon stat-icon--cyan">
+            <i class="fa-solid fa-robot"></i>
+        </div>
+        <div class="stat-info">
+            <span class="stat-value">{{ stats.ai_queries }}</span>
+            <span class="stat-label">AI Queries</span>
+        </div>
+        <a href="{% url 'dashboard:ai_queries_list' %}" class="stat-link"><i class="fa-solid fa-arrow-right"></i></a>
+    </div>
+</div>
+
+<!-- Quick Actions -->
+<div class="card" style="margin-bottom:1.5rem;">
+    <div class="card-header">
+        <h2 class="section-title"><i class="fa-solid fa-bolt"></i> Quick Actions</h2>
+    </div>
+    <div class="card-body" style="padding-top:0.75rem;">
+        <div class="quick-actions">
+            <a href="{% url 'dashboard:project_create' %}" class="quick-action-btn">
+                <i class="fa-solid fa-plus"></i> New Project
+            </a>
+            <a href="{% url 'dashboard:blog_create' %}" class="quick-action-btn">
+                <i class="fa-solid fa-plus"></i> New Blog Post
+            </a>
+            <a href="{% url 'dashboard:skill_create' %}" class="quick-action-btn">
+                <i class="fa-solid fa-plus"></i> Add Skill
+            </a>
+            <a href="{% url 'dashboard:resource_create' %}" class="quick-action-btn">
+                <i class="fa-solid fa-plus"></i> Add Resource
+            </a>
+            <a href="{% url 'dashboard:achievement_create' %}" class="quick-action-btn">
+                <i class="fa-solid fa-plus"></i> Add Achievement
+            </a>
+            <a href="{% url 'dashboard:ai_context_create' %}" class="quick-action-btn">
+                <i class="fa-solid fa-plus"></i> AI Context
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Three Columns: Messages · Blogs · Projects -->
+<div class="dash-cols dash-cols-3">
+
+    <!-- Recent Messages -->
+    <div class="card">
+        <div class="card-header">
+            <h2 class="section-title"><i class="fa-solid fa-envelope"></i> Recent Messages</h2>
+            <a href="{% url 'dashboard:contacts_list' %}" class="btn btn-sm btn-outline">View All</a>
+        </div>
+        <div class="activity-list">
+            {% for msg in recent_messages %}
+            <div class="activity-item">
+                <div class="activity-icon"><i class="fa-solid fa-user"></i></div>
+                <div class="activity-body">
+                    <div class="activity-title">
+                        <a href="{% url 'dashboard:contact_detail' msg.pk %}">{{ msg.name|truncatechars:30 }}</a>
+                        {% if not msg.is_read %}<span class="badge-new">New</span>{% endif %}
+                    </div>
+                    <div class="activity-meta">{{ msg.email }} &middot; {{ msg.submitted_date|timesince }} ago</div>
+                    <div class="activity-preview">{{ msg.message|truncatechars:80 }}</div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="empty-hint"><i class="fa-solid fa-inbox"></i> No messages yet.</div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Recent Blogs -->
+    <div class="card">
+        <div class="card-header">
+            <h2 class="section-title"><i class="fa-solid fa-newspaper"></i> Recent Blogs</h2>
+            <a href="{% url 'dashboard:blog_list' %}" class="btn btn-sm btn-outline">View All</a>
+        </div>
+        <div class="activity-list">
+            {% for blog in recent_blogs %}
+            <div class="activity-item">
+                <div class="activity-icon activity-icon--purple">
+                    <i class="fa-solid fa-newspaper"></i>
+                </div>
+                <div class="activity-body">
+                    <div class="activity-title">
+                        <a href="{% url 'dashboard:blog_edit' blog.pk %}">{{ blog.title|truncatechars:35 }}</a>
+                        <span class="status-badge {% if blog.is_published %}published{% else %}draft{% endif %}">
+                            {% if blog.is_published %}Live{% else %}Draft{% endif %}
+                        </span>
+                    </div>
+                    <div class="activity-meta">{{ blog.created_date|date:"M d, Y" }} &middot; {{ blog.reading_time }}
+                        min read</div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="empty-hint"><i class="fa-solid fa-inbox"></i> No blog posts yet.</div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Recent Projects -->
+    <div class="card">
+        <div class="card-header">
+            <h2 class="section-title"><i class="fa-solid fa-diagram-project"></i> Recent Projects</h2>
+            <a href="{% url 'dashboard:projects_list' %}" class="btn btn-sm btn-outline">View All</a>
+        </div>
+        <div class="activity-list">
+            {% for project in recent_projects %}
+            <div class="activity-item">
+                <div class="activity-icon activity-icon--cyan">
+                    <i class="fa-solid fa-diagram-project"></i>
+                </div>
+                <div class="activity-body">
+                    <div class="activity-title">
+                        <a href="{% url 'dashboard:project_edit' project.pk %}">{{ project.title|truncatechars:35 }}</a>
+                        <span class="status-badge {% if project.is_published %}published{% else %}draft{% endif %}">
+                            {% if project.is_published %}Live{% else %}Hidden{% endif %}
+                        </span>
+                    </div>
+                    <div class="activity-meta">{{ project.created_date|date:"M d, Y" }}</div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="empty-hint"><i class="fa-solid fa-inbox"></i> No projects yet.</div>
+            {% endfor %}
+        </div>
+    </div>
+
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    function updateTime() {
+        const el = document.getElementById('current-time');
+        if (el) el.textContent = new Date().toLocaleTimeString();
+    }
+    updateTime();
+    setInterval(updateTime, 1000);
+</script>
+{% endblock %}

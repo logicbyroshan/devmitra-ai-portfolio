@@ -1,0 +1,78 @@
+﻿{% extends 'dashboard/base.html' %}
+{% block title %}Blog Posts — Admin{% endblock %}
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1 class="page-title">Blog Posts</h1>
+        <p class="page-subtitle">{{ posts.count }} post{{ posts.count|pluralize }}</p>
+    </div>
+    <a href="{% url 'dashboard:blog_create' %}" class="btn btn-primary">
+        <i class="fa-solid fa-plus"></i> New Post
+    </a>
+</div>
+
+{% include 'dashboard/tabs/blog.html' %}
+
+<div class="card">
+    <div class="card-toolbar">
+        <input type="text" id="table-search" class="search-input" placeholder="Search blog posts…">
+    </div>
+    <div class="table-wrap">
+        <table class="data-table" id="main-table">
+            <thead>
+                <tr>
+                    <th style="width:60px;">Cover</th>
+                    <th>Title</th>
+                    <th>Category</th>
+                    <th>Reading Time</th>
+                    <th>Published</th>
+                    <th style="width:110px;">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for post in posts %}
+                <tr>
+                    <td>
+                        {% if post.cover_image %}
+                        <img src="{{ post.cover_image.url }}" alt=""
+                            style="width:48px;height:36px;object-fit:cover;border-radius:4px;">
+                        {% else %}
+                        <div
+                            style="width:48px;height:36px;background:var(--color-border);border-radius:4px;display:grid;place-items:center;font-size:0.7rem;color:var(--color-text-muted);">
+                            N/A</div>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <div class="fw-medium">{{ post.title|truncatechars:45 }}</div>
+                        <div class="text-muted text-sm">{{ post.slug }}</div>
+                    </td>
+                    <td>{{ post.categories.first.name|default:"—" }}</td>
+                    <td>{{ post.reading_time }} min</td>
+                    <td>
+                        <label class="toggle-switch">
+                            <input type="checkbox" class="status-toggle" data-url="{% url 'dashboard:blog_toggle_published' post.pk %}"{% if post.is_published %} checked{% endif %}>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </td>
+                    <td>
+                        <div class="action-btns">
+                            <a href="{% url 'dashboard:blog_edit' post.pk %}" class="btn-icon edit" title="Edit">
+                                <i class="fa-solid fa-pen"></i>
+                            </a>
+                            <a href="{% url 'dashboard:blog_delete' post.pk %}" class="btn-icon delete" title="Delete">
+                                <i class="fa-solid fa-trash"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" class="empty-row"><i class="fa-solid fa-inbox"></i> No blog posts yet. <a
+                            href="{% url 'dashboard:blog_create' %}">Add one</a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

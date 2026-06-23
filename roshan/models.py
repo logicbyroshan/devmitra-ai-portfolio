@@ -16,7 +16,7 @@ ALLOWED_TAGS = {
     "iframe", "video", "audio",
 }
 ALLOWED_ATTRIBUTES = {
-    "a": {"href", "title", "target", "rel"},
+    "a": {"href", "title", "target"},
     "img": {"src", "alt", "title", "width", "height", "loading", "style"},
     "iframe": {"src", "width", "height", "frameborder", "allow", "allowfullscreen", "title", "loading", "style"},
     "video": {"src", "controls", "width", "height", "autoplay", "muted", "loop", "poster"},
@@ -251,7 +251,7 @@ class ResourceCategory(models.Model):
         ordering = ["order", "name"]
 
     def save(self, *args, **kwargs):
-        if not self.slug or self.slug != slugify(self.name):
+        if not self.slug:
             base_slug = slugify(self.name)
             slug = base_slug
             counter = 1
@@ -364,7 +364,7 @@ class Resource(models.Model):
         verbose_name_plural = "Resources"
 
     def save(self, *args, **kwargs):
-        if not self.slug or self.slug != slugify(self.title):
+        if not self.slug:
             base_slug = slugify(self.title)
             slug = base_slug
             counter = 1
@@ -458,7 +458,7 @@ class ManualPlaylist(models.Model):
         verbose_name_plural = "Manual Playlists"
 
     def save(self, *args, **kwargs):
-        if not self.slug or self.slug != slugify(self.name):
+        if not self.slug:
             base_slug = slugify(self.name)
             slug = base_slug
             counter = 1

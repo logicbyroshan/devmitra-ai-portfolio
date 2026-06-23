@@ -1,0 +1,345 @@
+﻿/* ============================================================
+   dashboard.css — Home / index page specific styles
+   ============================================================ */
+
+/* ---- Stats Grid -------------------------------------------- */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.25rem;
+    margin-bottom: 2rem;
+}
+
+@media (max-width: 1200px) {
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 640px) {
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.stat-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--r-lg);
+    padding: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    position: relative;
+    transition: border-color var(--t), transform var(--t);
+    overflow: hidden;
+}
+
+.stat-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(76, 201, 240, 0.04) 0%, transparent 60%);
+    pointer-events: none;
+}
+
+.stat-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+}
+
+.stat-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 10px;
+    display: grid;
+    place-items: center;
+    font-size: 1.4rem;
+    flex-shrink: 0;
+}
+
+.stat-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.stat-value {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1;
+    display: block;
+}
+
+.stat-label {
+    font-size: 0.85rem;
+    color: var(--text2);
+    margin-top: 0.25rem;
+    display: block;
+}
+
+/* ---- Stat icon color variants ----------------------------- */
+.stat-icon--cyan {
+    background: rgba(76, 201, 240, 0.14);
+    color: var(--accent);
+}
+
+.stat-icon--purple {
+    background: rgba(114, 9, 183, 0.18);
+    color: #b56fff;
+}
+
+.stat-icon--green {
+    background: rgba(72, 199, 142, 0.15);
+    color: #48c78e;
+}
+
+.stat-icon--orange {
+    background: rgba(255, 160, 50, 0.15);
+    color: #ffa032;
+}
+
+.stat-icon--red {
+    background: rgba(240, 80, 80, 0.15);
+    color: #f05050;
+}
+
+/* ---- Activity icon color variants ------------------------- */
+.activity-icon--cyan {
+    background: rgba(76, 201, 240, 0.12);
+    color: var(--accent);
+}
+
+.activity-icon--purple {
+    background: rgba(114, 9, 183, 0.15);
+    color: #b56fff;
+}
+
+.stat-link {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    transition: color var(--t);
+    margin-left: auto;
+    flex-shrink: 0;
+    align-self: flex-start;
+}
+
+.stat-link:hover {
+    color: var(--accent);
+}
+
+/* ---- Dash column layouts ----------------------------------- */
+.dash-cols {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+    margin-top: 1.25rem;
+}
+
+.dash-cols-3 {
+    grid-template-columns: 1fr 1fr 1fr;
+}
+
+@media (max-width: 1200px) {
+    .dash-cols-3 {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 900px) {
+
+    .dash-cols,
+    .dash-cols-3 {
+        grid-template-columns: 1fr;
+    }
+}
+
+.dash-col {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.75rem;
+}
+
+.section-title {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text2);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* ---- Activity List ------------------------------------------ */
+.activity-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+
+.card>.activity-list {
+    padding: 0.75rem;
+}
+
+.activity-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.85rem;
+    padding: 0.75rem;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--r-md);
+    transition: border-color var(--t);
+}
+
+.activity-item:hover {
+    border-color: var(--accent);
+}
+
+.activity-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: rgba(65, 90, 119, 0.4);
+    color: var(--text2);
+    font-size: 0.85rem;
+    flex-shrink: 0;
+}
+
+.activity-body {
+    flex: 1;
+    min-width: 0;
+}
+
+.activity-title {
+    font-size: 0.88rem;
+    font-weight: 500;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+}
+
+.activity-title a {
+    color: var(--text);
+}
+
+.activity-title a:hover {
+    color: var(--accent);
+}
+
+.activity-meta {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    margin-top: 0.2rem;
+}
+
+.activity-preview {
+    font-size: 0.82rem;
+    color: var(--text2);
+    margin-top: 0.3rem;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.empty-hint {
+    text-align: center;
+    padding: 1.5rem;
+    color: var(--text-muted);
+    font-size: 0.88rem;
+}
+
+/* ---- Quick Actions ----------------------------------------- */
+.quick-actions {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.65rem;
+}
+
+@media (max-width: 640px) {
+    .quick-actions {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+.quick-action-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.65rem 0.9rem;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--r-md);
+    color: var(--text2);
+    font-size: 0.82rem;
+    transition: all var(--t);
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.quick-action-btn i {
+    color: var(--accent);
+    font-size: 0.9rem;
+}
+
+.quick-action-btn:hover {
+    border-color: var(--accent);
+    color: var(--text);
+    background: rgba(76, 201, 240, 0.05);
+}
+
+/* ---- Page Tabs --------------------------------------------- */
+.page-tabs {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border);
+    flex-wrap: wrap;
+}
+
+.page-tab {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.6rem 1.1rem;
+    color: var(--text2);
+    font-size: 0.87rem;
+    font-weight: 500;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    transition: color 0.18s, border-color 0.18s;
+    white-space: nowrap;
+}
+
+.page-tab i {
+    font-size: 0.82rem;
+    opacity: 0.8;
+}
+
+.page-tab:hover {
+    color: var(--text);
+    border-bottom-color: var(--border);
+}
+
+.page-tab.active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+    font-weight: 600;
+}
+
+.page-tab.active i {
+    opacity: 1;
+}

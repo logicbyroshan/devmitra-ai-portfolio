@@ -1,0 +1,9 @@
+<div class="page-tabs">
+    <a href="{% url 'dashboard:blog_list' %}" class="page-tab {% if active_nav == 'blog' %}active{% endif %}">
+        <i class="fa-solid fa-newspaper"></i> Posts
+    </a>
+    <a href="{% url 'dashboard:blog_categories_list' %}"
+        class="page-tab {% if active_nav == 'blog_categories' %}active{% endif %}">
+        <i class="fa-solid fa-tags"></i> Categories
+    </a>
+</div>

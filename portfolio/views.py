@@ -1,30 +1,27 @@
-from django.http import JsonResponse, HttpResponseRedirect
+from django.http import JsonResponse
 from django.urls import reverse
 from django.contrib import messages
 from django.shortcuts import get_object_or_404, render, redirect
 from django.views import View
 from django.views.generic import TemplateView, ListView, DetailView
-from django.contrib.auth.decorators import login_required
-from django.views.decorators.http import require_POST
 from django.utils.decorators import method_decorator
 from django_ratelimit.decorators import ratelimit
+from django.core.validators import validate_email
+from django.core.exceptions import ValidationError as DjangoValidationError
 
 # Import all models from your models.py
 from .models import (
-    Skill,
+    Technology,
     Experience,
     Project,
     FAQ,
     Category,
     NewsletterSubscriber,
-    ProjectComment,
     Achievement,
     SiteConfiguration,
     Resume,
     VideoResume,
-    Technology,
     ContactSubmission,
-    ProjectCommentLike,
 )
 
 # Import all forms from your forms.py
@@ -41,55 +38,13 @@ class HomeView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-
-        # =================================================================
-        # NEW & UPDATED: Skill Categories for Skills Section
-        # =================================================================
-
-        # Get skill categories with counts and first few technologies
-        skill_categories = []
-        for category_code, category_name in Skill.SKILL_CATEGORIES:
-            skills_in_category = Skill.objects.filter(category=category_code).order_by(
-                "order"
-            )
-            if skills_in_category.exists():
-                # Get the main/featured skill for this category or first skill
-                main_skill = (
-                    skills_in_category.filter(is_featured=True).first()
-                    or skills_in_category.first()
-                )
-
-                # Get technologies from skills in this category
-                technologies = Technology.objects.filter(
-                    skill__category=category_code
-                ).distinct()[
-                    :6
-                ]  # Limit to 6 technologies per category
-
-                skill_categories.append(
-                    {
-                        "code": category_code,
-                        "name": category_name,
-                        "skills_count": skills_in_category.count(),
-                        "technologies": technologies,
-                        "main_skill": main_skill,  # This will be used for linking to detail page
-                    }
-                )
-
-        context["skill_categories"] = skill_categories
-
-        # =================================================================
-        # Fetch data for the rest of the homepage sections
-        # =================================================================
-        context["skills"] = Skill.objects.all()
+        context["skills"] = Technology.objects.all().order_by("name")
         context["experiences"] = Experience.objects.order_by("-start_date")[:3]
         context["projects"] = Project.objects.order_by("-created_date")[:3]
         context["achievements"] = Achievement.objects.order_by("-date_issued")[:3]
         from blog.models import Blog
 
         context["blogs"] = Blog.objects.order_by("-created_date")[:3]
-        # FAQ section moved to about page
-
         return context
 
 
@@ -105,7 +60,7 @@ class ProjectListView(ListView):
     paginate_by = 6
 
     def get_queryset(self):
-        queryset = super().get_queryset()
+        queryset = super().get_queryset().filter(is_published=True)
         category_slug = self.request.GET.get("category")
         if category_slug and category_slug != "all":
             queryset = queryset.filter(
@@ -129,7 +84,7 @@ class ProjectListView(ListView):
 
 
 class ProjectDetailView(DetailView):
-    """View for a single project detail page with comment functionality."""
+    """View for a single project detail page."""
 
     model = Project
     template_name = "project-detail.html"
@@ -137,112 +92,8 @@ class ProjectDetailView(DetailView):
     slug_field = "slug"
     slug_url_kwarg = "slug"
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        project = self.object  # Already fetched by DetailView
-
-        # Get initial 5 comments for display
-        initial_comments = project.comments.filter(is_approved=True).order_by(
-            "-created_date"
-        )[:5]
-        context["comments"] = initial_comments
-
-        # Add user's liked comments for proper state management
-        if self.request.user.is_authenticated:
-            user_liked_comments = ProjectCommentLike.objects.filter(
-                user=self.request.user, comment__in=initial_comments
-            ).values_list("comment_id", flat=True)
-            context["user_liked_comments"] = list(user_liked_comments)
-        else:
-            context["user_liked_comments"] = []
-
-        # Check if there are more comments beyond the initial 5
-        total_comments_count = project.comments.filter(is_approved=True).count()
-        context["has_more_comments"] = total_comments_count > 5
-        context["total_comments"] = total_comments_count
-
-        return context
-
-    def post(self, request, *args, **kwargs):
-        project = self.get_object()
-
-        # Check if user is authenticated
-        if not request.user.is_authenticated:
-            login_url = (
-                reverse("authentication:login")
-                + f'?next={reverse("portfolio:project_detail", kwargs={"slug": project.slug})}%23comments'
-            )
-            return HttpResponseRedirect(login_url)
-
-        body = request.POST.get("body")
-
-        redirect_url = (
-            reverse("portfolio:project_detail", kwargs={"slug": project.slug})
-            + "#comments"
-        )
-        response = HttpResponseRedirect(redirect_url)
-
-        if body:
-            if len(body) > 5000:
-                messages.error(request, "Comment is too long. Maximum 5000 characters.")
-                return response
-            # Create comment with authenticated user's name
-            author_name = request.user.first_name or request.user.username
-            ProjectComment.objects.create(
-                project=project, author_name=author_name, body=body
-            )
-            messages.success(
-                request, "Your comment has been posted and is awaiting approval."
-            )
-        else:
-            messages.error(request, "Please enter your comment.")
-
-        return response
-
-
-def load_more_project_comments(request, slug):
-    """AJAX view to load more project comments."""
-    if request.method == "GET":
-        project = get_object_or_404(Project, slug=slug)
-        offset = int(request.GET.get("offset", 0))
-        offset = max(0, offset)  # Prevent negative offsets
-
-        total_comments = project.comments.filter(is_approved=True).count()
-        offset = min(offset, total_comments)  # Cap offset at total count
-
-        # Load 10 comments starting from the offset
-        comments = project.comments.filter(is_approved=True).order_by("-created_date")[
-            offset : offset + 10
-        ]
-
-        # Get user's liked comments if authenticated
-        user_liked_comments = []
-        if request.user.is_authenticated:
-            user_liked_comments = ProjectCommentLike.objects.filter(
-                user=request.user, comment__in=comments
-            ).values_list("comment_id", flat=True)
-            user_liked_comments = list(user_liked_comments)
-
-        comments_data = []
-        for comment in comments:
-            comments_data.append(
-                {
-                    "id": comment.id,
-                    "author_name": comment.author_name,
-                    "body": comment.body,
-                    "likes": comment.total_likes,  # Use the new property
-                    "is_liked": comment.id in user_liked_comments,
-                    "created_at": comment.created_date.strftime(
-                        "%B %d, %Y at %I:%M %p"
-                    ),
-                }
-            )
-
-        return JsonResponse(
-            {"comments": comments_data, "has_more": total_comments > (offset + 10)}
-        )
-
-    return JsonResponse({"error": "Invalid request"}, status=400)
+    def get_queryset(self):
+        return Project.objects.filter(is_published=True)
 
 
 # =========================================================================
@@ -293,30 +144,6 @@ class ExperienceDetailView(DetailView):
         context["related_experiences"] = Experience.objects.exclude(
             id=experience.id
         ).order_by("-start_date")[:3]
-        return context
-
-
-# =========================================================================
-# SKILL DETAIL VIEW
-# =========================================================================
-class SkillDetailView(DetailView):
-    """View for a single skill dtl page, showing related projects."""
-
-    model = Skill
-    template_name = "skill-detail.html"
-    context_object_name = "skill"
-    slug_field = "slug"
-    slug_url_kwarg = "slug"
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        skill = self.get_object()
-        skill_technologies = skill.technologies.all()
-        context["related_projects"] = (
-            Project.objects.filter(technologies__in=skill_technologies)
-            .distinct()
-            .order_by("-created_date")[:2]
-        )
         return context
 
 
@@ -413,9 +240,12 @@ class NewsletterSubscribeHomeView(View):
 class NewsletterSubscribeAjaxView(View):
     """Handles AJAX requests for newsletter subscriptions from the modal."""
 
+    @method_decorator(ratelimit(key="ip", rate="5/m", method="POST", block=True))
     def post(self, request, *args, **kwargs):
-        email = request.POST.get("email")
-        if not email or "@" not in email or "." not in email:
+        email = request.POST.get("email", "").strip()
+        try:
+            validate_email(email)
+        except DjangoValidationError:
             return JsonResponse(
                 {"success": False, "message": "Please enter a valid email address."},
                 status=400,
@@ -458,40 +288,6 @@ class AchievementListView(ListView):
             category_type=Category.CategoryType.ACHIEVEMENT
         )
         return context
-
-
-# =========================================================================
-# COMMENT LIKE VIEWS
-# =========================================================================
-
-
-@login_required
-@require_POST
-def toggle_project_comment_like(request, comment_id):
-    """AJAX view to toggle like/unlike for project comments."""
-    try:
-        comment = get_object_or_404(ProjectComment, id=comment_id)
-        like, created = ProjectCommentLike.objects.get_or_create(
-            comment=comment, user=request.user
-        )
-
-        if not created:
-            like.delete()
-            liked = False
-        else:
-            liked = True
-
-        return JsonResponse(
-            {"success": True, "liked": liked, "total_likes": comment.total_likes}
-        )
-
-    except ProjectComment.DoesNotExist:
-        return JsonResponse(
-            {"success": False, "error": "Comment not found"}, status=404
-        )
-
-    except Exception as e:
-        return JsonResponse({"success": False, "error": str(e)}, status=500)
 
 
 # ======================= CUSTOM ERROR HANDLERS =======================

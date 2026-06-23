@@ -1,0 +1,59 @@
+﻿{% extends 'dashboard/base.html' %}
+{% block title %}FAQs — Admin{% endblock %}
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1 class="page-title">FAQs</h1>
+        <p class="page-subtitle">{{ faqs.count }} FAQ{{ faqs.count|pluralize }}</p>
+    </div>
+
+    <a href="{% url 'dashboard:faq_create' %}" class="btn btn-primary">
+        <i class="fa-solid fa-plus"></i> Add FAQ
+    </a>
+</div>
+
+{% include 'dashboard/tabs/portfolio.html' %}
+
+<div class="card">
+    <div class="card-toolbar">
+        <input type="text" id="table-search" class="search-input" placeholder="Search FAQs…">
+    </div>
+    <div class="table-wrap">
+        <table class="data-table" id="main-table">
+            <thead>
+                <tr>
+                    <th>Question</th>
+                    <th style="width:60px;">Order</th>
+                    <th style="width:110px;">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for faq in faqs %}
+                <tr>
+                    <td>
+                        <div class="fw-medium">{{ faq.question|truncatechars:80 }}</div>
+                        <div class="text-muted text-sm">{{ faq.answer|truncatechars:100|striptags }}</div>
+                    </td>
+                    <td class="text-center">{{ faq.order }}</td>
+                    <td>
+                        <div class="action-btns">
+                            <a href="{% url 'dashboard:faq_edit' faq.pk %}" class="btn-icon edit" title="Edit">
+                                <i class="fa-solid fa-pen"></i>
+                            </a>
+                            <a href="{% url 'dashboard:faq_delete' faq.pk %}" class="btn-icon delete" title="Delete">
+                                <i class="fa-solid fa-trash"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="3" class="empty-row"><i class="fa-solid fa-inbox"></i> No FAQs yet. <a
+                            href="{% url 'dashboard:faq_create' %}">Add one</a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

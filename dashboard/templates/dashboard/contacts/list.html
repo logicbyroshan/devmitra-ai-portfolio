@@ -1,0 +1,71 @@
+﻿{% extends 'dashboard/base.html' %}
+{% block title %}Messages — Admin{% endblock %}
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1 class="page-title">Contact Messages</h1>
+        <p class="page-subtitle">
+            {{ contacts.count }} message{{ contacts.count|pluralize }}
+            {% if unread_count %} &middot; <span style="color:var(--color-accent);">{{ unread_count }} unread</span>{% endif %}
+        </p>
+    </div>
+
+</div>
+
+{% include 'dashboard/tabs/contacts.html' %}
+
+<div class="card">
+    <div class="card-toolbar">
+        <input type="text" id="table-search" class="search-input" placeholder="Search messages…">
+    </div>
+    <div class="table-wrap">
+        <table class="data-table" id="main-table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Subject</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                    <th style="width:110px;">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for msg in contacts %}
+                <tr {% if not msg.is_read %}class="row-unread"{% endif %}>
+                    <td>
+                        <div class="fw-medium">
+                            {{ msg.name }}
+                            {% if not msg.is_read %}<span class="badge-new">New</span>{% endif %}
+                        </div>
+                    </td>
+                    <td class="text-sm">{{ msg.email }}</td>
+                    <td>{{ msg.subject|default:msg.message|truncatechars:40 }}</td>
+                    <td class="text-sm text-muted">{{ msg.submitted_date|date:"M d, Y" }}</td>
+                    <td>
+                        <span class="status-badge {% if msg.is_read %}read{% else %}unread{% endif %}">
+                            {% if msg.is_read %}Read{% else %}Unread{% endif %}
+                        </span>
+                    </td>
+                    <td>
+                        <div class="action-btns">
+                            <a href="{% url 'dashboard:contact_detail' msg.pk %}" class="btn-icon edit" title="View">
+                                <i class="fa-solid fa-eye"></i>
+                            </a>
+                            <a href="{% url 'dashboard:contact_delete' msg.pk %}" class="btn-icon delete"
+                                title="Delete">
+                                <i class="fa-solid fa-trash"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" class="empty-row"><i class="fa-solid fa-inbox"></i> No messages yet.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

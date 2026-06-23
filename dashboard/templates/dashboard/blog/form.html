@@ -1,0 +1,106 @@
+{% extends 'dashboard/base.html' %}
+{% block title %}{% if post %}Edit Post{% else %}Add Post{% endif %} — Admin{% endblock %}
+
+{% block extra_head %}{{ form.media }}{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1 class="page-title">{% if post %}Edit Post{% else %}New Blog Post{% endif %}</h1>
+        {% if post %}<p class="page-tagline">{{ post.title }}</p>{% endif %}
+    </div>
+    <a href="{% url 'dashboard:blog_list' %}" class="btn btn-outline">
+        <i class="fa-solid fa-arrow-left"></i> Back
+    </a>
+</div>
+
+<form method="post" enctype="multipart/form-data" id="main-form">
+    {% csrf_token %}
+    
+    {% if form.non_field_errors %}
+    <div class="alert alert-danger" style="color: #ff4d4f; background: rgba(255,77,79,0.1); border: 1px solid #ff4d4f; padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
+        {{ form.non_field_errors }}
+    </div>
+    {% endif %}
+    
+    <div class="form-layout">
+        <div class="form-main">
+
+            <div class="form-section">
+                <h3 class="form-section-title">Post Content</h3>
+                <div class="form-group">
+                    <label class="form-label required">Title</label>
+                    {{ form.title }}
+                    {% if form.title.errors %}<div class="field-error">{{ form.title.errors|join:", " }}</div>{% endif%}
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Excerpt / Summary</label>
+                    {{ form.summary }}
+                    {% if form.summary.errors %}<div class="field-error" style="color: #ff4d4f; font-size: 0.85rem; margin-top: 0.25rem;">{{ form.summary.errors|join:", " }}</div>{% endif %}
+                </div>
+                <div class="form-group">
+                    <label class="form-label required">Content</label>
+                    {{ form.content }}
+                    {% if form.content.errors %}<div class="field-error" style="color: #ff4d4f; font-size: 0.85rem; margin-top: 0.25rem;">{{ form.content.errors|join:", " }}</div>{% endif %}
+                </div>
+            </div>
+
+        </div>
+
+        <div class="form-sidebar">
+            <div class="form-section">
+                <h3 class="form-section-title">Cover Image</h3>
+                {% if post and post.cover_image %}
+                <img src="{{ post.cover_image.url }}" alt="" class="img-preview" id="cover-preview">
+                {% else %}
+                <img src="" alt="" class="img-preview" id="cover-preview" style="display:none;">
+                {% endif %}
+                <div class="form-group">
+                    {{ form.cover_image }}
+                    {% if form.cover_image.errors %}<div class="field-error" style="color: #ff4d4f; font-size: 0.85rem; margin-top: 0.25rem;">{{ form.cover_image.errors|join:", " }}</div>{% endif %}
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3 class="form-section-title">Taxonomy</h3>
+                <div class="form-group">
+                    <label class="form-label">Categories</label>
+                    <div class="checkbox-group">{{ form.categories }}</div>
+                    {% if form.categories.errors %}<div class="field-error" style="color: #ff4d4f; font-size: 0.85rem; margin-top: 0.25rem;">{{ form.categories.errors|join:", " }}</div>{% endif %}
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3 class="form-section-title">Visibility</h3>
+                <div class="form-check-row">
+                    {{ form.is_published }}
+                    <label for="{{ form.is_published.id_for_label }}">Published</label>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary w-full">
+                    <i class="fa-solid fa-floppy-disk"></i> Save Post
+                </button>
+                {% if post %}
+                <a href="{% url 'dashboard:blog_delete' post.pk %}" class="btn btn-danger w-full">
+                    <i class="fa-solid fa-trash"></i> Delete
+                </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</form>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.querySelector('input[name="cover_image"]')?.addEventListener('change', function () {
+        const preview = document.getElementById('cover-preview');
+        if (this.files && this.files[0]) {
+            preview.src = URL.createObjectURL(this.files[0]);
+            preview.style.display = 'block';
+        }
+    });
+</script>
+{% endblock %}

@@ -207,7 +207,7 @@ class EmailServiceTest(BaseTestCase):
             # Skip if bulk email service doesn't exist
             pass
 
-    @patch("notifications.services.send_mail")
+    @patch("notifications.services.send_mail", create=True)
     def test_email_send_failure_handling(self, mock_send_mail):
         """Test email send failure handling."""
         mock_send_mail.side_effect = Exception("SMTP Error")

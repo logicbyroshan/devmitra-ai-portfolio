@@ -1,0 +1,218 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login</title>
+    <link rel="icon" href="{% static 'dashboard/img/favicon.ico' %}">
+    <link rel="stylesheet" href="{% static 'dashboard/css/base.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+        crossorigin="anonymous">
+    <style>
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background: var(--bg);
+        }
+
+        .login-wrap {
+            width: 100%;
+            max-width: 420px;
+            padding: 1.5rem;
+        }
+
+        .login-card {
+            background: var(--bg2);
+            border: 1px solid var(--border);
+            border-radius: var(--r-lg);
+            padding: 2.5rem 2rem;
+        }
+
+        .login-logo {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .login-logo img {
+            height: 52px;
+            margin-bottom: 0.75rem;
+            display: block;
+            margin-inline: auto;
+        }
+
+        .login-logo h1 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text);
+            margin: 0;
+        }
+
+        .login-logo p {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            margin: 0.25rem 0 0;
+        }
+
+        .login-messages {
+            margin-bottom: 1rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.82rem;
+            color: var(--text2);
+            margin-bottom: 0.45rem;
+            font-weight: 500;
+        }
+
+        .input-wrap {
+            position: relative;
+        }
+
+        .input-wrap i {
+            position: absolute;
+            left: 0.85rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .input-wrap input {
+            width: 100%;
+            padding: 0.65rem 0.85rem 0.65rem 2.5rem;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            color: var(--text);
+            font-size: 0.9rem;
+            transition: border-color var(--t);
+        }
+
+        .input-wrap input:focus,
+        .input-wrap input:focus-visible {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(76, 201, 240, 0.15);
+        }
+
+        .btn-login {
+            width: 100%;
+            padding: 0.75rem;
+            background: var(--accent);
+            color: var(--bg);
+            border: none;
+            border-radius: var(--radius-md);
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: opacity var(--t);
+            margin-top: 0.5rem;
+        }
+
+        .btn-login:hover {
+            opacity: 0.9;
+        }
+
+        .login-footer {
+            text-align: center;
+            margin-top: 1.5rem;
+        }
+
+        .login-footer a {
+            color: var(--accent);
+            font-size: 0.82rem;
+            text-decoration: none;
+        }
+
+        .login-footer a:hover {
+            text-decoration: underline;
+        }
+
+        .errorlist {
+            list-style: none;
+            padding: 0.6rem 0.85rem;
+            background: rgba(239, 68, 68, 0.12);
+            border: 1px solid rgba(239, 68, 68, 0.4);
+            border-radius: var(--radius-md);
+            margin-bottom: 0.75rem;
+            color: var(--danger);
+            font-size: 0.82rem;
+        }
+
+        .errorlist li {
+            padding: 0.1rem 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="login-wrap">
+        <div class="login-card">
+            <div class="login-logo">
+                <img src="{% static 'dashboard/img/logo.png' %}" alt="Logo">
+                <h1>Admin Panel</h1>
+                <p>Sign in to manage your portfolio</p>
+            </div>
+
+            {% if messages %}
+            <div class="login-messages">
+                {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <form method="post" novalidate>
+                {% csrf_token %}
+                {% if form.non_field_errors %}
+                <ul class="errorlist">
+                    {% for error in form.non_field_errors %}<li>{{ error }}</li>{% endfor %}
+                </ul>
+                {% endif %}
+
+                <div class="form-group">
+                    <label class="form-label" for="{{ form.username.id_for_label }}">Username</label>
+                    <div class="input-wrap">
+                        <i class="fa-solid fa-user"></i>
+                        <input type="text" name="username" id="{{ form.username.id_for_label }}"
+                            value="{{ form.username.value|default:'' }}" placeholder="Enter username"
+                            autocomplete="username" autofocus>
+                    </div>
+                    {% if form.username.errors %}
+                    <ul class="errorlist">{% for e in form.username.errors %}<li>{{ e }}</li>{% endfor %}</ul>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="{{ form.password.id_for_label }}">Password</label>
+                    <div class="input-wrap">
+                        <i class="fa-solid fa-lock"></i>
+                        <input type="password" name="password" id="{{ form.password.id_for_label }}"
+                            placeholder="Enter password" autocomplete="current-password">
+                    </div>
+                    {% if form.password.errors %}
+                    <ul class="errorlist">{% for e in form.password.errors %}<li>{{ e }}</li>{% endfor %}</ul>
+                    {% endif %}
+                </div>
+
+                <button type="submit" class="btn-login">
+                    <i class="fa-solid fa-right-to-bracket"></i>&nbsp; Sign In
+                </button>
+            </form>
+        </div>
+        <div class="login-footer">
+            <a href="/" target="_blank" rel="noopener noreferrer"><i class="fa-solid fa-arrow-up-right-from-square"></i> View Website</a>
+        </div>
+    </div>
+</body>
+
+</html>

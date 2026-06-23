@@ -1,0 +1,51 @@
+﻿{% extends 'dashboard/base.html' %}
+{% block title %}AI Queries — Admin{% endblock %}
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1 class="page-title">AI Queries</h1>
+        <p class="page-subtitle">{{ queries.count }} quer{{ queries.count|pluralize:"y,ies" }}</p>
+    </div>
+
+</div>
+
+{% include 'dashboard/tabs/ai.html' %}
+
+<div class="card">
+    <div class="card-toolbar">
+        <input type="text" id="table-search" class="search-input" placeholder="Search queries…">
+    </div>
+    <div class="table-wrap">
+        <table class="data-table" id="main-table">
+            <thead>
+                <tr>
+                    <th>Question</th>
+                    <th>Date</th>
+                    <th style="width:80px;">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for q in queries %}
+                <tr>
+                    <td>
+                        <div class="fw-medium">{{ q.question|truncatechars:80 }}</div>
+                    </td>
+                    <td class="text-sm text-muted">{{ q.created_at|date:"M d, Y H:i" }}</td>
+                    <td>
+                        <div class="action-btns">
+                            <a href="{% url 'dashboard:ai_query_delete' q.pk %}" class="btn-icon delete" title="Delete">
+                                <i class="fa-solid fa-trash"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="3" class="empty-row"><i class="fa-solid fa-inbox"></i> No AI queries yet.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

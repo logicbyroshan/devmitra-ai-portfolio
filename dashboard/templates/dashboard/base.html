@@ -1,0 +1,82 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% if page_title %}{{ page_title }} — {% endif %}Admin Panel{% endblock %}</title>
+    <link rel="icon" href="{% static 'dashboard/img/favicon.ico' %}" type="image/x-icon">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+    <!-- Dashboard CSS -->
+    <link rel="stylesheet" href="{% static 'dashboard/css/base.css' %}">
+    <link rel="stylesheet" href="{% static 'dashboard/css/nav.css' %}">
+    <link rel="stylesheet" href="{% static 'dashboard/css/side.css' %}">
+    <link rel="stylesheet" href="{% static 'dashboard/css/dashboard.css' %}">
+    <link rel="stylesheet" href="{% static 'dashboard/css/forms.css' %}">
+
+    {% block extra_css %}{% endblock %}
+    {% block extra_head %}{% endblock %}
+    <script>
+        /* Apply sidebar state before first paint — prevents open→close flash */
+        (function () {
+            if (localStorage.getItem('sidebarState') === 'collapsed') {
+                document.documentElement.classList.add('sidebar-pre-collapsed');
+            }
+        })();
+    </script>
+    <style>
+        /* Kill transitions on initial page load so sidebar never animates in */
+        .sidebar-pre-collapsed .sidebar,
+        .sidebar-pre-collapsed .admin-layout {
+            transition: none !important;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="admin-layout" id="admin-layout">
+
+        <!-- ── Sidebar ─────────────────────────────────────── -->
+        {% include "dashboard/side.html" %}
+
+        <!-- ── Main content ────────────────────────────────── -->
+        <div class="main-content-wrapper">
+
+            <!-- Navbar -->
+            {% include "dashboard/nav.html" %}
+
+            <!-- Page content -->
+            <main class="content-area">
+
+                <!-- Django messages -->
+                {% if messages %}
+                <div class="messages-container">
+                    {% for msg in messages %}
+                    <div class="alert alert-{{ msg.tags|default:'info' }}">
+                        <i
+                            class="fa-solid {% if msg.tags == 'success' %}fa-circle-check{% elif msg.tags == 'error' %}fa-circle-xmark{% elif msg.tags == 'warning' %}fa-triangle-exclamation{% else %}fa-circle-info{% endif %}"></i>
+                        {{ msg }}
+                        <button class="alert-close"><i class="fa-solid fa-xmark"></i></button>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                {% block content %}{% endblock %}
+            </main>
+        </div>
+    </div>
+
+    <!-- Dashboard core JS -->
+    <script src="{% static 'dashboard/js/nav.js' %}" defer></script>
+    <script src="{% static 'dashboard/js/side.js' %}" defer></script>
+    <script src="{% static 'dashboard/js/dashboard.js' %}" defer></script>
+
+    {% block extra_js %}{% endblock %}
+</body>
+
+</html>

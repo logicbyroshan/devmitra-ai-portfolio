@@ -1,0 +1,65 @@
+﻿{% extends 'dashboard/base.html' %}
+{% block title %}Resume Settings — Admin{% endblock %}
+{% block content %}
+<div class="page-header">
+    <h1 class="page-title">Resume</h1>
+</div>
+
+{% include 'dashboard/tabs/settings.html' %}
+
+
+<form method="post" enctype="multipart/form-data" id="main-form">
+    {% csrf_token %}
+    <div class="grid-col-2">
+        <!-- Resume Upload -->
+        <div class="card">
+            <div class="card-body">
+                <h3 class="form-section-title">Resume Document</h3>
+                {% if resume and resume.downloadable_file %}
+                <div style="margin-bottom:1.5rem;padding:1rem;background:rgba(76,201,240,0.08);border:1px solid rgba(76,201,240,0.3);border-radius:var(--r-md);display:flex;align-items:center;gap:1rem;">
+                    <i class="fa-solid fa-file-pdf" style="font-size:2rem;color:var(--accent);"></i>
+                    <div>
+                        <div class="fw-medium">{{ resume.title|default:"Current Resume" }}</div>
+                        <a href="{{ resume.downloadable_file.url }}" target="_blank" rel="noopener noreferrer" style="color:var(--accent);font-size:0.85rem;">Download</a>
+                    </div>
+                </div>
+                {% endif %}
+                <div class="form-group">
+                    <label class="form-label">Title</label>
+                    {{ resume_form.title }}
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Upload PDF Resume</label>
+                    {{ resume_form.downloadable_file }}
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Preview Image</label>
+                    {{ resume_form.preview_image }}
+                </div>
+            </div>
+        </div>
+
+        <!-- Video Resume -->
+        <div class="card">
+            <div class="card-body">
+                <h3 class="form-section-title">Video Resume</h3>
+                {% if video_resume and video_resume.embed_code %}
+                <div style="margin-bottom:1.5rem;padding:1rem;background:rgba(76,201,240,0.08);border:1px solid rgba(76,201,240,0.3);border-radius:var(--r-md);">
+                    <div class="text-muted text-sm">Current embed code set</div>
+                </div>
+                {% endif %}
+                <div class="form-group">
+                    <label class="form-label">Video Embed Code</label>
+                    {{ video_form.embed_code }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div style="margin-top:1.5rem;">
+        <button type="submit" class="btn btn-primary">
+            <i class="fa-solid fa-floppy-disk"></i> Save All
+        </button>
+    </div>
+</form>
+{% endblock %}

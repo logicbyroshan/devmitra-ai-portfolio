@@ -1,0 +1,702 @@
+﻿/* ============================================================
+   base.css — Custom Admin Dashboard (complete)
+   ============================================================ */
+
+/* ---- Variables --------------------------------------------- */
+:root {
+    --bg: #0d1b2a;
+    --bg2: #1b263b;
+    --border: #415a77;
+    --accent: #4cc9f0;
+    --accent-h: #3a86ff;
+    --text: #f0f8ff;
+    --text2: #a9b4c2;
+    --text-muted: #7a8fa3;
+    --success: #22c55e;
+    --warning: #f59e0b;
+    --danger: #ef4444;
+    --white: #ffffff;
+    --sidebar-w: 200px;
+    --sidebar-col: 72px;
+    --r-sm: 4px;
+    --r-md: 8px;
+    --r-lg: 12px;
+    --t: 0.25s ease;
+    /* aliases used in some templates */
+    --color-primary-dark: #0d1b2a;
+    --color-secondary-dark: #1b263b;
+    --color-border: #415a77;
+    --color-accent: #4cc9f0;
+    --color-accent-hover: #3a86ff;
+    --color-text-primary: #f0f8ff;
+    --color-text-secondary: #a9b4c2;
+    --color-text-muted: #7a8fa3;
+    --color-success: #22c55e;
+    --color-warning: #f59e0b;
+    --color-danger: #ef4444;
+    --color-white: #ffffff;
+    --sidebar-width-expanded: 200px;
+    --sidebar-width-collapsed: 72px;
+    --border-radius-sm: 4px;
+    --border-radius-md: 8px;
+    --border-radius-lg: 12px;
+    --transition-speed: 0.25s ease;
+    /* short-form radius aliases used in some templates */
+    --color-card: #1b263b;
+    --radius-sm: 4px;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+}
+
+/* ---- Reset --------------------------------------------------- */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+img {
+    max-width: 100%;
+}
+
+input,
+textarea,
+select,
+button {
+    font-family: inherit;
+    font-size: inherit;
+}
+
+ul {
+    list-style: none;
+}
+
+/* ---- Layout -------------------------------------------------- */
+.admin-layout {
+    display: flex;
+    min-height: 100vh;
+}
+
+.main-content-wrapper {
+    margin-left: var(--sidebar-w);
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    transition: margin-left var(--t);
+    min-width: 0;
+}
+
+.admin-layout.sidebar-collapsed .main-content-wrapper {
+    margin-left: var(--sidebar-col);
+}
+
+.content-area {
+    padding: 2rem;
+    flex: 1;
+}
+
+/* ---- Page Header -------------------------------------------- */
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.page-title {
+    font-size: 1.55rem;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1.2;
+}
+
+/* Title + count badge sit side-by-side */
+.page-header>div:first-child {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+}
+
+.page-subtitle {
+    display: inline-flex;
+    align-items: center;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 0.18rem 0.7rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--text2);
+    white-space: nowrap;
+    line-height: 1.6;
+}
+
+/* Descriptive (non-badge) subtitle — used on dashboard index etc. */
+.page-tagline {
+    font-size: 0.87rem;
+    color: var(--text2);
+    margin-top: 0.25rem;
+    width: 100%;
+}
+
+/* ---- Card ---------------------------------------------------- */
+.card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--r-lg);
+    overflow: hidden;
+}
+
+.card-body {
+    padding: 1.5rem;
+}
+
+.card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.9rem 1.25rem;
+    border-bottom: 1px solid var(--border);
+}
+
+.card-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 1rem;
+}
+
+.card-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.85rem 1.25rem;
+    border-bottom: 1px solid var(--border);
+}
+
+/* ---- Buttons ------------------------------------------------- */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.55rem 1.1rem;
+    border-radius: var(--r-md);
+    font-weight: 500;
+    cursor: pointer;
+    border: none;
+    transition: all 0.18s;
+    font-size: 0.88rem;
+    white-space: nowrap;
+    line-height: 1.4;
+}
+
+.btn-primary {
+    background: var(--accent);
+    color: var(--bg);
+}
+
+.btn-primary:hover {
+    background: var(--accent-h);
+    color: var(--white);
+}
+
+.btn-secondary {
+    background: var(--border);
+    color: var(--text);
+}
+
+.btn-secondary:hover {
+    background: #5a7a99;
+}
+
+.btn-danger {
+    background: transparent;
+    color: var(--danger);
+    border: 1px solid var(--danger);
+}
+
+.btn-danger:hover {
+    background: var(--danger);
+    color: var(--white);
+}
+
+.btn-outline {
+    background: transparent;
+    color: var(--accent);
+    border: 1px solid var(--accent);
+}
+
+.btn-outline:hover {
+    background: var(--accent);
+    color: var(--bg);
+}
+
+.btn-sm {
+    padding: 0.3rem 0.65rem;
+    font-size: 0.78rem;
+}
+
+.w-full {
+    width: 100%;
+    justify-content: center;
+}
+
+.btn-icon {
+    background: transparent;
+    border: none;
+    color: var(--text2);
+    padding: 0.4rem 0.5rem;
+    border-radius: var(--r-sm);
+    cursor: pointer;
+    transition: color 0.18s, background 0.18s;
+    font-size: 0.9rem;
+    line-height: 1;
+    display: inline-flex;
+    align-items: center;
+}
+
+.btn-icon:hover {
+    color: var(--text);
+    background: var(--border);
+}
+
+.btn-icon.edit:hover {
+    color: var(--accent);
+    background: rgba(76, 201, 240, 0.1);
+}
+
+.btn-icon.delete:hover {
+    color: var(--danger);
+    background: rgba(239, 68, 68, 0.1);
+}
+
+/* ---- Table --------------------------------------------------- */
+.table-wrap {
+    overflow-x: auto;
+}
+
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+}
+
+.data-table th {
+    background: rgba(13, 27, 42, 0.7);
+    color: var(--text2);
+    text-align: left;
+    padding: 0.75rem 1rem;
+    font-weight: 500;
+    font-size: 0.77rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+}
+
+.data-table td {
+    padding: 0.9rem 1rem;
+    border-bottom: 1px solid rgba(65, 90, 119, 0.35);
+    vertical-align: middle;
+}
+
+.data-table tr:last-child td {
+    border-bottom: none;
+}
+
+.data-table tr:hover td {
+    background: rgba(65, 90, 119, 0.12);
+}
+
+.action-btns {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.empty-row {
+    text-align: center;
+    color: var(--text-muted);
+    padding: 2.5rem 1rem !important;
+    font-size: 0.9rem;
+}
+
+.empty-row i {
+    margin-right: 0.4rem;
+}
+
+.empty-row a {
+    color: var(--accent);
+    text-decoration: underline;
+}
+
+.search-input {
+    padding: 0.45rem 0.85rem;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--r-md);
+    color: var(--text);
+    font-size: 0.88rem;
+    transition: border-color 0.2s;
+    min-width: 230px;
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: var(--accent);
+}
+
+.search-input:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+}
+
+.search-input::placeholder {
+    color: var(--text-muted);
+}
+
+/* ---- Status Badges ------------------------------------------ */
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.22rem 0.6rem;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.status-badge.published,
+.status-badge.active,
+.status-badge.visible {
+    background: rgba(34, 197, 94, 0.12);
+    color: #4ade80;
+    border: 1px solid rgba(34, 197, 94, 0.28);
+}
+
+.status-badge.draft,
+.status-badge.inactive,
+.status-badge.hidden {
+    background: rgba(245, 158, 11, 0.12);
+    color: #fbbf24;
+    border: 1px solid rgba(245, 158, 11, 0.28);
+}
+
+.status-badge.featured {
+    background: rgba(76, 201, 240, 0.12);
+    color: var(--accent);
+    border: 1px solid rgba(76, 201, 240, 0.28);
+}
+
+.status-badge.read {
+    background: rgba(34, 197, 94, 0.08);
+    color: var(--success);
+    border: 1px solid rgba(34, 197, 94, 0.22);
+}
+
+.status-badge.unread {
+    background: rgba(76, 201, 240, 0.1);
+    color: var(--accent);
+    border: 1px solid rgba(76, 201, 240, 0.25);
+}
+
+/* ---- Unread table row ------------------------------------- */
+.row-unread {
+    background: rgba(76, 201, 240, 0.04);
+}
+
+/* ---- Toggle Switch ------------------------------------------ */
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 42px;
+    height: 22px;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.toggle-slider {
+    position: absolute;
+    inset: 0;
+    background: rgba(65, 90, 119, 0.6);
+    border-radius: 999px;
+    transition: 0.2s;
+}
+
+.toggle-slider::before {
+    content: '';
+    position: absolute;
+    height: 16px;
+    width: 16px;
+    left: 3px;
+    bottom: 3px;
+    background: var(--text2);
+    border-radius: 50%;
+    transition: 0.2s;
+}
+
+.toggle-switch input:checked+.toggle-slider {
+    background: var(--success);
+}
+
+.toggle-switch input:checked+.toggle-slider::before {
+    transform: translateX(20px);
+    background: var(--white);
+}
+
+/* ---- Tags ---------------------------------------------------- */
+.tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.18rem 0.55rem;
+    background: rgba(76, 201, 240, 0.1);
+    color: var(--accent);
+    border: 1px solid rgba(76, 201, 240, 0.22);
+    border-radius: var(--r-sm);
+    font-size: 0.75rem;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.tag-muted {
+    background: rgba(65, 90, 119, 0.2);
+    color: var(--text2);
+    border-color: rgba(65, 90, 119, 0.35);
+}
+
+/* ---- Dot / New badges --------------------------------------- */
+.badge-dot {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.15rem 0.5rem;
+    background: rgba(239, 68, 68, 0.14);
+    color: #f87171;
+    border-radius: 999px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    margin-left: 0.4rem;
+}
+
+.badge-new {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.12rem 0.45rem;
+    background: rgba(76, 201, 240, 0.15);
+    color: var(--accent);
+    border-radius: 999px;
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-left: 0.35rem;
+}
+
+/* ---- Utility classes ---------------------------------------- */
+.fw-medium {
+    font-weight: 500;
+}
+
+.fw-bold {
+    font-weight: 600;
+}
+
+.text-muted {
+    color: var(--text-muted);
+}
+
+.text-sm {
+    font-size: 0.82rem;
+}
+
+.text-xs {
+    font-size: 0.74rem;
+}
+
+/* ---- Image helpers ------------------------------------------ */
+.img-preview {
+    width: 100%;
+    max-height: 200px;
+    object-fit: cover;
+    border-radius: var(--r-md);
+    margin-bottom: 0.75rem;
+    border: 1px solid var(--border);
+    display: block;
+}
+
+.img-preview-sm {
+    width: 70px;
+    height: 52px;
+    object-fit: cover;
+    border-radius: var(--r-sm);
+    border: 1px solid var(--border);
+    display: block;
+    margin-bottom: 0.4rem;
+}
+
+/* ---- Formset rows ------------------------------------------- */
+.formset-row {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--r-md);
+    padding: 0.9rem;
+    margin-bottom: 0.65rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.formset-row.formset-deleted {
+    opacity: 0.35;
+    border-style: dashed;
+}
+
+/* ---- Alerts / Messages ------------------------------------- */
+.messages-container {
+    margin-bottom: 1.25rem;
+}
+
+.alert {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.85rem 1.1rem;
+    border-radius: var(--r-md);
+    margin-bottom: 0.5rem;
+    font-size: 0.88rem;
+    border-left: 4px solid;
+}
+
+.alert-success {
+    background: rgba(34, 197, 94, 0.08);
+    border-color: var(--success);
+    color: #86efac;
+}
+
+.alert-error,
+.alert-danger {
+    background: rgba(239, 68, 68, 0.08);
+    border-color: var(--danger);
+    color: #fca5a5;
+}
+
+.alert-warning {
+    background: rgba(245, 158, 11, 0.08);
+    border-color: var(--warning);
+    color: #fcd34d;
+}
+
+.alert-info {
+    background: rgba(76, 201, 240, 0.08);
+    border-color: var(--accent);
+    color: var(--accent);
+}
+
+.alert-close {
+    margin-left: auto;
+    background: none;
+    border: none;
+    color: inherit;
+    cursor: pointer;
+    font-size: 1rem;
+    opacity: 0.65;
+    padding: 0;
+}
+
+.alert-close:hover {
+    opacity: 1;
+}
+
+/* ---- Confirm delete ----------------------------------------- */
+.delete-confirm-wrap {
+    max-width: 500px;
+    margin: 3rem auto;
+    text-align: center;
+}
+
+.delete-confirm-wrap .del-icon {
+    font-size: 3rem;
+    color: var(--danger);
+    margin-bottom: 1rem;
+}
+
+/* ---- Scrollbar ---------------------------------------------- */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--bg);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--accent);
+}
+
+/* ── Smooth page transitions (eliminates tab-switch flash/vibration) ── */
+@view-transition {
+    navigation: auto;
+}
+
+body {
+    animation: page-fade-in 0.12s ease;
+}
+
+@keyframes page-fade-in {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+/* ---- Responsive -------------------------------------------- */
+@media (max-width: 768px) {
+    .content-area {
+        padding: 1rem;
+    }
+
+    .main-content-wrapper {
+        margin-left: 0 !important;
+    }
+
+    .page-title {
+        font-size: 1.3rem;
+    }
+
+    .search-input {
+        min-width: 160px;
+    }
+}

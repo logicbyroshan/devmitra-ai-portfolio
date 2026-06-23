@@ -80,8 +80,8 @@ class AIQuerySubmitView(View):
                     status=400,
                 )
 
-            # Save the query to database
-            AIQuery.objects.create(question=question_text, attachment=attached_file)
+            # Save the query to database (attachment field excluded — not passed to AI)
+            AIQuery.objects.create(question=question_text)
 
             # Parse conversation history from frontend (JSON array)
             conversation_history = None

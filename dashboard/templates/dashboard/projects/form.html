@@ -1,0 +1,202 @@
+{% extends 'dashboard/base.html' %}
+{% load static %}
+{% block title %}{% if project %}Edit{% else %}Add{% endif %} Project — Admin{% endblock %}
+
+{% block extra_head %}{{ form.media }}{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1 class="page-title">{% if project %}Edit Project{% else %}Add Project{% endif %}</h1>
+        {% if project %}<p class="page-tagline">{{ project.title }}</p>{% endif %}
+    </div>
+    <a href="{% url 'dashboard:projects_list' %}" class="btn btn-outline">
+        <i class="fa-solid fa-arrow-left"></i> Back
+    </a>
+</div>
+
+<form method="post" enctype="multipart/form-data" id="main-form">
+    {% csrf_token %}
+    
+    {% if form.non_field_errors %}
+    <div class="alert alert-danger" style="color: #ff4d4f; background: rgba(255,77,79,0.1); border: 1px solid #ff4d4f; padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
+        {{ form.non_field_errors }}
+    </div>
+    {% endif %}
+    
+    <div class="form-layout">
+
+        <!-- Main Column -->
+        <div class="form-main">
+
+            <div class="form-section">
+                <h3 class="form-section-title">Basic Information</h3>
+                <div class="form-group">
+                    <label class="form-label required" for="{{ form.title.id_for_label }}">Title</label>
+                    {{ form.title }}
+                    {% if form.title.errors %}<div class="field-error">{{ form.title.errors|join:", " }}</div>{% endif%}
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="{{ form.summary.id_for_label }}">Summary</label>
+                    {{ form.summary }}
+                    {% if form.summary.errors %}<div class="field-error">{{ form.summary.errors|join:", " }}</div>{% endif %}
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Content</label>
+                    {{ form.content }}
+                    {% if form.content.errors %}<div class="field-error" style="color: #ff4d4f; font-size: 0.85rem; margin-top: 0.25rem;">{{ form.content.errors|join:", " }}</div>{% endif %}
+                </div>
+            </div>
+
+            <!-- Project Images Formset -->
+            <div class="form-section">
+                <div class="section-header-inner">
+                    <h3 class="form-section-title">Project Images</h3>
+                    <button type="button" class="btn btn-sm btn-outline" id="add-image-btn">
+                        <i class="fa-solid fa-plus"></i> Add Image
+                    </button>
+                </div>
+                {{ image_formset.management_form }}
+                <div id="image-formset-container">
+                    {% for img_form in image_formset %}
+                    <div class="formset-row{% if img_form.DELETE.value %} formset-deleted{% endif %}">
+                        {% if img_form.instance.pk %}
+                        {% if img_form.instance.image %}
+                        <img src="{{ img_form.instance.image.url }}" alt="" class="img-preview-sm">
+                        {% endif %}
+                        <div style="display:flex;align-items:center;gap:0.5rem;">
+                            {{ img_form.image }}
+                            {{ img_form.DELETE.label_tag }} {{ img_form.DELETE }}
+                            {% if img_form.id %}{{ img_form.id }}{% endif %}
+                        </div>
+                        {% else %}
+                        {{ img_form.image }}
+                        <div style="display:none;">{{ img_form.DELETE }}{% if img_form.id %}{{ img_form.id }}{% endif %}
+                        </div>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Links -->
+            <div class="form-section">
+                <h3 class="form-section-title">Links</h3>
+                <div class="form-row col-2">
+                    <div class="form-group">
+                        <label class="form-label" for="{{ form.github_url.id_for_label }}">GitHub URL</label>
+                        {{ form.github_url }}
+                        {% if form.github_url.errors %}<div class="field-error" style="color: #ff4d4f; font-size: 0.85rem; margin-top: 0.25rem;">{{ form.github_url.errors|join:", " }}</div>{% endif %}
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="{{ form.live_url.id_for_label }}">Live URL</label>
+                        {{ form.live_url }}
+                        {% if form.live_url.errors %}<div class="field-error" style="color: #ff4d4f; font-size: 0.85rem; margin-top: 0.25rem;">{{ form.live_url.errors|join:", " }}</div>{% endif %}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="{{ form.youtube_embed_code.id_for_label }}">YouTube Embed
+                        Code</label>
+                    {{ form.youtube_embed_code }}
+                    {% if form.youtube_embed_code.errors %}<div class="field-error" style="color: #ff4d4f; font-size: 0.85rem; margin-top: 0.25rem;">{{ form.youtube_embed_code.errors|join:", " }}</div>{% endif %}
+                </div>
+            </div>
+
+            <!-- Taxonomy -->
+            <div class="form-section">
+                <h3 class="form-section-title">Taxonomy</h3>
+                <div class="form-row col-2">
+                    <div class="form-group">
+                        <label class="form-label">Technologies</label>
+                        <div class="checkbox-group">{{ form.technologies }}</div>
+                        {% if form.technologies.errors %}<div class="field-error" style="color: #ff4d4f; font-size: 0.85rem; margin-top: 0.25rem;">{{ form.technologies.errors|join:", " }}</div>{% endif %}
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Categories</label>
+                        <div class="checkbox-group">{{ form.categories }}</div>
+                        {% if form.categories.errors %}<div class="field-error" style="color: #ff4d4f; font-size: 0.85rem; margin-top: 0.25rem;">{{ form.categories.errors|join:", " }}</div>{% endif %}
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Sidebar -->
+        <div class="form-sidebar">
+            <div class="form-section">
+                <h3 class="form-section-title">Cover Image</h3>
+                {% if project and project.cover_image %}
+                <img src="{{ project.cover_image.url }}" alt="" class="img-preview" id="cover-preview">
+                {% else %}
+                <img src="" alt="" class="img-preview" id="cover-preview" style="display:none;">
+                {% endif %}
+                <div class="form-group">
+                    <label class="form-label" for="{{ form.cover_image.id_for_label }}">Upload Image</label>
+                    {{ form.cover_image }}
+                    {% if form.cover_image.errors %}<div class="field-error" style="color: #ff4d4f; font-size: 0.85rem; margin-top: 0.25rem;">{{ form.cover_image.errors|join:", " }}</div>{% endif %}
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3 class="form-section-title">Visibility</h3>
+                <div class="form-check-row">
+                    {{ form.is_published }}
+                    <label for="{{ form.is_published.id_for_label }}">Published (visible on site)</label>
+                </div>
+
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary w-full">
+                    <i class="fa-solid fa-floppy-disk"></i> Save Project
+                </button>
+                {% if project %}
+                <a href="{% url 'dashboard:project_delete' project.pk %}" class="btn btn-danger w-full">
+                    <i class="fa-solid fa-trash"></i> Delete
+                </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</form>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const addBtn = document.getElementById('add-image-btn');
+        const container = document.getElementById('image-formset-container');
+        if (!addBtn || !container) return;
+
+        addBtn.addEventListener('click', function () {
+            const totalForms = document.getElementById('id_images-TOTAL_FORMS');
+            if (!totalForms) return;
+            const count = parseInt(totalForms.value);
+
+            const newRow = document.createElement('div');
+            newRow.className = 'formset-row';
+            newRow.innerHTML =
+                `<label style="font-size:0.85rem;color:var(--color-text-muted);">Image ${count + 1}</label>` +
+                `<input type="file" name="images-${count}-image" accept="image/*" class="form-input" id="id_images-${count}-image">` +
+                `<input type="hidden" name="images-${count}-id" id="id_images-${count}-id">` +
+                `<input type="hidden" name="images-${count}-project" id="id_images-${count}-project">`;
+            container.appendChild(newRow);
+            totalForms.value = count + 1;
+        });
+
+        // Cover image preview
+        const coverInput = document.querySelector('input[name="cover_image"]');
+        const coverPreview = document.getElementById('cover-preview');
+        if (coverInput && coverPreview) {
+            coverInput.addEventListener('change', function () {
+                const file = this.files[0];
+                if (file) {
+                    coverPreview.src = URL.createObjectURL(file);
+                    coverPreview.style.display = '';
+                }
+            });
+        }
+    });
+</script>
+{% endblock %}

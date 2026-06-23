@@ -1,0 +1,9 @@
+﻿<!-- Contacts section tabs -->
+<div class="page-tabs">
+    <a href="{% url 'dashboard:contacts_list' %}" class="page-tab {% if active_nav == 'contacts' %}active{% endif %}">
+        <i class="fa-solid fa-message"></i> Messages
+    </a>
+    <a href="{% url 'dashboard:newsletter_list' %}" class="page-tab {% if active_nav == 'newsletter' %}active{% endif %}">
+        <i class="fa-solid fa-paper-plane"></i> Newsletter
+    </a>
+</div>

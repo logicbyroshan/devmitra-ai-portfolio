@@ -1,0 +1,21 @@
+﻿<!-- Settings section tabs -->
+<div class="page-tabs">
+    <a href="{% url 'dashboard:settings_site' %}" class="page-tab {% if active_nav == 'settings_site' or active_nav == 'settings' %}active{% endif %}">
+        <i class="fa-solid fa-sliders"></i> Site Config
+    </a>
+    <a href="{% url 'dashboard:settings_about' %}" class="page-tab {% if active_nav == 'settings_about' %}active{% endif %}">
+        <i class="fa-solid fa-user"></i> About Me
+    </a>
+    <a href="{% url 'dashboard:settings_resume' %}" class="page-tab {% if active_nav == 'settings_resume' %}active{% endif %}">
+        <i class="fa-solid fa-file-pdf"></i> Resume
+    </a>
+    <a href="{% url 'dashboard:settings_notifications' %}" class="page-tab {% if active_nav == 'settings_notifications' %}active{% endif %}">
+        <i class="fa-solid fa-bell"></i> Notifications
+    </a>
+    <a href="{% url 'dashboard:settings_resources_config' %}" class="page-tab {% if active_nav == 'settings_resources' %}active{% endif %}">
+        <i class="fa-solid fa-books"></i> Resources Config
+    </a>
+    <a href="{% url 'dashboard:email_templates_list' %}" class="page-tab {% if active_nav == 'email_templates' %}active{% endif %}">
+        <i class="fa-solid fa-envelope-open-text"></i> Email Templates
+    </a>
+</div>

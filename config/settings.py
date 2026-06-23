@@ -43,7 +43,6 @@ GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 TINYMCE_API_KEY = os.getenv("TINYMCE_API_KEY", "")
 
 INSTALLED_APPS = [
-    "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
@@ -55,10 +54,12 @@ INSTALLED_APPS = [
     "portfolio",
     "blog",
     "ai",
-    "authentication",
     "roshan",
     "notifications",
+    "dashboard",
 ]
+
+LOGIN_URL = "/panel/login/"
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -70,6 +71,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "config.middleware.SecurityHeadersMiddleware",
 ]
 
 ROOT_URLCONF = "config.urls"
@@ -86,7 +88,7 @@ TEMPLATES = [
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
                 "portfolio.context_processors.site_context",
-                "config.admin_context.admin_dashboard_context",
+                "dashboard.context_processors.dashboard_context",
             ],
         },
     },
@@ -120,6 +122,14 @@ else:
         }
     }
 
+
+# Cache configuration for django-ratelimit and general caching
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+        "LOCATION": "portfolio-cache",
+    }
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
@@ -168,7 +178,9 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 TINYMCE_DEFAULT_CONFIG = {
     "height": 500,
     "width": "100%",
-    "cleanup_on_startup": True,
+    "skin": "oxide-dark",
+    "content_css": "dark",
+    "promotion": False,
     "custom_undo_redo_levels": 20,
     "plugins": """
         advlist autolink lists link image charmap preview anchor
@@ -176,12 +188,16 @@ TINYMCE_DEFAULT_CONFIG = {
         insertdatetime media table emoticons
     """,
     "toolbar": """
-        undo redo | bold italic underline | alignleft aligncenter alignright |
-        bullist numlist | link image media | code preview fullscreen |
-        emoticons charmap
+        undo redo | bold italic underline strikethrough |
+        alignleft aligncenter alignright alignjustify |
+        bullist numlist outdent indent | forecolor backcolor |
+        link image media table | code preview fullscreen |
+        emoticons charmap removeformat
     """,
+    "toolbar_mode": "sliding",
     "menubar": True,
     "statusbar": True,
+    "content_style": "body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-size: 15px; line-height: 1.6; }",
 }
 
 
@@ -232,7 +248,10 @@ if not DEBUG:
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
     SESSION_COOKIE_HTTPONLY = True
-    CSRF_COOKIE_HTTPONLY = True
+    # NOTE: CSRF_COOKIE_HTTPONLY must NOT be True — JS needs to read the csrftoken
+    # cookie for AJAX POST requests (status toggles etc.)
+    CSRF_COOKIE_HTTPONLY = False
+    SECURE_REFERRER_POLICY = "strict-origin-when-cross-origin"
 
 # CORS Configuration
 CORS_ALLOWED_ORIGINS = [
@@ -289,11 +308,6 @@ LOGGING = {
             "handlers": ["console"],
             "level": "INFO" if DEBUG else "WARNING",
             "propagate": False,
-        },
-        "django.contrib.admin": {
-            "handlers": ["console"],
-            "level": "DEBUG",
-            "propagate": True,
         },
     },
 }

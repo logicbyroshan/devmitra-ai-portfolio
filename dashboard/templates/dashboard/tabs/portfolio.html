@@ -1,0 +1,20 @@
+﻿<!-- Portfolio section tabs -->
+<div class="page-tabs">
+    <a href="{% url 'dashboard:projects_list' %}" class="page-tab {% if active_nav == 'projects' %}active{% endif %}">
+        <i class="fa-solid fa-diagram-project"></i> Projects
+    </a>
+    <a href="{% url 'dashboard:experience_list' %}"
+        class="page-tab {% if active_nav == 'experience' %}active{% endif %}">
+        <i class="fa-solid fa-building"></i> Experience
+    </a>
+    <a href="{% url 'dashboard:skills_list' %}" class="page-tab {% if active_nav == 'skills' %}active{% endif %}">
+        <i class="fa-solid fa-code"></i> Skills
+    </a>
+    <a href="{% url 'dashboard:achievements_list' %}"
+        class="page-tab {% if active_nav == 'achievements' %}active{% endif %}">
+        <i class="fa-solid fa-trophy"></i> Achievements
+    </a>
+    <a href="{% url 'dashboard:faq_list' %}" class="page-tab {% if active_nav == 'faqs' %}active{% endif %}">
+        <i class="fa-solid fa-circle-question"></i> FAQs
+    </a>
+</div>

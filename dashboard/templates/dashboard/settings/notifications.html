@@ -1,0 +1,35 @@
+﻿{% extends 'dashboard/base.html' %}
+{% block title %}Notification Settings — Admin{% endblock %}
+{% block content %}
+<div class="page-header">
+    <h1 class="page-title">Notification Settings</h1>
+</div>
+
+{% include 'dashboard/tabs/settings.html' %}
+
+
+<form method="post" id="main-form">
+    {% csrf_token %}
+    <div class="card" style="max-width:600px;">
+        <div class="card-body">
+            {% for field in form %}
+            <div class="form-group {% if field.field.widget.input_type|default:'' == 'checkbox' %}form-group-inline{% endif %}">
+                {% if field.field.widget.input_type|default:'' == 'checkbox' %}
+                <div class="form-check-row">
+                    {{ field }}
+                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                </div>
+                {% else %}
+                <label class="form-label">{{ field.label }}</label>
+                {{ field }}
+                {% endif %}
+                {% if field.errors %}<div class="field-error">{{ field.errors|join:", " }}</div>{% endif %}
+            </div>
+            {% endfor %}
+            <button type="submit" class="btn btn-primary">
+                <i class="fa-solid fa-floppy-disk"></i> Save
+            </button>
+        </div>
+    </div>
+</form>
+{% endblock %}

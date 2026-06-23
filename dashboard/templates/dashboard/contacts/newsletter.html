@@ -1,0 +1,50 @@
+﻿{% extends 'dashboard/base.html' %}
+{% block title %}Newsletter Subscribers — Admin{% endblock %}
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1 class="page-title">Newsletter Subscribers</h1>
+        <p class="page-subtitle">{{ subscribers.count }} subscriber{{ subscribers.count|pluralize }}</p>
+    </div>
+
+</div>
+
+{% include 'dashboard/tabs/contacts.html' %}
+
+<div class="card">
+    <div class="card-toolbar">
+        <input type="text" id="table-search" class="search-input" placeholder="Search subscribers…">
+    </div>
+    <div class="table-wrap">
+        <table class="data-table" id="main-table">
+            <thead>
+                <tr>
+                    <th>Email</th>
+                    <th>Subscribed</th>
+                    <th style="width:80px;">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for sub in subscribers %}
+                <tr>
+                    <td class="fw-medium">{{ sub.email }}</td>
+                    <td class="text-sm text-muted">{{ sub.subscribed_date|date:"M d, Y" }}</td>
+                    <td>
+                        <div class="action-btns">
+                            <a href="{% url 'dashboard:newsletter_delete' sub.pk %}" class="btn-icon delete"
+                                title="Delete">
+                                <i class="fa-solid fa-trash"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="3" class="empty-row"><i class="fa-solid fa-inbox"></i> No subscribers yet.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

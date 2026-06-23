@@ -1,6 +1,6 @@
 from django.contrib.sitemaps import Sitemap
 from django.urls import reverse
-from .models import Project, Achievement, Skill, Experience
+from .models import Project, Achievement, Experience
 
 
 class StaticViewSitemap(Sitemap):
@@ -12,7 +12,6 @@ class StaticViewSitemap(Sitemap):
     def items(self):
         return [
             "portfolio:home",
-            "portfolio:about_me",
             "portfolio:project_list",
             "portfolio:experience_list",
             "portfolio:achievements_list",
@@ -38,22 +37,6 @@ class ProjectSitemap(Sitemap):
         return reverse("portfolio:project_detail", kwargs={"slug": obj.slug})
 
 
-class SkillSitemap(Sitemap):
-    """Sitemap for skills"""
-
-    changefreq = "monthly"
-    priority = 0.6
-
-    def items(self):
-        return Skill.objects.filter(is_featured=True).order_by("-created_date")
-
-    def lastmod(self, obj):
-        return obj.created_date
-
-    def location(self, obj):
-        return reverse("portfolio:skill_detail", kwargs={"slug": obj.slug})
-
-
 class ExperienceSitemap(Sitemap):
     """Sitemap for experiences"""
 
@@ -64,7 +47,7 @@ class ExperienceSitemap(Sitemap):
         return Experience.objects.all().order_by("-start_date")
 
     def lastmod(self, obj):
-        return obj.created_date
+        return obj.start_date
 
     def location(self, obj):
         return reverse("portfolio:experience_detail", kwargs={"pk": obj.pk})
@@ -80,7 +63,7 @@ class AchievementSitemap(Sitemap):
         return Achievement.objects.all().order_by("-date_issued")
 
     def lastmod(self, obj):
-        return obj.created_date if hasattr(obj, "created_date") else obj.date_issued
+        return obj.date_issued
 
     def location(self, obj):
         # Achievements might not have detail pages, but include in sitemap for list page filtering

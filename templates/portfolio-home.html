@@ -138,27 +138,19 @@
         <h2>My Tech <span>Skills</span></h2>
     </div>
     <div class="skills-grid">
-        {% for category in skill_categories %}
-        <a href="{% url 'portfolio:skill_detail' slug=category.main_skill.slug %}" class="skill-category-card"
-            data-animation="fade-in-up">
-            <div class="skill-card-header">
-                <div class="skill-category-icon">
-                    <i class="{{ category.main_skill.icon }}"></i>
-                </div>
-                <h3>{{ category.name }}</h3>
+        {% for skill in skills %}
+        <div class="skill-badge-item" data-animation="fade-in-up">
+            <div class="skill-badge-icon">
+                {% if skill.icon %}
+                <img src="{{ skill.icon.url }}" alt="{{ skill.name }}">
+                {% else %}
+                <i class="fa-solid fa-code"></i>
+                {% endif %}
             </div>
-            <div class="skill-technologies">
-                {% for tech in category.technologies %}
-                <span class="tech-tag">
-                    <i class="{{ tech.icon }}"></i>
-                    {{ tech.name }}
-                </span>
-                {% endfor %}
-            </div>
-            <div class="skill-card-footer">
-                <span class="skills-count">{{ category.skills_count }} skill{{ category.skills_count|pluralize }}</span>
-            </div>
-        </a>
+            <span class="skill-badge-name">{{ skill.name }}</span>
+        </div>
+        {% empty %}
+        <p style="color:var(--text-color);opacity:0.6;grid-column:1/-1;">No skills added yet.</p>
         {% endfor %}
     </div>
 </section>

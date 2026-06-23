@@ -1,0 +1,79 @@
+﻿{% extends 'dashboard/base.html' %}
+{% block title %}Achievements — Admin{% endblock %}
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1 class="page-title">Achievements</h1>
+        <p class="page-subtitle">{{ achievements.count }} achievement{{ achievements.count|pluralize }}</p>
+    </div>
+
+    <a href="{% url 'dashboard:achievement_create' %}" class="btn btn-primary">
+        <i class="fa-solid fa-plus"></i> Add Achievement
+    </a>
+</div>
+
+{% include 'dashboard/tabs/portfolio.html' %}
+
+<div class="card">
+    <div class="card-toolbar">
+        <input type="text" id="table-search" class="search-input" placeholder="Search achievements…">
+    </div>
+    <div class="table-wrap">
+        <table class="data-table" id="main-table">
+            <thead>
+                <tr>
+                    <th style="width:60px;">Image</th>
+                    <th>Title</th>
+                    <th>Issuer</th>
+                    <th>Date</th>
+                    <th>Visible</th>
+                    <th style="width:110px;">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for ach in achievements %}
+                <tr>
+                    <td>
+                        {% if ach.image %}
+                        <img src="{{ ach.image.url }}" alt=""
+                            style="width:48px;height:36px;object-fit:cover;border-radius:4px;">
+                        {% else %}
+                        <div
+                            style="width:48px;height:36px;background:var(--color-border);border-radius:4px;display:grid;place-items:center;">
+                            <i class="fa-solid fa-trophy" style="color:var(--color-text-muted);font-size:0.8rem;"></i>
+                        </div>
+                        {% endif %}
+                    </td>
+                    <td class="fw-medium">{{ ach.title|truncatechars:45 }}</td>
+                    <td>{{ ach.issuing_organization|default:"—" }}</td>
+                    <td>{{ ach.date_issued|date:"M Y"|default:"—" }}</td>
+                    <td>
+                        <label class="toggle-switch">
+                            <input type="checkbox" class="status-toggle"
+                                data-url="{% url 'dashboard:achievement_toggle_visible' ach.pk %}" {% if ach.is_visible %}checked{% endif %}>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </td>
+                    <td>
+                        <div class="action-btns">
+                            <a href="{% url 'dashboard:achievement_edit' ach.pk %}" class="btn-icon edit" title="Edit">
+                                <i class="fa-solid fa-pen"></i>
+                            </a>
+                            <a href="{% url 'dashboard:achievement_delete' ach.pk %}" class="btn-icon delete"
+                                title="Delete">
+                                <i class="fa-solid fa-trash"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" class="empty-row"><i class="fa-solid fa-inbox"></i> No achievements yet. <a
+                            href="{% url 'dashboard:achievement_create' %}">Add one</a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

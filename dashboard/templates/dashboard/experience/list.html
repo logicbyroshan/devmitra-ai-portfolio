@@ -1,0 +1,73 @@
+﻿{% extends 'dashboard/base.html' %}
+{% block title %}Experience — Admin{% endblock %}
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1 class="page-title">Experience</h1>
+        <p class="page-subtitle">{{ experiences.count }} entr{{ experiences.count|pluralize:"y,ies" }}</p>
+    </div>
+
+    <a href="{% url 'dashboard:experience_create' %}" class="btn btn-primary">
+        <i class="fa-solid fa-plus"></i> Add Experience
+    </a>
+</div>
+
+{% include 'dashboard/tabs/portfolio.html' %}
+
+<div class="card">
+    <div class="card-toolbar">
+        <input type="text" id="table-search" class="search-input" placeholder="Search experience…">
+    </div>
+    <div class="table-wrap">
+        <table class="data-table" id="main-table">
+            <thead>
+                <tr>
+                    <th>Company</th>
+                    <th>Role</th>
+                    <th>Period</th>
+                    <th>Type</th>
+                    <th>Visible</th>
+                    <th style="width:110px;">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for exp in experiences %}
+                <tr>
+                    <td>
+                        <div class="fw-medium">{{ exp.company_name }}</div>
+                    </td>
+                    <td>{{ exp.role }}</td>
+                    <td>
+                        <div class="text-sm">{{ exp.start_date|date:"M Y" }} — {% if exp.end_date %}{{ exp.end_date|date:"M Y" }}{% else %}Present{% endif %}</div>
+                    </td>
+                    <td><span class="tag">{{ exp.experience_type.name|default:"—" }}</span></td>
+                    <td>
+                        <label class="toggle-switch">
+                            <input type="checkbox" class="status-toggle"
+                                data-url="{% url 'dashboard:experience_toggle_visible' exp.pk %}" {% if exp.is_visible %}checked{% endif %}>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </td>
+                    <td>
+                        <div class="action-btns">
+                            <a href="{% url 'dashboard:experience_edit' exp.pk %}" class="btn-icon edit" title="Edit">
+                                <i class="fa-solid fa-pen"></i>
+                            </a>
+                            <a href="{% url 'dashboard:experience_delete' exp.pk %}" class="btn-icon delete"
+                                title="Delete">
+                                <i class="fa-solid fa-trash"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" class="empty-row"><i class="fa-solid fa-inbox"></i> No experience entries yet. <a
+                            href="{% url 'dashboard:experience_create' %}">Add one</a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

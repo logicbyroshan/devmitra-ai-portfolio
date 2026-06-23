@@ -1,0 +1,111 @@
+{% extends 'dashboard/base.html' %}
+{% block title %}{% if exp %}Edit Experience{% else %}Add Experience{% endif %} — Admin{% endblock %}
+
+{% block extra_head %}{{ form.media }}{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1 class="page-title">{% if exp %}Edit Experience{% else %}Add Experience{% endif %}</h1>
+        {% if exp %}<p class="page-tagline">{{ exp.role }} at {{ exp.company_name }}</p>{% endif %}
+    </div>
+    <a href="{% url 'dashboard:experience_list' %}" class="btn btn-outline">
+        <i class="fa-solid fa-arrow-left"></i> Back
+    </a>
+</div>
+
+<form method="post" enctype="multipart/form-data" id="main-form">
+    {% csrf_token %}
+    
+    {% if form.non_field_errors %}
+    <div class="alert alert-danger" style="color: #ff4d4f; background: rgba(255,77,79,0.1); border: 1px solid #ff4d4f; padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
+        {{ form.non_field_errors }}
+    </div>
+    {% endif %}
+    
+    <div class="form-layout">
+        <div class="form-main">
+            <div class="form-section">
+                <h3 class="form-section-title">Position Details</h3>
+                <div class="form-row col-2">
+                    <div class="form-group">
+                        <label class="form-label required">Role / Title</label>
+                        {{ form.role }}
+                        {% if form.role.errors %}<div class="field-error">{{ form.role.errors|join:", " }}</div>{% endif%}
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label required">Company</label>
+                        {{ form.company_name }}
+                        {% if form.company_name.errors %}<div class="field-error">{{ form.company_name.errors|join:", "
+                            }}</div>{% endif %}
+                    </div>
+                </div>
+                <div class="form-row col-2">
+                    <div class="form-group">
+                        <label class="form-label">Start Date</label>
+                        {{ form.start_date }}
+                        {% if form.start_date.errors %}<div class="field-error" style="color: #ff4d4f; font-size: 0.85rem; margin-top: 0.25rem;">{{ form.start_date.errors|join:", " }}</div>{% endif %}
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">End Date <small class="text-muted">(leave blank if
+                                current)</small></label>
+                        {{ form.end_date }}
+                        {% if form.end_date.errors %}<div class="field-error" style="color: #ff4d4f; font-size: 0.85rem; margin-top: 0.25rem;">{{ form.end_date.errors|join:", " }}</div>{% endif %}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Company URL</label>
+                    {{ form.company_url }}
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Summary</label>
+                    {{ form.summary }}
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Key Responsibilities</label>
+                    {{ form.responsibilities }}
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Achievements</label>
+                    {{ form.achievements }}
+                </div>
+            </div>
+        </div>
+
+        <div class="form-sidebar">
+            <div class="form-section">
+                <h3 class="form-section-title">Experience Type</h3>
+                <div class="form-group">
+                    {{ form.experience_type }}
+                    {% if form.experience_type.errors %}<div class="field-error" style="color: #ff4d4f; font-size: 0.85rem; margin-top: 0.25rem;">{{ form.experience_type.errors|join:", " }}</div>{% endif %}
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3 class="form-section-title">Technologies</h3>
+                <div class="checkbox-group">{{ form.technologies }}</div>
+                {% if form.technologies.errors %}<div class="field-error" style="color: #ff4d4f; font-size: 0.85rem; margin-top: 0.25rem;">{{ form.technologies.errors|join:", " }}</div>{% endif %}
+            </div>
+
+            <div class="form-section">
+                <h3 class="form-section-title">Visibility</h3>
+                <div class="form-check-row">
+                    {{ form.is_visible }}
+                    <label for="{{ form.is_visible.id_for_label }}">Visible on website</label>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary w-full">
+                    <i class="fa-solid fa-floppy-disk"></i> Save
+                </button>
+                {% if exp %}
+                <a href="{% url 'dashboard:experience_delete' exp.pk %}" class="btn btn-danger w-full">
+                    <i class="fa-solid fa-trash"></i> Delete
+                </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</form>
+{% endblock %}

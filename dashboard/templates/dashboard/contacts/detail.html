@@ -1,0 +1,82 @@
+{% extends 'dashboard/base.html' %}
+{% block title %}Message from {{ contact.name }} — Admin{% endblock %}
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1 class="page-title">Message from {{ contact.name }}</h1>
+        <p class="page-tagline">{{ contact.email }} &middot; {{ contact.submitted_date|date:"F d, Y H:i" }}</p>
+    </div>
+    <div style="display:flex;gap:0.75rem;">
+        {% if not contact.is_read %}
+        <form method="post" action="{% url 'dashboard:contact_mark_read' contact.pk %}">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-outline">
+                <i class="fa-solid fa-check"></i> Mark as Read
+            </button>
+        </form>
+        {% endif %}
+        <a href="{% url 'dashboard:contact_delete' contact.pk %}" class="btn btn-danger">
+            <i class="fa-solid fa-trash"></i> Delete
+        </a>
+        <a href="{% url 'dashboard:contacts_list' %}" class="btn btn-outline">
+            <i class="fa-solid fa-arrow-left"></i> Back
+        </a>
+    </div>
+</div>
+
+<div style="display:grid;grid-template-columns:1fr 320px;gap:1.5rem;align-items:start;">
+
+    <div class="card">
+        <div class="card-body" style="padding:2rem;">
+            {% if contact.subject %}
+            <h3 style="margin:0 0 1rem;font-size:1.05rem;">{{ contact.subject }}</h3>
+            {% endif %}
+            <div style="line-height:1.75;color:var(--text2);white-space:pre-wrap;">{{ contact.message }}
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <div class="card">
+            <div class="card-body">
+                <h3
+                    style="font-size:0.85rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-muted);margin:0 0 1rem;">
+                    Sender Info</h3>
+                <dl style="display:grid;gap:0.75rem;">
+                    <div>
+                        <dt style="font-size:0.78rem;color:var(--text-muted);">Name</dt>
+                        <dd style="font-weight:600;margin:0;">{{ contact.name }}</dd>
+                    </div>
+                    <div>
+                        <dt style="font-size:0.78rem;color:var(--text-muted);">Email</dt>
+                        <dd style="margin:0;"><a href="mailto:{{ contact.email }}" style="color:var(--accent);">{{
+                                contact.email }}</a></dd>
+                    </div>
+                    <div>
+                        <dt style="font-size:0.78rem;color:var(--text-muted);">Received</dt>
+                        <dd style="margin:0;">{{ contact.submitted_date|date:"F d, Y" }}<br><span
+                                style="color:var(--text-muted);font-size:0.85rem;">{{
+                                contact.submitted_date|timesince
+                                }} ago</span></dd>
+                    </div>
+                    <div>
+                        <dt style="font-size:0.78rem;color:var(--text-muted);">Status</dt>
+                        <dd style="margin:0;">
+                            <span class="status-badge {% if contact.is_read %}read{% else %}unread{% endif %}">
+                                {% if contact.is_read %}Read{% else %}Unread{% endif %}
+                            </span>
+                        </dd>
+                    </div>
+                </dl>
+                <div style="margin-top:1.5rem;">
+                    <a href="mailto:{{ contact.email }}?subject=Re%3A%20{{ contact.subject|default:'Your message'|urlencode }}"
+                        class="btn btn-primary w-full">
+                        <i class="fa-solid fa-reply"></i> Reply via Email
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

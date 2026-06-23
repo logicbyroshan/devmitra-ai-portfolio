@@ -37,9 +37,9 @@ class AboutMeView(TemplateView):
         context = super().get_context_data(**kwargs)
         try:
             config = AboutMeConfiguration.objects.first()
-            context["config"] = config
+            context["about_config"] = config
         except AboutMeConfiguration.DoesNotExist:
-            context["config"] = None
+            context["about_config"] = None
 
         # Add FAQ data for the FAQ section
         from portfolio.models import FAQ

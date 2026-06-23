@@ -20,7 +20,7 @@ ALLOWED_TAGS = {
     "iframe", "video", "audio",
 }
 ALLOWED_ATTRIBUTES = {
-    "a": {"href", "title", "target", "rel"},
+    "a": {"href", "title", "target"},
     "img": {"src", "alt", "title", "width", "height", "loading", "style"},
     "iframe": {"src", "width", "height", "frameborder", "allow", "allowfullscreen", "title", "loading", "style"},
     "video": {"src", "controls", "width", "height", "autoplay", "muted", "loop", "poster"},
@@ -91,6 +91,9 @@ class Blog(models.Model):
     categories = models.ManyToManyField(
         Category, limit_choices_to={"category_type": Category.CategoryType.BLOG}
     )
+    is_published = models.BooleanField(
+        default=True, db_index=True, help_text="Show this post on the website"
+    )
     created_date = models.DateTimeField(auto_now_add=True)
 
     class Meta:
@@ -105,7 +108,7 @@ class Blog(models.Model):
         return minutes if minutes > 0 else 1
 
     def save(self, *args, **kwargs):
-        if not self.slug or self.slug != slugify(self.title):
+        if not self.slug:
             base_slug = slugify(self.title)
             slug = base_slug
             counter = 1
@@ -145,46 +148,3 @@ class Blog(models.Model):
             )
         except AboutMeConfiguration.DoesNotExist:
             return None
-
-
-class Comment(models.Model):
-    post = models.ForeignKey(Blog, related_name="comments", on_delete=models.CASCADE)
-    author_name = models.CharField(max_length=100)
-    body = models.TextField()
-    created_date = models.DateTimeField(auto_now_add=True)
-    is_approved = models.BooleanField(default=True, db_index=True)
-
-    class Meta:
-        ordering = ["created_date"]
-
-    def __str__(self):
-        return f"Comment by {self.author_name} on {self.post.title}"
-
-    @property
-    def total_likes(self):
-        """Get total number of likes for this comment."""
-        return self.user_likes.count()
-
-    def is_liked_by_user(self, user):
-        """Check if a specific user has liked this comment."""
-        if user.is_authenticated:
-            return self.user_likes.filter(user=user).exists()
-        return False
-
-
-class CommentLike(models.Model):
-    """Model to track individual user likes on blog comments."""
-
-    comment = models.ForeignKey(
-        Comment, related_name="user_likes", on_delete=models.CASCADE
-    )
-    user = models.ForeignKey("auth.User", on_delete=models.CASCADE)
-    created_date = models.DateTimeField(auto_now_add=True)
-
-    class Meta:
-        unique_together = ("comment", "user")  # Prevent duplicate likes
-        verbose_name = "Comment Like"
-        verbose_name_plural = "Comment Likes"
-
-    def __str__(self):
-        return f"{self.user.username} likes comment on {self.comment.post.title}"

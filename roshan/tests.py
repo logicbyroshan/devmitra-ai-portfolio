@@ -33,16 +33,15 @@ class RoshanModelTest(BaseTestCase):
             resource = Resource.objects.create(
                 title="Useful Resource",
                 description="This is a useful resource for developers",
-                url="https://example.com/resource",
-                category="development",
+                link="https://example.com/resource",
+                resource_type="link",
                 is_featured=True,
-                is_public=True,
+                is_active=True,
             )
 
             self.assertEqual(resource.title, "Useful Resource")
-            self.assertEqual(resource.category, "development")
             self.assertTrue(resource.is_featured)
-            self.assertTrue(resource.is_public)
+            self.assertTrue(resource.is_active)
 
             # Test string representation
             self.assertIn("Useful Resource", str(resource))
@@ -547,8 +546,9 @@ class RoshanIntegrationTest(BaseTestCase):
             resource = Resource.objects.create(
                 title="Featured Resource",
                 description="A featured resource",
+                resource_type="link",
                 is_featured=True,
-                is_public=True,
+                is_active=True,
             )
 
             # Check if featured resources appear on home page
@@ -792,8 +792,9 @@ class RoshanPerformanceTest(BaseTestCase):
                     Resource(
                         title=f"Resource {i}",
                         description=f"Description {i}",
-                        url=f"https://example{i}.com",
-                        category="development",
+                        resource_type="link",
+                        link=f"https://example{i}.com",
+                        slug=f"resource-{i}",
                     )
                 )
 

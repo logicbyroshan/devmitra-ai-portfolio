@@ -1,0 +1,65 @@
+﻿{% extends 'dashboard/base.html' %}
+{% block title %}Technologies — Admin{% endblock %}
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1 class="page-title">Technologies</h1>
+        <p class="page-subtitle">{{ technologies.count }} technolog{{ technologies.count|pluralize:"y,ies" }}</p>
+    </div>
+
+    <a href="{% url 'dashboard:technology_create' %}" class="btn btn-primary">
+        <i class="fa-solid fa-plus"></i> Add Technology
+    </a>
+</div>
+
+{% include 'dashboard/tabs/taxonomy.html' %}
+
+<div class="card">
+    <div class="card-toolbar">
+        <input type="text" id="table-search" class="search-input" placeholder="Search technologies…">
+    </div>
+    <div class="table-wrap">
+        <table class="data-table" id="main-table">
+            <thead>
+                <tr>
+                    <th style="width:48px;">Icon</th>
+                    <th>Name</th>
+                    <th>Slug</th>
+                    <th style="width:110px;">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for tech in technologies %}
+                <tr>
+                    <td>
+                        {% if tech.icon %}
+                        <img src="{{ tech.icon.url }}" alt="" style="width:28px;height:28px;object-fit:contain;">
+                        {% else %}
+                        <div style="width:28px;height:28px;background:var(--border);border-radius:4px;"></div>
+                        {% endif %}
+                    </td>
+                    <td class="fw-medium">{{ tech.name }}</td>
+                    <td class="text-muted text-sm">{{ tech.slug }}</td>
+                    <td>
+                        <div class="action-btns">
+                            <a href="{% url 'dashboard:technology_edit' tech.pk %}" class="btn-icon edit"
+                                title="Edit">
+                                <i class="fa-solid fa-pen"></i>
+                            </a>
+                            <a href="{% url 'dashboard:technology_delete' tech.pk %}" class="btn-icon delete"
+                                title="Delete">
+                                <i class="fa-solid fa-trash"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4" class="empty-row"><i class="fa-solid fa-inbox"></i> No technologies yet.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

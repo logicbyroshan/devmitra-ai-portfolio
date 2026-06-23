@@ -1,0 +1,86 @@
+﻿{% extends 'dashboard/base.html' %}
+{% block title %}{% if ach %}Edit Achievement{% else %}Add Achievement{% endif %} — Admin{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1 class="page-title">{% if ach %}Edit Achievement{% else %}Add Achievement{% endif %}</h1>
+        {% if ach %}<p class="page-tagline">{{ ach.title }}</p>{% endif %}
+    </div>
+    <a href="{% url 'dashboard:achievements_list' %}" class="btn btn-outline">
+        <i class="fa-solid fa-arrow-left"></i> Back
+    </a>
+</div>
+
+<form method="post" enctype="multipart/form-data" id="main-form">
+    {% csrf_token %}
+    <div class="form-layout">
+        <div class="form-main">
+            <div class="form-section">
+                <h3 class="form-section-title">Achievement Details</h3>
+                <div class="form-group">
+                    <label class="form-label required">Title</label>
+                    {{ form.title }}
+                    {% if form.title.errors %}<div class="field-error">{{ form.title.errors|join:", " }}</div>{% endif%}
+                </div>
+                <div class="form-row col-2">
+                    <div class="form-group">
+                        <label class="form-label">Issuing Organization</label>
+                        {{ form.issuing_organization }}
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Date Issued</label>
+                        {{ form.date_issued }}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Credential URL</label>
+                    {{ form.credential_url }}
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Summary</label>
+                    {{ form.summary }}
+                </div>
+            </div>
+        </div>
+
+        <div class="form-sidebar">
+            <div class="form-section">
+                <h3 class="form-section-title">Image</h3>
+                {% if ach and ach.image %}
+                <img src="{{ ach.image.url }}" alt="" class="img-preview">
+                {% endif %}
+                <div class="form-group">
+                    {{ form.image }}
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3 class="form-section-title">Category</h3>
+                <div class="form-group">
+                    {{ form.category }}
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3 class="form-section-title">Visibility</h3>
+                <div class="form-check-row">
+                    {{ form.is_visible }}
+                    <label for="{{ form.is_visible.id_for_label }}">Visible on website</label>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary w-full">
+                    <i class="fa-solid fa-floppy-disk"></i> Save
+                </button>
+                {% if ach %}
+                <a href="{% url 'dashboard:achievement_delete' ach.pk %}" class="btn btn-danger w-full">
+                    <i class="fa-solid fa-trash"></i> Delete
+                </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</form>
+{% endblock %}

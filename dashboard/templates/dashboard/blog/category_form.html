@@ -1,0 +1,37 @@
+{% extends 'dashboard/base.html' %}
+{% block title %}{% if category %}Edit Category{% else %}Add Blog Category{% endif %} — Admin{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1 class="page-title">{% if category %}Edit Category{% else %}Add Blog Category{% endif %}</h1>
+        {% if category %}<p class="page-tagline">{{ category.name }}</p>{% endif %}
+    </div>
+    <a href="{% url 'dashboard:blog_categories_list' %}" class="btn btn-outline">
+        <i class="fa-solid fa-arrow-left"></i> Back
+    </a>
+</div>
+
+<div class="card" style="max-width:500px;">
+    <div class="card-body">
+        <form method="post" id="main-form">
+            {% csrf_token %}
+            <div class="form-group">
+                <label class="form-label required">Name</label>
+                {{ form.name }}
+                {% if form.name.errors %}<div class="field-error">{{ form.name.errors|join:", " }}</div>{% endif %}
+            </div>
+            <div style="display:flex;gap:0.75rem;">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fa-solid fa-floppy-disk"></i> Save
+                </button>
+                {% if category %}
+                <a href="{% url 'dashboard:blog_category_delete' category.pk %}" class="btn btn-danger">
+                    <i class="fa-solid fa-trash"></i> Delete
+                </a>
+                {% endif %}
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

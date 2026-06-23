@@ -1,0 +1,67 @@
+﻿{% extends 'dashboard/base.html' %}
+{% block title %}Skills — Admin{% endblock %}
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1 class="page-title">Skills</h1>
+        <p class="page-subtitle">{{ skills.count }} skill{{ skills.count|pluralize }}</p>
+    </div>
+
+    <a href="{% url 'dashboard:skill_create' %}" class="btn btn-primary">
+        <i class="fa-solid fa-plus"></i> Add Skill
+    </a>
+</div>
+
+{% include 'dashboard/tabs/portfolio.html' %}
+
+<div class="card">
+    <div class="card-toolbar">
+        <input type="text" id="table-search" class="search-input" placeholder="Search skills…">
+    </div>
+    <div class="table-wrap">
+        <table class="data-table" id="main-table">
+            <thead>
+                <tr>
+                    <th style="width:52px;">Icon</th>
+                    <th>Name</th>
+                    <th style="width:110px;">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for skill in skills %}
+                <tr>
+                    <td>
+                        {% if skill.icon %}
+                        <img src="{{ skill.icon.url }}" alt="{{ skill.name }}"
+                            style="width:32px;height:32px;object-fit:contain;">
+                        {% else %}
+                        <div
+                            style="width:32px;height:32px;display:grid;place-items:center;color:var(--color-text-muted);">
+                            <i class="fa-solid fa-code"></i>
+                        </div>
+                        {% endif %}
+                    </td>
+                    <td class="fw-medium">{{ skill.name }}</td>
+                    <td>
+                        <div class="action-btns">
+                            <a href="{% url 'dashboard:skill_edit' skill.pk %}" class="btn-icon edit" title="Edit">
+                                <i class="fa-solid fa-pen"></i>
+                            </a>
+                            <a href="{% url 'dashboard:skill_delete' skill.pk %}" class="btn-icon delete"
+                                title="Delete">
+                                <i class="fa-solid fa-trash"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="3" class="empty-row"><i class="fa-solid fa-inbox"></i> No skills yet. <a
+                            href="{% url 'dashboard:skill_create' %}">Add one</a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,49 @@
+﻿{% extends 'dashboard/base.html' %}
+{% block title %}{% if skill %}Edit Skill{% else %}Add Skill{% endif %} — Admin{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1 class="page-title">{% if skill %}Edit Skill{% else %}Add Skill{% endif %}</h1>
+        {% if skill %}<p class="page-tagline">{{ skill.name }}</p>{% endif %}
+    </div>
+    <a href="{% url 'dashboard:skills_list' %}" class="btn btn-outline">
+        <i class="fa-solid fa-arrow-left"></i> Back
+    </a>
+</div>
+
+<div class="card" style="max-width:500px;">
+    <div class="card-body">
+        <form method="post" enctype="multipart/form-data" id="main-form">
+            {% csrf_token %}
+            <div class="form-group">
+                <label class="form-label required">Name</label>
+                {{ form.name }}
+                {% if form.name.errors %}<div class="field-error">{{ form.name.errors|join:", " }}</div>{% endif %}
+            </div>
+            <div class="form-group">
+                <label class="form-label">Icon</label>
+                {% if skill and skill.icon %}
+                <div style="margin-bottom:0.5rem;">
+                    <img src="{{ skill.icon.url }}" alt="{{ skill.name }}"
+                        style="width:48px;height:48px;object-fit:contain;">
+                </div>
+                {% endif %}
+                {{ form.icon }}
+                {% if form.icon.errors %}<div class="field-error">{{ form.icon.errors|join:", " }}</div>{% endif %}
+                <div class="field-hint">{{ form.icon.help_text }}</div>
+            </div>
+            <div style="display:flex;gap:0.75rem;">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fa-solid fa-floppy-disk"></i> Save Skill
+                </button>
+                {% if skill %}
+                <a href="{% url 'dashboard:skill_delete' skill.pk %}" class="btn btn-danger">
+                    <i class="fa-solid fa-trash"></i> Delete
+                </a>
+                {% endif %}
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
