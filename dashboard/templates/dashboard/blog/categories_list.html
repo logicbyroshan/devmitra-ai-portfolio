@@ -1,9 +1,9 @@
 {% extends 'dashboard/base.html' %}
-{% block title %}Blog Categories — Admin{% endblock %}
+{% block title %}Article Categories — Admin{% endblock %}
 {% block content %}
 <div class="page-header">
     <div>
-        <h1 class="page-title">Blog Categories</h1>
+        <h1 class="page-title">Article Categories</h1>
         <p class="page-subtitle">{{ categories.count }} categor{{ categories.count|pluralize:"y,ies" }}</p>
     </div>
     <a href="{% url 'dashboard:blog_category_create' %}" class="btn btn-primary">
@@ -20,7 +20,7 @@
                 <tr>
                     <th>Name</th>
                     <th>Slug</th>
-                    <th>Posts</th>
+                    <th>Articles</th>
                     <th style="width:110px;">Actions</th>
                 </tr>
             </thead>

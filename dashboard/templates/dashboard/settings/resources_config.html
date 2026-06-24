@@ -1,4 +1,4 @@
-﻿{% extends 'dashboard/base.html' %}
+{% extends 'dashboard/base.html' %}
 {% block title %}Resources Config — Admin{% endblock %}
 {% block extra_head %}{{ form.media }}{% endblock %}
 {% block content %}
@@ -6,28 +6,36 @@
     <h1 class="page-title">Resources Configuration</h1>
 </div>
 
-{% include 'dashboard/tabs/settings.html' %}
-
+{% include 'dashboard/tabs/resources.html' %}
 
 <form method="post" id="main-form">
     {% csrf_token %}
-    <div class="card" style="max-width:600px;">
-        <div class="card-body">
-            {% for field in form %}
-            <div class="form-group">
-                {% if field.field.widget.input_type|default:'' == 'checkbox' %}
-                <div class="form-check-row">{{ field }}<label for="{{ field.id_for_label }}">{{ field.label }}</label>
+    <div class="form-layout">
+        <div class="form-main">
+            <div class="form-section">
+                <h3 class="form-section-title">Page Configuration</h3>
+                {% for field in form %}
+                <div class="form-group">
+                    {% if field.field.widget.input_type|default:'' == 'checkbox' %}
+                    <div class="form-check-row">{{ field }}<label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    </div>
+                    {% else %}
+                    <label class="form-label">{{ field.label }}</label>
+                    {{ field }}
+                    {% endif %}
+                    {% if field.errors %}<div class="field-error">{{ field.errors|join:", " }}</div>{% endif %}
                 </div>
-                {% else %}
-                <label class="form-label">{{ field.label }}</label>
-                {{ field }}
-                {% endif %}
-                {% if field.errors %}<div class="field-error">{{ field.errors|join:", " }}</div>{% endif %}
+                {% endfor %}
             </div>
-            {% endfor %}
-            <button type="submit" class="btn btn-primary">
-                <i class="fa-solid fa-floppy-disk"></i> Save
-            </button>
+        </div>
+        <div class="form-sidebar">
+            <div class="card">
+                <div class="card-body form-actions">
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="fa-solid fa-floppy-disk"></i> Save Changes
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
 </form>

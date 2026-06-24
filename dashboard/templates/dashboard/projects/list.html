@@ -1,4 +1,4 @@
-﻿{% extends 'dashboard/base.html' %}
+{% extends 'dashboard/base.html' %}
 {% block title %}Projects — Admin{% endblock %}
 {% block content %}
 <div class="page-header">
@@ -35,10 +35,10 @@
                     <td>
                         {% if project.cover_image %}
                         <img src="{{ project.cover_image.url }}" alt=""
-                            style="width:48px;height:36px;object-fit:cover;border-radius:4px;">
+                            style="width:60px;height:40px;object-fit:cover;border-radius:4px;">
                         {% else %}
                         <div
-                            style="width:48px;height:36px;background:var(--color-border);border-radius:4px;display:grid;place-items:center;font-size:0.7rem;color:var(--color-text-muted);">
+                            style="width:60px;height:40px;background:var(--color-border);border-radius:4px;display:grid;place-items:center;font-size:0.7rem;color:var(--color-text-muted);">
                             N/A</div>
                         {% endif %}
                     </td>

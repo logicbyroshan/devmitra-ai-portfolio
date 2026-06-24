@@ -1,13 +1,13 @@
-﻿{% extends 'dashboard/base.html' %}
-{% block title %}Blog Posts — Admin{% endblock %}
+{% extends 'dashboard/base.html' %}
+{% block title %}Articles — Admin{% endblock %}
 {% block content %}
 <div class="page-header">
     <div>
-        <h1 class="page-title">Blog Posts</h1>
-        <p class="page-subtitle">{{ posts.count }} post{{ posts.count|pluralize }}</p>
+        <h1 class="page-title">Articles</h1>
+        <p class="page-subtitle">{{ posts.count }} article{{ posts.count|pluralize }}</p>
     </div>
     <a href="{% url 'dashboard:blog_create' %}" class="btn btn-primary">
-        <i class="fa-solid fa-plus"></i> New Post
+        <i class="fa-solid fa-plus"></i> New Article
     </a>
 </div>
 
@@ -15,7 +15,7 @@
 
 <div class="card">
     <div class="card-toolbar">
-        <input type="text" id="table-search" class="search-input" placeholder="Search blog posts…">
+        <input type="text" id="table-search" class="search-input" placeholder="Search articles…">
     </div>
     <div class="table-wrap">
         <table class="data-table" id="main-table">
@@ -35,10 +35,10 @@
                     <td>
                         {% if post.cover_image %}
                         <img src="{{ post.cover_image.url }}" alt=""
-                            style="width:48px;height:36px;object-fit:cover;border-radius:4px;">
+                            style="width:60px;height:40px;object-fit:cover;border-radius:4px;">
                         {% else %}
                         <div
-                            style="width:48px;height:36px;background:var(--color-border);border-radius:4px;display:grid;place-items:center;font-size:0.7rem;color:var(--color-text-muted);">
+                            style="width:60px;height:40px;background:var(--color-border);border-radius:4px;display:grid;place-items:center;font-size:0.7rem;color:var(--color-text-muted);">
                             N/A</div>
                         {% endif %}
                     </td>
@@ -67,7 +67,7 @@
                 </tr>
                 {% empty %}
                 <tr>
-                    <td colspan="6" class="empty-row"><i class="fa-solid fa-inbox"></i> No blog posts yet. <a
+                    <td colspan="6" class="empty-row"><i class="fa-solid fa-inbox"></i> No articles yet. <a
                             href="{% url 'dashboard:blog_create' %}">Add one</a></td>
                 </tr>
                 {% endfor %}

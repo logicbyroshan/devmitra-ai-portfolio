@@ -800,9 +800,9 @@
 }
 
 .toggle-switch input {
-    opacity: 0;
-    width: 0;
-    height: 0;
+    opacity: 0 !important;
+    width: 0 !important;
+    height: 0 !important;
 }
 
 .toggle-slider {
@@ -863,7 +863,7 @@ input:checked+.toggle-slider:before {
     display: none;
     flex: 1;
     min-width: 100%;
-    margin-top: 8px;
+    margin-bottom: 8px;
 }
 
 .urgent-warning.show {
@@ -940,6 +940,8 @@ input:checked+.toggle-slider:before {
 
     .cta-right-content {
         justify-content: center;
+        width: 100% !important;
+        align-self: stretch;
     }
 
     .cta-form {
@@ -1028,18 +1030,22 @@ input:checked+.toggle-slider:before {
         text-align: center;
     }
 
-    /* Hero Actions - Keep side by side until really tight */
+    /* Hero Actions - Side by side full width */
     .hero-actions {
+        display: flex;
         justify-content: center;
         gap: 10px;
         flex-wrap: nowrap;
+        width: 100%;
     }
 
     .hero-actions .filled-btn,
     .hero-actions .outline-btn {
         padding: 8px 12px;
         font-size: 14px;
-        flex-shrink: 0;
+        flex: 1;
+        text-align: center;
+        justify-content: center;
     }
 
     .home-hero-image {
@@ -1085,7 +1091,38 @@ input:checked+.toggle-slider:before {
     }
 
     .skills-grid {
-        gap: 10px;
+        gap: 8px;
+        padding: 15px;
+    }
+
+    .skill-badge-item {
+        padding: 10px 12px;
+        gap: 6px;
+        min-width: 70px;
+        border-radius: 10px;
+    }
+
+    .skill-badge-icon {
+        width: 36px;
+        height: 36px;
+    }
+
+    .skill-badge-icon i {
+        font-size: 22px;
+    }
+
+    .skill-badge-name {
+        font-size: 11px;
+    }
+
+    .tech-tag {
+        padding: 4px 8px;
+        font-size: 11px;
+        gap: 4px;
+    }
+
+    .tech-tag i {
+        font-size: 10px;
     }
 
     .exp-card {
@@ -1105,15 +1142,15 @@ input:checked+.toggle-slider:before {
 
     .cta-form {
         flex-direction: column;
-        width: 100%;
+        width: 100% !important;
     }
 
     .cta-form input {
-        width: 100%;
+        width: 100% !important;
     }
 
     .cta-form .filled-btn {
-        width: 100%;
+        width: 100% !important;
         text-align: center;
     }
 
@@ -1142,11 +1179,20 @@ input:checked+.toggle-slider:before {
         padding: 0 !important;
     }
 
-    .outline-btn[type="submit"] {
-        width: 100%;
+    .outline-btn[type="submit"], #contact-submit-btn {
+        width: 100% !important;
         text-align: center;
         display: block;
         padding: 12px;
+    }
+
+    .form-group {
+        width: 100% !important;
+    }
+
+    .right-contact-form input,
+    .right-contact-form textarea {
+        width: 100% !important;
     }
 
     .urgent-toggle-wrapper {
@@ -1159,19 +1205,4 @@ input:checked+.toggle-slider:before {
         font-size: 12px;
     }
 }
-
-/* Very small screens - only stack buttons if absolutely necessary */
-@media (max-width: 350px) {
-    .hero-actions {
-        flex-direction: column;
-        gap: 10px;
-        align-items: center;
-    }
-
-    .hero-actions .filled-btn,
-    .hero-actions .outline-btn {
-        width: 100%;
-        text-align: center;
-        justify-content: center;
-    }
-}
+

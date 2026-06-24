@@ -379,7 +379,7 @@
 .user-profile img {
     width: 34px;
     height: 34px;
-    border-radius: 50%;
+    border-radius: var(--r-md);
     object-fit: cover;
     flex-shrink: 0;
 }

@@ -120,36 +120,4 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Set active state based on current URL (for Django integration)
-    const currentPath = window.location.pathname;
-
-    // First check dropdown items (most specific match wins)
-    let foundActiveItem = false;
-    dropdownItems.forEach(item => {
-        const linkHref = item.querySelector('a')?.getAttribute('href');
-        if (linkHref && linkHref !== '/' && linkHref !== '#' && currentPath.startsWith(linkHref)) {
-            clearAllActiveStates();
-            item.classList.add('active');
-
-            // Mark parent dropdown as having active child
-            const parentDropdown = item.closest('.has-dropdown');
-            if (parentDropdown) {
-                parentDropdown.classList.add('has-active-child');
-                parentDropdown.classList.add('open'); // Keep dropdown open
-            }
-            foundActiveItem = true;
-        }
-    });
-
-    // If no dropdown item was active, check main navigation items
-    if (!foundActiveItem) {
-        navLinks.forEach(link => {
-            const linkHref = link.querySelector('a')?.getAttribute('href');
-            if (linkHref && linkHref !== '/' && linkHref !== '#' && currentPath.startsWith(linkHref)) {
-                clearAllActiveStates();
-                link.classList.add('active');
-            }
-        });
-    }
-
 });

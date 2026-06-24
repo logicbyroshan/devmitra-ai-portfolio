@@ -182,7 +182,7 @@ def blog_create(request):
     form = BlogForm(request.POST or None, request.FILES or None)
     if request.method == 'POST' and form.is_valid():
         post = form.save()
-        messages.success(request, f'Blog post "{post.title}" created.')
+        messages.success(request, f'Article "{post.title}" created.')
         return redirect('dashboard:blog_list')
     return render(request, 'dashboard/blog/form.html', {
         'form': form, 'active_nav': 'blog',
@@ -195,7 +195,7 @@ def blog_edit(request, pk):
     form = BlogForm(request.POST or None, request.FILES or None, instance=post)
     if request.method == 'POST' and form.is_valid():
         form.save()
-        messages.success(request, f'Blog post "{post.title}" updated.')
+        messages.success(request, f'Article "{post.title}" updated.')
         return redirect('dashboard:blog_list')
     return render(request, 'dashboard/blog/form.html', {
         'form': form, 'post': post, 'active_nav': 'blog',
@@ -208,7 +208,7 @@ def blog_delete(request, pk):
     if request.method == 'POST':
         title = post.title
         post.delete()
-        messages.success(request, f'Blog post "{title}" deleted.')
+        messages.success(request, f'Article "{title}" deleted.')
         return redirect('dashboard:blog_list')
     return render(request, 'dashboard/confirm_delete.html', {
         'object_name': 'Blog Post', 'object_label': post.title,

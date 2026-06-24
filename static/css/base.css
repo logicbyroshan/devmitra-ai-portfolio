@@ -123,7 +123,6 @@ body {
     align-items: center;
     justify-content: center;
     position: relative;
-    z-index: 1;
     margin-top: 160px;
     /* Space for sticky header */
 }
@@ -1398,6 +1397,33 @@ img {
 
     .footer-col-links ul li {
         margin-bottom: 5px;
+    }
+
+    .cards-container {
+        grid-template-columns: 1fr;
+    }
+
+    /* Reduce Navbar Icons Size */
+    .mobile-nav-toggle {
+        width: 24px;
+        height: 18px;
+    }
+
+    .mobile-header-theme-toggle {
+        width: 32px;
+        height: 32px;
+    }
+
+    .mobile-header-theme-toggle i {
+        font-size: 14px;
+    }
+
+    .site-header.mobile-menu-active .mobile-nav-toggle .top {
+        transform: rotate(45deg) translate(4px, 4px);
+    }
+
+    .site-header.mobile-menu-active .mobile-nav-toggle .bottom {
+        transform: rotate(-45deg) translate(5px, -4px);
     }
 
     .footer-col-links ul li a {

@@ -1,4 +1,4 @@
-﻿/* ============================================================
+/* ============================================================
    base.css — Custom Admin Dashboard (complete)
    ============================================================ */
 
@@ -16,7 +16,7 @@
     --warning: #f59e0b;
     --danger: #ef4444;
     --white: #ffffff;
-    --sidebar-w: 200px;
+    --sidebar-w: 170px;
     --sidebar-col: 72px;
     --r-sm: 4px;
     --r-md: 8px;
@@ -35,7 +35,7 @@
     --color-warning: #f59e0b;
     --color-danger: #ef4444;
     --color-white: #ffffff;
-    --sidebar-width-expanded: 200px;
+    --sidebar-width-expanded: 170px;
     --sidebar-width-collapsed: 72px;
     --border-radius-sm: 4px;
     --border-radius-md: 8px;
@@ -140,7 +140,7 @@ ul {
     align-items: center;
     background: var(--bg);
     border: 1px solid var(--border);
-    border-radius: 20px;
+    border-radius: var(--r-md);
     padding: 0.18rem 0.7rem;
     font-size: 0.75rem;
     font-weight: 500;
@@ -260,32 +260,35 @@ ul {
 }
 
 .btn-icon {
-    background: transparent;
-    border: none;
+    background: var(--bg);
+    border: 1px solid var(--border);
     color: var(--text2);
-    padding: 0.4rem 0.5rem;
-    border-radius: var(--r-sm);
+    border-radius: var(--r-md);
     cursor: pointer;
-    transition: color 0.18s, background 0.18s;
-    font-size: 0.9rem;
-    line-height: 1;
+    transition: background 0.2s, border-color 0.2s, color 0.2s;
     display: inline-flex;
     align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    font-size: 0.95rem;
+    flex-shrink: 0;
 }
 
 .btn-icon:hover {
+    background: var(--bg2);
+    border-color: var(--accent);
     color: var(--text);
-    background: var(--border);
 }
 
 .btn-icon.edit:hover {
+    border-color: var(--accent);
     color: var(--accent);
-    background: rgba(76, 201, 240, 0.1);
 }
 
 .btn-icon.delete:hover {
+    border-color: var(--danger);
     color: var(--danger);
-    background: rgba(239, 68, 68, 0.1);
 }
 
 /* ---- Table --------------------------------------------------- */

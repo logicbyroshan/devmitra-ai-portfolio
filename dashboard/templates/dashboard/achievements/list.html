@@ -1,4 +1,4 @@
-﻿{% extends 'dashboard/base.html' %}
+{% extends 'dashboard/base.html' %}
 {% block title %}Achievements — Admin{% endblock %}
 {% block content %}
 <div class="page-header">
@@ -36,10 +36,10 @@
                     <td>
                         {% if ach.image %}
                         <img src="{{ ach.image.url }}" alt=""
-                            style="width:48px;height:36px;object-fit:cover;border-radius:4px;">
+                            style="width:60px;height:40px;object-fit:cover;border-radius:4px;">
                         {% else %}
                         <div
-                            style="width:48px;height:36px;background:var(--color-border);border-radius:4px;display:grid;place-items:center;">
+                            style="width:60px;height:40px;background:var(--color-border);border-radius:4px;display:grid;place-items:center;">
                             <i class="fa-solid fa-trophy" style="color:var(--color-text-muted);font-size:0.8rem;"></i>
                         </div>
                         {% endif %}

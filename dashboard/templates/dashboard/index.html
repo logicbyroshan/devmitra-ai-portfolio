@@ -31,7 +31,7 @@
         </div>
         <div class="stat-info">
             <span class="stat-value">{{ stats.blogs }}</span>
-            <span class="stat-label">Blog Posts</span>
+            <span class="stat-label">Articles</span>
         </div>
         <a href="{% url 'dashboard:blog_list' %}" class="stat-link"><i class="fa-solid fa-arrow-right"></i></a>
     </div>
@@ -155,10 +155,10 @@
         </div>
     </div>
 
-    <!-- Recent Blogs -->
+    <!-- Recent Articles -->
     <div class="card">
         <div class="card-header">
-            <h2 class="section-title"><i class="fa-solid fa-newspaper"></i> Recent Blogs</h2>
+            <h2 class="section-title"><i class="fa-solid fa-newspaper"></i> Recent Articles</h2>
             <a href="{% url 'dashboard:blog_list' %}" class="btn btn-sm btn-outline">View All</a>
         </div>
         <div class="activity-list">
@@ -179,7 +179,7 @@
                 </div>
             </div>
             {% empty %}
-            <div class="empty-hint"><i class="fa-solid fa-inbox"></i> No blog posts yet.</div>
+            <div class="empty-hint"><i class="fa-solid fa-inbox"></i> No articles yet.</div>
             {% endfor %}
         </div>
     </div>

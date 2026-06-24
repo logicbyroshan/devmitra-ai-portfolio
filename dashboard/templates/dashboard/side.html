@@ -1,4 +1,4 @@
-﻿{% load static %}
+{% load static %}
 <!-- ── Sidebar ─────────────────────────────────────────────── -->
 <aside class="sidebar" id="sidebar">
     <!-- Header / Logo -->
@@ -22,7 +22,7 @@
             </li>
 
             <!-- Portfolio -->
-            <li class="{% if active_nav in 'projects,experience,skills,achievements,faqs' %}active{% endif %}">
+            <li class="{% if active_nav == 'projects' or active_nav == 'experience' or active_nav == 'skills' or active_nav == 'achievements' or active_nav == 'faqs' %}active{% endif %}">
                 <a href="{% url 'dashboard:projects_list' %}">
                     <i class="fa-solid fa-briefcase"></i>
                     <span class="link-text">Portfolio</span>
@@ -30,15 +30,15 @@
             </li>
 
             <!-- Blog -->
-            <li class="{% if active_nav in 'blog,blog_categories' %}active{% endif %}">
+            <li class="{% if active_nav == 'blog' or active_nav == 'blog_categories' %}active{% endif %}">
                 <a href="{% url 'dashboard:blog_list' %}">
                     <i class="fa-solid fa-newspaper"></i>
-                    <span class="link-text">Blog</span>
+                    <span class="link-text">Articles</span>
                 </a>
             </li>
 
             <!-- Resources -->
-            <li class="{% if active_nav in 'resources,resource_categories' %}active{% endif %}">
+            <li class="{% if active_nav == 'resources' or active_nav == 'resource_categories' or active_nav == 'settings_resources' %}active{% endif %}">
                 <a href="{% url 'dashboard:resources_list' %}">
                     <i class="fa-solid fa-book-open"></i>
                     <span class="link-text">Resources</span>
@@ -46,7 +46,7 @@
             </li>
 
             <!-- Contacts -->
-            <li class="{% if active_nav in 'contacts,newsletter' %}active{% endif %}">
+            <li class="{% if active_nav == 'contacts' or active_nav == 'newsletter' %}active{% endif %}">
                 <a href="{% url 'dashboard:contacts_list' %}">
                     <i class="fa-solid fa-envelope"></i>
                     <span class="link-text">Contacts</span>
@@ -54,7 +54,7 @@
             </li>
 
             <!-- AI Panel -->
-            <li class="{% if active_nav in 'ai,ai_queries,ai_context' %}active{% endif %}">
+            <li class="{% if active_nav == 'ai' or active_nav == 'ai_queries' or active_nav == 'ai_context' %}active{% endif %}">
                 <a href="{% url 'dashboard:ai_queries_list' %}">
                     <i class="fa-solid fa-robot"></i>
                     <span class="link-text">AI Panel</span>
@@ -63,7 +63,7 @@
 
             <!-- Settings -->
             <li
-                class="{% if active_nav in 'settings,settings_site,settings_about,settings_resume,settings_notifications,settings_resources,email_templates' %}active{% endif %}">
+                class="{% if active_nav == 'settings' or active_nav == 'settings_site' or active_nav == 'settings_about' or active_nav == 'settings_resume' or active_nav == 'settings_notifications' or active_nav == 'email_templates' %}active{% endif %}">
                 <a href="{% url 'dashboard:settings_site' %}">
                     <i class="fa-solid fa-gear"></i>
                     <span class="link-text">Settings</span>
@@ -78,7 +78,7 @@
         <a href="/" target="_blank" rel="noopener noreferrer" class="user-profile-link" title="View Website">
             <div class="user-profile">
                 <div
-                    style="width:36px;height:36px;background:var(--border);border-radius:50%;display:grid;place-items:center;font-size:0.85rem;flex-shrink:0;">
+                    style="width:36px;height:36px;background:var(--border);border-radius:var(--r-md);display:grid;place-items:center;font-size:0.85rem;flex-shrink:0;">
                     <i class="fa-solid fa-user"></i>
                 </div>
                 <div class="user-details">

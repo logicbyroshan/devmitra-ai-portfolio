@@ -26,7 +26,7 @@
             <img src="{{ user_avatar.url }}" class="user-avatar" alt="{{ request.user.get_full_name }}">
             {% else %}
             <div class="user-avatar"
-                style="background:var(--border);border-radius:50%;width:38px;height:38px;display:grid;place-items:center;font-size:1rem;color:var(--text2);">
+                style="background:var(--border);border-radius:var(--r-md);width:38px;height:38px;display:grid;place-items:center;font-size:1rem;color:var(--text2);">
                 <i class="fa-solid fa-user"></i>
             </div>
             {% endif %}
