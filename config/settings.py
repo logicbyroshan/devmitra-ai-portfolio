@@ -38,6 +38,15 @@ if env_hosts:
         [host.strip() for host in env_hosts.split(",") if host.strip()]
     )
 
+CSRF_TRUSTED_ORIGINS = [
+    "https://devmitra.rkdapp.site",
+    "https://www.devmitra.rkdapp.site",
+]
+if env_hosts:
+    CSRF_TRUSTED_ORIGINS.extend(
+        [f"https://{host.strip()}" for host in env_hosts.split(",") if host.strip()]
+    )
+
 # API Keys and External Services
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 TINYMCE_API_KEY = os.getenv("TINYMCE_API_KEY", "")
