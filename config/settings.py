@@ -243,10 +243,16 @@ MESSAGE_TAGS = {
     messages.ERROR: "danger",
 }
 
+# Reverse proxy
+USE_X_FORWARDED_HOST = True
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+
+# django-ratelimit
+RATELIMIT_IP_META_KEY = "HTTP_X_FORWARDED_FOR"
+
 # Security Settings for Production
 if not DEBUG:
     # HTTPS and Security
-    SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
     SECURE_CONTENT_TYPE_NOSNIFF = True
     X_FRAME_OPTIONS = "DENY"
     SECURE_HSTS_SECONDS = 31536000  # 1 year
