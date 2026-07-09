@@ -25,8 +25,8 @@ if DEBUG:
 
 # Production ALLOWED_HOSTS for cPanel
 ALLOWED_HOSTS = [
-    "roshandamor.me",
-    "www.roshandamor.me",
+    "devmitra.rkdapp.site",
+    "www.devmitra.rkdapp.site",
     "127.0.0.1",
     "localhost",
 ]
