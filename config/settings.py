@@ -246,6 +246,7 @@ MESSAGE_TAGS = {
 # Security Settings for Production
 if not DEBUG:
     # HTTPS and Security
+    SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
     SECURE_CONTENT_TYPE_NOSNIFF = True
     X_FRAME_OPTIONS = "DENY"
     SECURE_HSTS_SECONDS = 31536000  # 1 year
