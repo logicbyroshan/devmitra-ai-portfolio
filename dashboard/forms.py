@@ -111,9 +111,10 @@ class ExperienceForm(forms.ModelForm):
 class SkillForm(forms.ModelForm):
     class Meta:
         model = Technology
-        fields = ['name', 'icon']
+        fields = ['name', 'icon', 'icon_url']
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-input', 'placeholder': 'Skill name'}),
+            'icon_url': forms.Textarea(attrs={'class': 'form-textarea', 'rows': 2, 'placeholder': 'Optional: Paste external icon URL or Markdown'}),
         }
 
 
@@ -121,9 +122,10 @@ class TechnologyForm(forms.ModelForm):
     """Used by the Taxonomy > Technologies CRUD views."""
     class Meta:
         model = Technology
-        fields = ['name', 'icon']
+        fields = ['name', 'icon', 'icon_url']
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-input', 'placeholder': 'Technology name'}),
+            'icon_url': forms.Textarea(attrs={'class': 'form-textarea', 'rows': 2, 'placeholder': 'Optional: Paste external icon URL or Markdown'}),
         }
 
 

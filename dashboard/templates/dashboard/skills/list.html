@@ -31,8 +31,8 @@
                 {% for skill in skills %}
                 <tr>
                     <td>
-                        {% if skill.icon %}
-                        <img src="{{ skill.icon.url }}" alt="{{ skill.name }}"
+                        {% if skill.get_icon_url %}
+                        <img src="{{ skill.get_icon_url }}" alt="{{ skill.name }}"
                             style="width:32px;height:32px;object-fit:contain;">
                         {% else %}
                         <div

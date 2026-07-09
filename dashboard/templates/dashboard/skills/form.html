@@ -22,16 +22,22 @@
                 {% if form.name.errors %}<div class="field-error">{{ form.name.errors|join:", " }}</div>{% endif %}
             </div>
             <div class="form-group">
-                <label class="form-label">Icon</label>
-                {% if skill and skill.icon %}
+                <label class="form-label">Icon Upload</label>
+                {% if skill and skill.get_icon_url %}
                 <div style="margin-bottom:0.5rem;">
-                    <img src="{{ skill.icon.url }}" alt="{{ skill.name }}"
+                    <img src="{{ skill.get_icon_url }}" alt="{{ skill.name }}"
                         style="width:48px;height:48px;object-fit:contain;">
                 </div>
                 {% endif %}
                 {{ form.icon }}
                 {% if form.icon.errors %}<div class="field-error">{{ form.icon.errors|join:", " }}</div>{% endif %}
                 <div class="field-hint">{{ form.icon.help_text }}</div>
+            </div>
+            <div class="form-group">
+                <label class="form-label">OR External Icon URL / Markdown</label>
+                {{ form.icon_url }}
+                {% if form.icon_url.errors %}<div class="field-error">{{ form.icon_url.errors|join:", " }}</div>{% endif %}
+                <div class="field-hint">{{ form.icon_url.help_text }}</div>
             </div>
             <div style="display:flex;gap:0.75rem;">
                 <button type="submit" class="btn btn-primary">

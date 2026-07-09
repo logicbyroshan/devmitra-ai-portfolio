@@ -21,12 +21,16 @@
                 {{ form.slug }}
             </div>
             <div class="form-group">
-                <label class="form-label">Icon</label>
-                {% if technology and technology.icon %}
-                <img src="{{ technology.icon.url }}" alt=""
+                <label class="form-label">Icon Upload</label>
+                {% if technology and technology.get_icon_url %}
+                <img src="{{ technology.get_icon_url }}" alt=""
                     style="width:40px;height:40px;object-fit:contain;display:block;margin-bottom:0.5rem;">
                 {% endif %}
                 {{ form.icon }}
+            </div>
+            <div class="form-group">
+                <label class="form-label">OR External Icon URL / Markdown</label>
+                {{ form.icon_url }}
             </div>
             <div style="display:flex;gap:0.75rem;">
                 <button type="submit" class="btn btn-primary"><i class="fa-solid fa-floppy-disk"></i> Save</button>

@@ -141,8 +141,8 @@
         {% for skill in skills %}
         <div class="skill-badge-item" data-animation="fade-in-up">
             <div class="skill-badge-icon">
-                {% if skill.icon %}
-                <img src="{{ skill.icon.url }}" alt="{{ skill.name }}">
+                {% if skill.get_icon_url %}
+                <img src="{{ skill.get_icon_url }}" alt="{{ skill.name }}">
                 {% else %}
                 <i class="fa-solid fa-code"></i>
                 {% endif %}

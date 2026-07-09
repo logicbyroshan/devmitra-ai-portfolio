@@ -146,6 +146,11 @@ class Technology(models.Model):
         validators=[validate_image_file],
         help_text="Skill icon (supports all image formats including SVG, WebP)",
     )
+    icon_url = models.TextField(
+        blank=True,
+        null=True,
+        help_text="OR paste an external icon URL or Markdown (e.g., [![My Skills](https://skillicons.dev/...)](...)). This overrides the uploaded file.",
+    )
 
     class Meta:
         verbose_name_plural = "Technologies"
@@ -155,6 +160,21 @@ class Technology(models.Model):
         if self.icon:
             compress_image_to_webp(self.icon)
         super().save(*args, **kwargs)
+
+    @property
+    def get_icon_url(self):
+        if self.icon_url:
+            # Extract URL from Markdown ![alt](url) or HTML <img src="url">
+            match_md = re.search(r'!\[.*?\]\((.*?)\)', self.icon_url)
+            if match_md:
+                return match_md.group(1)
+            match_html = re.search(r'src=["\']([^"\']*)["\']', self.icon_url)
+            if match_html:
+                return match_html.group(1)
+            return self.icon_url.strip()
+        if self.icon:
+            return self.icon.url
+        return ""
 
     def __str__(self):
         return self.name

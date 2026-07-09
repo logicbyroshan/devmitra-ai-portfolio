@@ -32,8 +32,8 @@
                 {% for tech in technologies %}
                 <tr>
                     <td>
-                        {% if tech.icon %}
-                        <img src="{{ tech.icon.url }}" alt="" style="width:28px;height:28px;object-fit:contain;">
+                        {% if tech.get_icon_url %}
+                        <img src="{{ tech.get_icon_url }}" alt="" style="width:28px;height:28px;object-fit:contain;">
                         {% else %}
                         <div style="width:28px;height:28px;background:var(--border);border-radius:4px;"></div>
                         {% endif %}
