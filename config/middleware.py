@@ -1,3 +1,20 @@
+class ProxyMiddleware:
+    """
+    Middleware to resolve the client IP address when behind a reverse proxy.
+    It takes the first IP from HTTP_X_FORWARDED_FOR and sets it as REMOTE_ADDR.
+    """
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+        if x_forwarded_for:
+            # X-Forwarded-For can be a comma-separated list of IPs.
+            # The client IP is the first one.
+            ip = x_forwarded_for.split(',')[0].strip()
+            request.META['REMOTE_ADDR'] = ip
+        return self.get_response(request)
+
 class SecurityHeadersMiddleware:
     """
     Middleware to add security headers to every response,

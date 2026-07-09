@@ -71,6 +71,7 @@ INSTALLED_APPS = [
 LOGIN_URL = "/panel/login/"
 
 MIDDLEWARE = [
+    "config.middleware.ProxyMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -246,9 +247,6 @@ MESSAGE_TAGS = {
 # Reverse proxy
 USE_X_FORWARDED_HOST = True
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
-
-# django-ratelimit
-RATELIMIT_IP_META_KEY = "HTTP_X_FORWARDED_FOR"
 
 # Security Settings for Production
 if not DEBUG:
