@@ -12,12 +12,12 @@ class Migration(migrations.Migration):
     operations = [
 
         migrations.DeleteModel(
-            name='Blog',
+            name='CommentLike',
         ),
         migrations.DeleteModel(
             name='Comment',
         ),
         migrations.DeleteModel(
-            name='CommentLike',
+            name='Blog',
         ),
     ]

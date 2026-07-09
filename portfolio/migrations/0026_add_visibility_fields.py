@@ -32,9 +32,9 @@ class Migration(migrations.Migration):
             field=models.BooleanField(db_index=True, default=True, help_text='Show this skill on the website'),
         ),
         migrations.DeleteModel(
-            name='ProjectComment',
+            name='ProjectCommentLike',
         ),
         migrations.DeleteModel(
-            name='ProjectCommentLike',
+            name='ProjectComment',
         ),
     ]
