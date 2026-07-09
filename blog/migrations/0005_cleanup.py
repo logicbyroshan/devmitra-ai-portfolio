@@ -10,10 +10,7 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.AlterUniqueTogether(
-            name='commentlike',
-            unique_together=None,
-        ),
+
         migrations.DeleteModel(
             name='CommentLike',
         ),

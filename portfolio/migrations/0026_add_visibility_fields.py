@@ -10,10 +10,7 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.AlterUniqueTogether(
-            name='projectcommentlike',
-            unique_together=None,
-        ),
+
         migrations.AddField(
             model_name='achievement',
             name='is_visible',

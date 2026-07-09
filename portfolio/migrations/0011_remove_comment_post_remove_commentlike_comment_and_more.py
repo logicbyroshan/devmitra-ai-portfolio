@@ -10,22 +10,7 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RemoveField(
-            model_name='comment',
-            name='post',
-        ),
-        migrations.RemoveField(
-            model_name='commentlike',
-            name='comment',
-        ),
-        migrations.AlterUniqueTogether(
-            name='commentlike',
-            unique_together=None,
-        ),
-        migrations.RemoveField(
-            model_name='commentlike',
-            name='user',
-        ),
+
         migrations.DeleteModel(
             name='Blog',
         ),
