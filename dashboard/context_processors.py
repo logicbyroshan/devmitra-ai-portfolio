@@ -9,7 +9,7 @@ from roshan.models import AboutMeConfiguration
 
 
 def dashboard_context(request):
-    if not (request.user.is_authenticated and request.user.is_staff):
+    if not hasattr(request, 'user') or not (request.user.is_authenticated and request.user.is_staff):
         return {}
 
     unread = ContactSubmission.objects.filter(is_read=False).count()
