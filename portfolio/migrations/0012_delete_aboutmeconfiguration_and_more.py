@@ -11,30 +11,40 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.DeleteModel(
+            name="ResourceView",
+        ),
+        migrations.DeleteModel(
             name="AboutMeConfiguration",
-        ),
-        migrations.RemoveField(
-            model_name="resource",
-            name="categories",
-        ),
-        migrations.RemoveField(
-            model_name="resource",
-            name="technologies",
-        ),
-        migrations.RemoveField(
-            model_name="resourceview",
-            name="resource",
         ),
         migrations.DeleteModel(
             name="ResourcesConfiguration",
         ),
-        migrations.DeleteModel(
-            name="ResourceCategory",
+        migrations.SeparateDatabaseAndState(
+            state_operations=[
+                migrations.RemoveField(
+                    model_name="resource",
+                    name="categories",
+                ),
+                migrations.RemoveField(
+                    model_name="resource",
+                    name="technologies",
+                ),
+            ],
+            database_operations=[
+                migrations.RunSQL(
+                    sql="DROP TABLE IF EXISTS portfolio_resource_categories;",
+                    reverse_sql=migrations.RunSQL.noop
+                ),
+                migrations.RunSQL(
+                    sql="DROP TABLE IF EXISTS portfolio_resource_technologies;",
+                    reverse_sql=migrations.RunSQL.noop
+                ),
+            ],
         ),
         migrations.DeleteModel(
             name="Resource",
         ),
         migrations.DeleteModel(
-            name="ResourceView",
+            name="ResourceCategory",
         ),
     ]

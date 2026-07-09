@@ -17,6 +17,20 @@ class Migration(migrations.Migration):
         migrations.DeleteModel(
             name='Comment',
         ),
+        migrations.SeparateDatabaseAndState(
+            state_operations=[
+                migrations.RemoveField(
+                    model_name='blog',
+                    name='categories',
+                ),
+            ],
+            database_operations=[
+                migrations.RunSQL(
+                    sql="DROP TABLE IF EXISTS portfolio_blog_categories;",
+                    reverse_sql=migrations.RunSQL.noop
+                ),
+            ],
+        ),
         migrations.DeleteModel(
             name='Blog',
         ),

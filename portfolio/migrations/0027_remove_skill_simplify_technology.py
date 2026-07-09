@@ -20,6 +20,20 @@ class Migration(migrations.Migration):
             name='icon',
             field=models.FileField(blank=True, help_text='Skill icon (supports all image formats including SVG, WebP)', null=True, upload_to='tech_icons/', validators=[portfolio.models.validate_image_file]),
         ),
+        migrations.SeparateDatabaseAndState(
+            state_operations=[
+                migrations.RemoveField(
+                    model_name='skill',
+                    name='technologies',
+                ),
+            ],
+            database_operations=[
+                migrations.RunSQL(
+                    sql="DROP TABLE IF EXISTS portfolio_skill_technologies;",
+                    reverse_sql=migrations.RunSQL.noop
+                ),
+            ],
+        ),
         migrations.DeleteModel(
             name='Skill',
         ),
