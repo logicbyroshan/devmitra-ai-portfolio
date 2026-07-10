@@ -72,10 +72,12 @@ urlpatterns = [
     path('categories/new/', views.category_create, name='category_create'),
     path('categories/<int:pk>/edit/', views.category_edit, name='category_edit'),
     path('categories/<int:pk>/delete/', views.category_delete, name='category_delete'),
+    path('api/categories/create/', views.api_category_create, name='api_category_create'),
     path('technologies/', views.technologies_list, name='technologies_list'),
     path('technologies/new/', views.technology_create, name='technology_create'),
     path('technologies/<int:pk>/edit/', views.technology_edit, name='technology_edit'),
     path('technologies/<int:pk>/delete/', views.technology_delete, name='technology_delete'),
+    path('api/technologies/create/', views.api_technology_create, name='api_technology_create'),
 
     # ── Contacts ──────────────────────────────────────────────
     path('contacts/', views.contacts_list, name='contacts_list'),

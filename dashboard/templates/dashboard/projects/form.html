@@ -125,7 +125,7 @@
             <div class="form-section">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
                     <h3 class="form-section-title" style="margin-bottom: 0;">Categories</h3>
-                    <a href="{% url 'dashboard:category_create' %}" style="font-size: 0.8rem; color: var(--color-primary);"><i class="fa-solid fa-plus"></i> Add</a>
+                    <a href="#" onclick="quickAddCategory('PRO'); return false;" style="font-size: 0.8rem; color: var(--color-primary);"><i class="fa-solid fa-plus"></i> Add</a>
                 </div>
                 <div class="checkbox-group">{{ form.categories }}</div>
                 {% if form.categories.errors %}<div class="field-error" style="color: #ff4d4f; font-size: 0.85rem; margin-top: 0.25rem;">{{ form.categories.errors|join:", " }}</div>{% endif %}
@@ -134,7 +134,7 @@
             <div class="form-section">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
                     <h3 class="form-section-title" style="margin-bottom: 0;">Technologies</h3>
-                    <a href="{% url 'dashboard:technology_create' %}" style="font-size: 0.8rem; color: var(--color-primary);"><i class="fa-solid fa-plus"></i> Add</a>
+                    <a href="#" onclick="quickAddTechnology(); return false;" style="font-size: 0.8rem; color: var(--color-primary);"><i class="fa-solid fa-plus"></i> Add</a>
                 </div>
                 <div class="checkbox-group">{{ form.technologies }}</div>
                 {% if form.technologies.errors %}<div class="field-error" style="color: #ff4d4f; font-size: 0.85rem; margin-top: 0.25rem;">{{ form.technologies.errors|join:", " }}</div>{% endif %}
@@ -201,5 +201,42 @@
             });
         }
     });
+
+    function quickAddCategory(type) {
+        const name = prompt("Enter new category name:");
+        if (!name) return;
+        const formData = new FormData();
+        formData.append('name', name);
+        formData.append('category_type', type);
+        formData.append('csrfmiddlewaretoken', document.querySelector('[name=csrfmiddlewaretoken]').value);
+        fetch("{% url 'dashboard:api_category_create' %}", { method: "POST", body: formData })
+        .then(r => r.json())
+        .then(data => {
+            if (data.success) {
+                const container = document.querySelector('input[name="categories"]').closest('.checkbox-group');
+                const label = document.createElement('label');
+                label.innerHTML = `<input type="checkbox" name="categories" value="${data.id}" checked> ${data.name}`;
+                container.appendChild(label);
+            } else { alert(data.message || 'Error creating category'); }
+        });
+    }
+
+    function quickAddTechnology() {
+        const name = prompt("Enter new technology name (you can add icon later from admin):");
+        if (!name) return;
+        const formData = new FormData();
+        formData.append('name', name);
+        formData.append('csrfmiddlewaretoken', document.querySelector('[name=csrfmiddlewaretoken]').value);
+        fetch("{% url 'dashboard:api_technology_create' %}", { method: "POST", body: formData })
+        .then(r => r.json())
+        .then(data => {
+            if (data.success) {
+                const container = document.querySelector('input[name="technologies"]').closest('.checkbox-group');
+                const label = document.createElement('label');
+                label.innerHTML = `<input type="checkbox" name="technologies" value="${data.id}" checked> ${data.name}`;
+                container.appendChild(label);
+            } else { alert(data.message || 'Error creating technology'); }
+        });
+    }
 </script>
 {% endblock %}

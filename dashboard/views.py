@@ -612,6 +612,25 @@ def resource_category_delete(request, pk):
 # TAXONOMY
 # ═══════════════════════════════════════════════════════════════
 
+@require_POST
+@login_required(login_url='dashboard:login')
+def api_category_create(request):
+    name = request.POST.get('name')
+    category_type = request.POST.get('category_type')
+    if not name or not category_type:
+        return JsonResponse({'success': False, 'message': 'Missing data'})
+    cat, created = Category.objects.get_or_create(name=name, category_type=category_type)
+    return JsonResponse({'success': True, 'id': cat.id, 'name': cat.name})
+
+@require_POST
+@login_required(login_url='dashboard:login')
+def api_technology_create(request):
+    name = request.POST.get('name')
+    if not name:
+        return JsonResponse({'success': False, 'message': 'Missing data'})
+    tech, created = Technology.objects.get_or_create(name=name)
+    return JsonResponse({'success': True, 'id': tech.id, 'name': tech.name})
+
 @login_required(login_url='dashboard:login')
 def categories_list(request):
     categories = Category.objects.order_by('category_type', 'name')
