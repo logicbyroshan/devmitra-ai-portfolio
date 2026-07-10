@@ -342,6 +342,7 @@
     border: 1px solid var(--card-border);
     border-radius: 14px;
     min-width: 90px;
+    flex-grow: 1;
     transition: all 0.25s ease;
     cursor: default;
 }

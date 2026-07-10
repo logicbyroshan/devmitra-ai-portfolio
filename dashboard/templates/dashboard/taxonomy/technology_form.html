@@ -22,10 +22,10 @@
             </div>
             <div class="form-group">
                 <label class="form-label">Icon Upload</label>
-                {% if technology and technology.get_icon_url %}
-                <img src="{{ technology.get_icon_url }}" alt=""
-                    style="width:40px;height:40px;object-fit:contain;display:block;margin-bottom:0.5rem;">
-                {% endif %}
+                <img id="icon-preview" 
+                     src="{% if technology and technology.get_icon_url %}{{ technology.get_icon_url }}{% endif %}" 
+                     alt=""
+                     style="width:40px;height:40px;object-fit:contain;display:{% if technology and technology.get_icon_url %}block{% else %}none{% endif %};margin-bottom:0.5rem;">
                 {{ form.icon }}
             </div>
             <div class="form-group">
@@ -42,4 +42,64 @@
         </form>
     </div>
 </div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const iconInput = document.querySelector('input[type="file"][name="icon"]');
+        const iconUrlInput = document.querySelector('textarea[name="icon_url"]') || document.querySelector('input[name="icon_url"]');
+        const previewImg = document.getElementById('icon-preview');
+
+        function updatePreview(url) {
+            if (url) {
+                previewImg.src = url;
+                previewImg.style.display = 'block';
+            } else {
+                previewImg.src = '';
+                previewImg.style.display = 'none';
+            }
+        }
+
+        if (iconInput) {
+            iconInput.addEventListener('change', function() {
+                if (this.files && this.files[0]) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        updatePreview(e.target.result);
+                    }
+                    reader.readAsDataURL(this.files[0]);
+                } else if (!iconUrlInput.value.trim()) {
+                    updatePreview('');
+                }
+            });
+        }
+
+        if (iconUrlInput) {
+            iconUrlInput.addEventListener('input', function() {
+                let val = this.value.trim();
+                if (val) {
+                    const mdMatch = val.match(/!\[.*?\]\((.*?)\)/);
+                    if (mdMatch) {
+                        val = mdMatch[1];
+                    } else {
+                        const htmlMatch = val.match(/src=["']([^"']*)["']/);
+                        if (htmlMatch) {
+                            val = htmlMatch[1];
+                        }
+                    }
+                    updatePreview(val);
+                } else if (iconInput && iconInput.files.length) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        updatePreview(e.target.result);
+                    }
+                    reader.readAsDataURL(iconInput.files[0]);
+                } else {
+                    updatePreview('');
+                }
+            });
+        }
+    });
+</script>
 {% endblock %}
