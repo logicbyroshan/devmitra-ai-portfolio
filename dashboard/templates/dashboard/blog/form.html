@@ -64,7 +64,7 @@
             <div class="form-section">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
                     <h3 class="form-section-title" style="margin-bottom: 0;">Taxonomy</h3>
-                    <a href="#" onclick="quickAddCategory('BLG'); return false;" style="font-size: 0.8rem; color: var(--color-primary);"><i class="fa-solid fa-plus"></i> Add Category</a>
+                    <a href="#" onclick="quickAddCategory(event, 'BLG');" style="font-size: 0.8rem; color: var(--color-primary);"><i class="fa-solid fa-plus"></i> Add Category</a>
                 </div>
                 <div class="form-group">
                     <label class="form-label">Categories</label>
@@ -106,7 +106,9 @@
         }
     });
 
-    function quickAddCategory(type) {
+    function quickAddCategory(event, type) {
+        event.preventDefault();
+        const btn = event.currentTarget;
         const name = prompt("Enter new category name:");
         if (!name) return;
         const formData = new FormData();
@@ -117,12 +119,17 @@
         .then(r => r.json())
         .then(data => {
             if (data.success) {
-                const container = document.querySelector('input[name="categories"]').closest('.checkbox-group');
-                const label = document.createElement('label');
-                label.innerHTML = `<input type="checkbox" name="categories" value="${data.id}" checked> ${data.name}`;
-                container.appendChild(label);
+                const container = btn.closest('.form-section').querySelector('.checkbox-group');
+                if (container) {
+                    const label = document.createElement('label');
+                    label.style.display = 'block';
+                    label.innerHTML = `<input type="checkbox" name="categories" value="${data.id}" checked> ${data.name}`;
+                    container.appendChild(label);
+                } else {
+                    alert('Category created! Please save and refresh to see it.');
+                }
             } else { alert(data.message || 'Error creating category'); }
-        });
+        }).catch(err => alert("Error: " + err));
     }
 </script>
 {% endblock %}

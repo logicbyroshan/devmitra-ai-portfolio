@@ -76,7 +76,7 @@
             <div class="form-section">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
                     <h3 class="form-section-title" style="margin-bottom: 0;">Experience Type</h3>
-                    <a href="#" onclick="quickAddCategory('EXP'); return false;" style="font-size: 0.8rem; color: var(--color-primary);"><i class="fa-solid fa-plus"></i> Add</a>
+                    <a href="#" onclick="quickAddCategory(event, 'EXP');" style="font-size: 0.8rem; color: var(--color-primary);"><i class="fa-solid fa-plus"></i> Add</a>
                 </div>
                 <div class="form-group">
                     {{ form.experience_type }}
@@ -87,7 +87,7 @@
             <div class="form-section">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
                     <h3 class="form-section-title" style="margin-bottom: 0;">Technologies</h3>
-                    <a href="#" onclick="quickAddTechnology(); return false;" style="font-size: 0.8rem; color: var(--color-primary);"><i class="fa-solid fa-plus"></i> Add</a>
+                    <a href="#" onclick="quickAddTechnology(event);" style="font-size: 0.8rem; color: var(--color-primary);"><i class="fa-solid fa-plus"></i> Add</a>
                 </div>
                 <div class="checkbox-group">{{ form.technologies }}</div>
                 {% if form.technologies.errors %}<div class="field-error" style="color: #ff4d4f; font-size: 0.85rem; margin-top: 0.25rem;">{{ form.technologies.errors|join:", " }}</div>{% endif %}
@@ -118,7 +118,8 @@
 
 {% block extra_js %}
 <script>
-    function quickAddCategory(type) {
+    function quickAddCategory(event, type) {
+        event.preventDefault();
         const name = prompt("Enter new experience type name:");
         if (!name) return;
         const formData = new FormData();
@@ -130,13 +131,19 @@
         .then(data => {
             if (data.success) {
                 const select = document.querySelector('select[name="experience_type"]');
-                const option = new Option(data.name, data.id, true, true);
-                select.add(option);
+                if (select) {
+                    const option = new Option(data.name, data.id, true, true);
+                    select.add(option);
+                } else {
+                    alert('Category created! Please save and refresh to see it.');
+                }
             } else { alert(data.message || 'Error creating category'); }
-        });
+        }).catch(err => alert("Error: " + err));
     }
 
-    function quickAddTechnology() {
+    function quickAddTechnology(event) {
+        event.preventDefault();
+        const btn = event.currentTarget;
         const name = prompt("Enter new technology name (you can add icon later from admin):");
         if (!name) return;
         const formData = new FormData();
@@ -146,17 +153,17 @@
         .then(r => r.json())
         .then(data => {
             if (data.success) {
-                let container = document.querySelector('input[name="technologies"]');
+                const container = btn.closest('.form-section').querySelector('.checkbox-group');
                 if (container) {
-                    container = container.closest('.checkbox-group');
+                    const label = document.createElement('label');
+                    label.style.display = 'block';
+                    label.innerHTML = `<input type="checkbox" name="technologies" value="${data.id}" checked> ${data.name}`;
+                    container.appendChild(label);
                 } else {
-                    container = document.querySelector('.checkbox-group'); // fallback if empty
+                    alert('Technology created! Please save and refresh to see it.');
                 }
-                const label = document.createElement('label');
-                label.innerHTML = `<input type="checkbox" name="technologies" value="${data.id}" checked> ${data.name}`;
-                container.appendChild(label);
             } else { alert(data.message || 'Error creating technology'); }
-        });
+        }).catch(err => alert("Error: " + err));
     }
 </script>
 {% endblock %}
