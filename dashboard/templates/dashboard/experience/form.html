@@ -74,7 +74,10 @@
 
         <div class="form-sidebar">
             <div class="form-section">
-                <h3 class="form-section-title">Experience Type</h3>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+                    <h3 class="form-section-title" style="margin-bottom: 0;">Experience Type</h3>
+                    <a href="{% url 'dashboard:category_create' %}" style="font-size: 0.8rem; color: var(--color-primary);"><i class="fa-solid fa-plus"></i> Add</a>
+                </div>
                 <div class="form-group">
                     {{ form.experience_type }}
                     {% if form.experience_type.errors %}<div class="field-error" style="color: #ff4d4f; font-size: 0.85rem; margin-top: 0.25rem;">{{ form.experience_type.errors|join:", " }}</div>{% endif %}
@@ -82,7 +85,10 @@
             </div>
 
             <div class="form-section">
-                <h3 class="form-section-title">Technologies</h3>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+                    <h3 class="form-section-title" style="margin-bottom: 0;">Technologies</h3>
+                    <a href="{% url 'dashboard:technology_create' %}" style="font-size: 0.8rem; color: var(--color-primary);"><i class="fa-solid fa-plus"></i> Add</a>
+                </div>
                 <div class="checkbox-group">{{ form.technologies }}</div>
                 {% if form.technologies.errors %}<div class="field-error" style="color: #ff4d4f; font-size: 0.85rem; margin-top: 0.25rem;">{{ form.technologies.errors|join:", " }}</div>{% endif %}
             </div>

@@ -16,12 +16,26 @@ from roshan.models import (
 )
 from ai.models import AIContext
 from notifications.models import NotificationSettings, EmailTemplate
+from django.utils.safestring import mark_safe
+
+class TechnologyModelMultipleChoiceField(forms.ModelMultipleChoiceField):
+    def label_from_instance(self, obj):
+        icon_url = obj.get_icon_url
+        if icon_url:
+            return mark_safe(f'<span style="display:inline-flex; align-items:center; gap:8px;"><img src="{icon_url}" style="width:20px; height:20px; object-fit:contain; border-radius:4px;" alt=""> {obj.name}</span>')
+        return obj.name
 
 
 # ─────────────────────────────────────────────
 # Project Forms
 # ─────────────────────────────────────────────
 class ProjectForm(forms.ModelForm):
+    technologies = TechnologyModelMultipleChoiceField(
+        queryset=Technology.objects.all(),
+        widget=forms.CheckboxSelectMultiple(),
+        required=False
+    )
+
     class Meta:
         model = Project
         fields = [
@@ -82,6 +96,12 @@ class BlogForm(forms.ModelForm):
 # Experience Forms
 # ─────────────────────────────────────────────
 class ExperienceForm(forms.ModelForm):
+    technologies = TechnologyModelMultipleChoiceField(
+        queryset=Technology.objects.all(),
+        widget=forms.CheckboxSelectMultiple(),
+        required=False
+    )
+
     class Meta:
         model = Experience
         fields = [
@@ -166,6 +186,12 @@ class AchievementForm(forms.ModelForm):
 # Resource Forms
 # ─────────────────────────────────────────────
 class ResourceForm(forms.ModelForm):
+    technologies = TechnologyModelMultipleChoiceField(
+        queryset=Technology.objects.all(),
+        widget=forms.CheckboxSelectMultiple(),
+        required=False
+    )
+
     class Meta:
         model = Resource
         fields = [
