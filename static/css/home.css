@@ -315,8 +315,8 @@
 
 /* Skills Section */
 .skills-grid {
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
     gap: 16px;
     background-color: var(--card-bg);
     padding: 30px;
@@ -336,13 +336,13 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
     gap: 10px;
     padding: 18px 20px;
     background: rgba(0, 169, 255, 0.06);
     border: 1px solid var(--card-border);
     border-radius: 14px;
     min-width: 90px;
-    flex-grow: 1;
     transition: all 0.25s ease;
     cursor: default;
 }
