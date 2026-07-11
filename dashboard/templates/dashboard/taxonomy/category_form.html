@@ -17,8 +17,9 @@
                 {% if form.name.errors %}<div class="field-error">{{ form.name.errors|join:", " }}</div>{% endif %}
             </div>
             <div class="form-group">
-                <label class="form-label">Slug</label>
-                {{ form.slug }}
+                <label class="form-label required">Category Type</label>
+                {{ form.category_type }}
+                {% if form.category_type.errors %}<div class="field-error">{{ form.category_type.errors|join:", " }}</div>{% endif %}
             </div>
             <div style="display:flex;gap:0.75rem;">
                 <button type="submit" class="btn btn-primary"><i class="fa-solid fa-floppy-disk"></i> Save</button>

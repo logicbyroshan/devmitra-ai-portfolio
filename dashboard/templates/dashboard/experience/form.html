@@ -74,10 +74,7 @@
 
         <div class="form-sidebar">
             <div class="form-section">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
-                    <h3 class="form-section-title" style="margin-bottom: 0;">Experience Type</h3>
-                    <a href="#" onclick="quickAddCategory(event, 'EXP');" style="font-size: 0.8rem; color: var(--color-primary);"><i class="fa-solid fa-plus"></i> Add</a>
-                </div>
+                <h3 class="form-section-title">Experience Type</h3>
                 <div class="form-group">
                     {{ form.experience_type }}
                     {% if form.experience_type.errors %}<div class="field-error" style="color: #ff4d4f; font-size: 0.85rem; margin-top: 0.25rem;">{{ form.experience_type.errors|join:", " }}</div>{% endif %}
@@ -118,29 +115,6 @@
 
 {% block extra_js %}
 <script>
-    function quickAddCategory(event, type) {
-        event.preventDefault();
-        const name = prompt("Enter new experience type name:");
-        if (!name) return;
-        const formData = new FormData();
-        formData.append('name', name);
-        formData.append('category_type', type);
-        formData.append('csrfmiddlewaretoken', document.querySelector('[name=csrfmiddlewaretoken]').value);
-        fetch("{% url 'dashboard:api_category_create' %}", { method: "POST", body: formData })
-        .then(r => r.json())
-        .then(data => {
-            if (data.success) {
-                const select = document.querySelector('select[name="experience_type"]');
-                if (select) {
-                    const option = new Option(data.name, data.id, true, true);
-                    select.add(option);
-                } else {
-                    alert('Category created! Please save and refresh to see it.');
-                }
-            } else { alert(data.message || 'Error creating category'); }
-        }).catch(err => alert("Error: " + err));
-    }
-
     function quickAddTechnology(event) {
         event.preventDefault();
         const btn = event.currentTarget;

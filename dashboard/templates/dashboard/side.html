@@ -22,7 +22,7 @@
             </li>
 
             <!-- Portfolio -->
-            <li class="{% if active_nav == 'projects' or active_nav == 'experience' or active_nav == 'skills' or active_nav == 'achievements' or active_nav == 'faqs' %}active{% endif %}">
+            <li class="{% if active_nav == 'projects' or active_nav == 'experience' or active_nav == 'skills' or active_nav == 'achievements' or active_nav == 'faqs' or active_nav == 'categories' %}active{% endif %}">
                 <a href="{% url 'dashboard:projects_list' %}">
                     <i class="fa-solid fa-briefcase"></i>
                     <span class="link-text">Portfolio</span>

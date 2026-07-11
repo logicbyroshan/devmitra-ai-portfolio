@@ -12,7 +12,7 @@
     </a>
 </div>
 
-{% include 'dashboard/tabs/taxonomy.html' %}
+{% include 'dashboard/tabs/portfolio.html' %}
 
 <div class="card">
     <div class="table-wrap">
@@ -21,7 +21,7 @@
                 <tr>
                     <th>Name</th>
                     <th>Slug</th>
-                    <th>Posts</th>
+                    <th>Type</th>
                     <th style="width:110px;">Actions</th>
                 </tr>
             </thead>
@@ -30,7 +30,7 @@
                 <tr>
                     <td class="fw-medium">{{ cat.name }}</td>
                     <td class="text-muted text-sm">{{ cat.slug }}</td>
-                    <td>{{ cat.blog_set.count }}</td>
+                    <td>{{ cat.get_category_type_display }}</td>
                     <td>
                         <div class="action-btns">
                             <a href="{% url 'dashboard:category_edit' cat.pk %}" class="btn-icon edit" title="Edit">

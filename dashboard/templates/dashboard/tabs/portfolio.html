@@ -17,4 +17,7 @@
     <a href="{% url 'dashboard:faq_list' %}" class="page-tab {% if active_nav == 'faqs' %}active{% endif %}">
         <i class="fa-solid fa-circle-question"></i> FAQs
     </a>
+    <a href="{% url 'dashboard:categories_list' %}" class="page-tab {% if active_nav == 'categories' %}active{% endif %}">
+        <i class="fa-solid fa-tags"></i> Categories
+    </a>
 </div>
